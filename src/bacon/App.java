@@ -14,7 +14,7 @@ import java.util.Set;
 import graph.*;
 
 public class App {
-	
+
 	private IndexParser _ip;
 	private DataParser _ap;
 	private DataParser _fp;
@@ -25,14 +25,14 @@ public class App {
 	private Map<Node, Double> _dist;
 	private Set<Node> _set;
 	private Set<Node> _unset;
-	
+
 	public App(){
 		_ip = null;
 		_ap = null;
 		_fp = null;
 	}
-	
-	
+
+
 	/*******
 	 * this method initializes the application by parsing the arguments and creating
 	 * all necessary data structures if the arguments are valid.
@@ -65,8 +65,8 @@ public class App {
 			_g = new Graph();
 		}
 	}
-	
-	
+
+
 	/******
 	 * this method is called by Dijkstra's to add neighbors as necessary.
 	 * it searches the index for the given source node, then adds all films
@@ -90,52 +90,46 @@ public class App {
 			String[] fnames = fids;
 			int i = 0;
 			List<String[]> actors = new ArrayList<String[]>();
-			if(fids!=null){
-				for(String s : fids){
-					//System.out.println("S: "+s);
-					fnames[i] = _fp.searchUID(s, 0, _fp.getLength());
-					String[] test = _fp.search(s, 0, _fp.getLength());
-					//System.out.println(fnames[i]);
-					//System.out.println(test.length);
-					//System.out.println("S: "+s);
-					//System.out.println(test.length);
-					/*for(String s2 : test){
-						System.out.println("Fids "+s+", "+s2);
-					}*/
-					actors.add(test);
-					i++;
-				}
-				i = 0;
-				for(String[] sar : actors){
-					//System.out.println(sar.length);
-					for(String sid : sar){
-						if(sid!=null){
-							String s = _ap.searchUID(sid, 0, _ap.getLength());
-							//System.out.println(s);
-							if(!source.toString().equals(s)){
-								//System.out.println(s);
-								if(-1!=_g.insertEdge(source.toString(), s.trim(), fnames[i], 1/sar.length)){
-									//System.out.println("Adding edge from "+source.toString()+" to "+s+": "+fnames[i]);
-									list.add(_g.findNode(s));
-								}
-							}
+			//if(fids!=null)
+			for(String s : fids){
+				//System.out.println("S: "+s);
+				fnames[i] = _fp.searchUID(s, 0, _fp.getLength());
+				String[] test = _fp.search(s, 0, _fp.getLength());
+				//System.out.println(fnames[i]);
+				//System.out.println(test.length);
+				//System.out.println("S: "+s);
+				//System.out.println(test.length);
+				/*for(String s2 : test){
+					System.out.println("Fids "+s+", "+s2);
+				}*/
+				actors.add(test);
+				i++;
+			}
+			i = 0;
+			for(String[] sar : actors){
+				//System.out.println(sar.length);
+				for(String sid : sar){
+					String s = _ap.searchUID(sid, 0, _ap.getLength());
+					//System.out.println(s);
+					if(!source.toString().equals(s)){
+						//System.out.println(s);
+						if(-1!=_g.insertEdge(source.toString(), s.trim(), fnames[i], 1/sar.length)){
+							//System.out.println("Adding edge from "+source.toString()+" to "+s+": "+fnames[i]);
+							list.add(_g.findNode(s));
 						}
-						
 					}
-					i++;
+
 				}
-				return list;
+				i++;
 			}
-			else{
-				return null;
-			}
+			return list;
 		}
 		else{
 			return null;
 		}
 	}
-	
-	
+
+
 	/***
 	 * this method is the highest level implementation of Dijkstra's algorithm
 	 * I do not make any optimizations at all, as my implementation uses unsorted
@@ -173,7 +167,7 @@ public class App {
 						_unset.remove(temp);
 						this.getMinD(temp);
 					}
-					
+
 					ArrayList<Node> path = new ArrayList<Node>();
 					n = _g.findNode(_dst);
 					if(n!=null){
@@ -205,7 +199,7 @@ public class App {
 			}
 		}
 	}
-	
+
 	/***
 	 * this method returns the nearest neighbor from the given set.
 	 * 
@@ -226,7 +220,7 @@ public class App {
 		}
 		return min;
 	}
-	
+
 	private double getShortD(Node n){
 		Double d = _dist.get(n);
 		if(d != null){
@@ -236,7 +230,7 @@ public class App {
 			return Double.POSITIVE_INFINITY;
 		}
 	}
-	
+
 	/***
 	 * this method adds updated distances to distance map
 	 * @param node
@@ -254,7 +248,7 @@ public class App {
 			}
 		}
 	}
-	
+
 	/****
 	 * this method get the distance (edge weight) between two nodes
 	 * 
