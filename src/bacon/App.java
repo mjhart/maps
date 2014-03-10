@@ -90,37 +90,45 @@ public class App {
 			String[] fnames = fids;
 			int i = 0;
 			List<String[]> actors = new ArrayList<String[]>();
-			for(String s : fids){
-				//System.out.println("S: "+s);
-				fnames[i] = _fp.searchUID(s, 0, _fp.getLength());
-				String[] test = _fp.search(s, 0, _fp.getLength());
-				//System.out.println(fnames[i]);
-				//System.out.println(test.length);
-				//System.out.println("S: "+s);
-				//System.out.println(test.length);
-				/*for(String s2 : test){
-					System.out.println("Fids "+s+", "+s2);
-				}*/
-				actors.add(test);
-				i++;
-			}
-			i = 0;
-			for(String[] sar : actors){
-				//System.out.println(sar.length);
-				for(String sid : sar){
-					String s = _ap.searchUID(sid, 0, _ap.getLength());
-					//System.out.println(s);
-					if(!source.toString().equals(s)){
-						//System.out.println(s);
-						if(-1!=_g.insertEdge(source.toString(), s, fnames[i], 1/sar.length)){
-							//System.out.println("Adding edge from "+source.toString()+" to "+s+": "+fnames[i]);
-							list.add(_g.findNode(s));
-						}
-					}
+			if(fids!=null){
+				for(String s : fids){
+					//System.out.println("S: "+s);
+					fnames[i] = _fp.searchUID(s, 0, _fp.getLength());
+					String[] test = _fp.search(s, 0, _fp.getLength());
+					//System.out.println(fnames[i]);
+					//System.out.println(test.length);
+					//System.out.println("S: "+s);
+					//System.out.println(test.length);
+					/*for(String s2 : test){
+						System.out.println("Fids "+s+", "+s2);
+					}*/
+					actors.add(test);
+					i++;
 				}
-				i++;
+				i = 0;
+				for(String[] sar : actors){
+					//System.out.println(sar.length);
+					for(String sid : sar){
+						if(sid!=null){
+							String s = _ap.searchUID(sid, 0, _ap.getLength());
+							//System.out.println(s);
+							if(!source.toString().equals(s)){
+								//System.out.println(s);
+								if(-1!=_g.insertEdge(source.toString(), s.trim(), fnames[i], 1/sar.length)){
+									//System.out.println("Adding edge from "+source.toString()+" to "+s+": "+fnames[i]);
+									list.add(_g.findNode(s));
+								}
+							}
+						}
+						
+					}
+					i++;
+				}
+				return list;
 			}
-			return list;
+			else{
+				return null;
+			}
 		}
 		else{
 			return null;

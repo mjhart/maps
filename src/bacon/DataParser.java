@@ -80,44 +80,64 @@ public class DataParser implements AutoCloseable{
 			if(ch > 128){
 				ch = _raf.read();
 			}// seek to first relevant byte
-			while(true){
+			while(_raf.getFilePointer()>min){
 				if(ch == 10){
 					break;
 				}
+				_raf.seek(_raf.getFilePointer()-2);
 				ch = _raf.read();
 			}// seek to first newline
 			//System.out.println(min + " "+ max);
-			if(_raf.getFilePointer()==max){
+			/*if(_raf.getFilePointer()==max){
 				ch = Integer.MAX_VALUE;
 				while(ch!=10){
 					_raf.seek(_raf.getFilePointer()-2);
 					ch = _raf.read();
 				}
-			}
-			String l = _raf.readLine();
-
-			if(l!=null){
-				String[] line = l.split("\t");
-				//System.out.println("cur line id: "+line[_idcol]);
-				//System.out.println("uid: "+uid);
-				//System.out.println("compare: "+line[_idcol].compareTo(uid));*/
-				line = l.split("\t");
-				if(line[_idcol].compareTo(uid) < 0){
-					min = mid;// + 1;
-					//System.out.println("min is now: "+min);
-					//System.out.println(min + " "+ max);
+			}*/
+			if(_raf.getFilePointer()==min){
+				while(true){
+					if(ch == 10){
+						break;
+					}
+					ch = _raf.read();
 				}
-				else if(line[_idcol].compareTo(uid) > 0){
-					max = mid - 1;
-					//System.out.println("max is now: "+max);
-					//System.out.println("here");
+			}
+			//System.out.println(min);
+			//System.out.println(_raf.getFilePointer());
+			//System.out.println(max);
+			if(_raf.getFilePointer()>=min){
+				//System.out.println("here");
+				String l = _raf.readLine();
+				//System.out.println(l);
+				
+				if(l!=null){
+					String[] line = l.split("\t");
+					//System.out.println("cur line id: "+line[_idcol]);
+					//System.out.println("uid: "+uid);
+					//System.out.println("compare: "+line[_idcol].compareTo(uid));*/
+					line = l.split("\t");
+					if(line[_idcol].compareTo(uid) < 0){
+						min = mid;// + 1;
+						//System.out.println("min is now: "+min);
+						//System.out.println(min + " "+ max);
+					}
+					else if(line[_idcol].compareTo(uid) > 0){
+						max = mid - 1;
+						//System.out.println("max is now: "+max);
+						//System.out.println("here");
+					}
+					else{
+						return line[_namecol];
+					}
 				}
 				else{
-					return line[_namecol];
+					//System.out.println("here");
+					break;
 				}
 			}
 			else{
-				//System.out.println("here");
+				//System.out.println("here 1");
 				break;
 			}
 		}
@@ -155,36 +175,53 @@ public class DataParser implements AutoCloseable{
 				//byte[] t1 = {(byte)ch};
 				//System.out.println("ch: "+new String(t1, "UTF-8"));
 			}// seek to first relevant byte
-			while(true){
-				//System.out.println("ch is now: "+ch);
+			while(_raf.getFilePointer()>min){
 				if(ch == 10){
 					break;
 				}
+				_raf.seek(_raf.getFilePointer()-2);
 				ch = _raf.read();
 			}// seek to first newline
-			if(_raf.getFilePointer()==max){
+			//System.out.println(min + " "+ max);
+			/*if(_raf.getFilePointer()==max){
 				ch = Integer.MAX_VALUE;
 				while(ch!=10){
 					_raf.seek(_raf.getFilePointer()-2);
 					ch = _raf.read();
 				}
-			}
-			String l = _raf.readLine();
-			
-			if(l!=null){
-				//System.out.println(_idcol);
-				//System.out.println(l);
-				String[] line = l.split("[\t]");
-				line = l.split("\t");
-				//System.out.println(line[_idcol]);
-				if(line[_idcol].compareTo(uid) < 0){
-					min = mid;// + 1;
+			}*/
+			if(_raf.getFilePointer()==min){
+				while(true){
+					if(ch == 10){
+						break;
+					}
+					ch = _raf.read();
 				}
-				else if(line[_idcol].compareTo(uid) > 0){
-					max = mid - 1;
+			}
+			
+			if(_raf.getFilePointer()>=min){
+				String l = _raf.readLine();
+				if(l!=null){
+					//System.out.println(_idcol);
+					String[] line = l.split("[\t]");
+					line = l.split("\t");
+					//System.out.println(line[_idcol]);
+					if(line[_idcol].compareTo(uid) < 0){
+						min = mid;// + 1;
+					}
+					else if(line[_idcol].compareTo(uid) > 0){
+						max = mid - 1;
+					}
+					else{
+						//System.out.println(l);
+						if(line.length<=_listcol){
+							break;
+						}
+						return line[_listcol].split(",");
+					}
 				}
 				else{
-					return line[_listcol].split(",");
+					break;
 				}
 			}
 			else{
