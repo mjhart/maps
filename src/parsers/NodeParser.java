@@ -27,7 +27,7 @@ public class NodeParser {
 		}
 	}
 	
-	public String[] search(String id) throws IOException{
+	public String[] search(String id, boolean latlon) throws IOException{
 		_raf.seek(0);
 		long min = 0;
 		long max = _len;
@@ -66,7 +66,13 @@ public class NodeParser {
 					max = mid - 1;
 				}
 				else{
-					return line[_wayscol].split(",");
+					if(latlon){
+						String[] temp = {line[_latcol], line[_loncol]};
+						return temp;
+					}
+					else{
+						return line[_wayscol].split(",");
+					}
 				}
 			}
 			else{

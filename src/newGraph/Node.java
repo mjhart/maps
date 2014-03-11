@@ -27,6 +27,14 @@ public class Node implements Comparable<Object>{
 		_prev = null;
 	}
 	
+	public double getLat(){
+		return _lat;
+	}
+	
+	public double getLon(){
+		return _lon;
+	}
+	
 	public String getId(){
 		return _id;
 	}

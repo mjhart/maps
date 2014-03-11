@@ -116,8 +116,12 @@ public class App {
 								if(!source.toString().equals(s)){
 									//System.out.println(s);
 									if(-1!=_g.insertEdge(source.toString(), s.trim(), fnames[i], 1/sar.length)){
-										//System.out.println("Adding edge from "+source.toString()+" to "+s+": "+fnames[i]);
+										System.out.println("Adding edge from "+source.toString()+" to "+s+": "+fnames[i]);
 										list.add(_g.findNode(s));
+										if(s.equals(_dst)){
+											throw new RuntimeException("FUCK THIS SHIT"+source);
+											//return list;
+										}
 									}
 								}
 							}
