@@ -84,7 +84,27 @@ public class WayDictionary {
 			e.printStackTrace();
 		}
 		
-		return null;
+		return result;
+	}
+	
+	public Node getEnd(String id){
+		Edge e = this.getWay(id);
+		if(e==null){
+			return null;
+		}
+		else{
+			return e.getDest();
+		}
+	}
+	
+	public Node getStart(String id){
+		Edge e = this.getWay(id);
+		if(e==null){
+			return null;
+		}
+		else{
+			return e.getSource();
+		}
 	}
 	
 	private Edge createEdge(String[] data) {
