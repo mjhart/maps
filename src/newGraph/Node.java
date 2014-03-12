@@ -1,11 +1,14 @@
 package newGraph;
+
+import kdTree.KDTreeEntry;
+
 /***
  * this class models a node for my graph.  It stores the name, first initial,
  * and second initial of the associated actor, as well as a unique ID for debugging.
  * @author sbreslow
  *
  */
-public class Node implements Comparable<Object>{
+public class Node implements Comparable<Object>, KDTreeEntry {
 	
 	private String _id;
 	private int _my_id;
@@ -90,6 +93,30 @@ public class Node implements Comparable<Object>{
 	@Override
 	public String toString(){
 		return _id;
+	}
+	
+	/* added these methods to comply with KDTreeENtry */
+
+	@Override
+	public double getCoord(int dim) {
+		if(dim==0) {
+			return _lat;
+		}
+		if(dim==1) {
+			return _lon;
+		}
+		throw new IllegalArgumentException("dim only valid for 0 or 1");
+	}
+
+	@Override
+	public double[] getCoords() {
+		double[] array = {_lat, _lon};
+		return array;
+	}
+
+	@Override
+	public int getDimensions() {
+		return 2;
 	}
 
 }
