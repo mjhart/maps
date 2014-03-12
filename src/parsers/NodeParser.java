@@ -23,7 +23,8 @@ public class NodeParser {
 		_latcol = this.findCols(3);
 		_loncol = this.findCols(4);
 		if(_idcol==Integer.MAX_VALUE || _wayscol==Integer.MAX_VALUE || _latcol==Integer.MAX_VALUE || _loncol==Integer.MAX_VALUE){
-			throw new RuntimeException("ERROR: Improper Nodes file");
+			System.err.println("ERROR: Improper Columns in Nodes file");
+			System.exit(1);
 		}
 	}
 	

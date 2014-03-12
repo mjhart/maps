@@ -1,5 +1,7 @@
 package newGraph;
 
+import java.awt.geom.Point2D;
+
 import kdTree.KDTreeEntry;
 
 /***
@@ -8,7 +10,7 @@ import kdTree.KDTreeEntry;
  * @author sbreslow
  *
  */
-public class Node implements Comparable<Object>, KDTreeEntry {
+public class Node extends Point2D.Double implements Comparable<Object>, KDTreeEntry {
 	
 	private String _id;
 	private int _my_id;
@@ -20,11 +22,12 @@ public class Node implements Comparable<Object>, KDTreeEntry {
 	private Node _prev;
 	
 	public Node(int my_id, String id, double lat, double lon){
+		super();
 		_my_id = my_id;
 		_id = id;
-		_g = Double.MAX_VALUE;
-		_h = Double.MAX_VALUE;
-		_f = Double.MAX_VALUE;
+		_g = java.lang.Double.MAX_VALUE;
+		_h = java.lang.Double.MAX_VALUE;
+		_f = java.lang.Double.MAX_VALUE;
 		_lat = lat;
 		_lon = lon;
 		_prev = null;
@@ -117,6 +120,11 @@ public class Node implements Comparable<Object>, KDTreeEntry {
 	@Override
 	public int getDimensions() {
 		return 2;
+	}
+	
+	public void setLoc(double x, double y){
+		//some transform here
+		this.setLocation(x, y);
 	}
 
 }

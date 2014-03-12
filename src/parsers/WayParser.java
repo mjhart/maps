@@ -23,7 +23,8 @@ public class WayParser {
 		_srccol = this.findCols(3);
 		_dstcol = this.findCols(4);
 		if(_idcol==Integer.MAX_VALUE || _namecol==Integer.MAX_VALUE || _srccol==Integer.MAX_VALUE || _dstcol==Integer.MAX_VALUE){
-			throw new RuntimeException("ERROR: Improper Nodes file");
+			System.err.println("ERROR: Improper Columns in Ways file");
+			System.exit(1);
 		}
 	}
 	
