@@ -99,13 +99,15 @@ public class NodeDictionary {
 		NodeIdComparator nc = new NodeIdComparator(_id);
 		FileSearcher fs = new FileSearcher(_file, nc);
 		long location = fs.search(nodeId);
-		System.out.println(location);
 		if(location != -1) {
 			try {
 				_file.seek(location);
-				String[] ways = _file.readLine().split("\t")[_ways].split(",");
-				for(String s : ways) {
-					results.add(s);
+				String[] line = _file.readLine().split("\t");
+				if(line.length > _ways) {
+					String[] ways = line[_ways].split(",");
+					for(String s : ways) {
+						results.add(s);
+					}
 				}
 			} catch (IOException e) {
 				e.printStackTrace();

@@ -2,7 +2,6 @@ package parsers;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.ArrayList;
 import java.util.Comparator;
 
 public class FileSearcher {
@@ -47,6 +46,9 @@ public class FileSearcher {
 				
 				// found film
 				if(compVal == 0) {
+					
+					// move to beginning of line
+					file.seek(file.getFilePointer()-2);
 					while(file.readByte() != '\n') {
 						file.seek(file.getFilePointer()-2);
 					}
@@ -54,7 +56,7 @@ public class FileSearcher {
 				}
 				
 				// upper half
-				if(compVal >  0) {
+				if(compVal <  0) {
 					b = file.getFilePointer();
 				}
 				

@@ -462,4 +462,58 @@ public class KDTree<T extends KDTreeEntry> {
 		}
 		return d;
 	}
+	
+	public List<T> withinBox(double[] max, double[] min) {
+		
+		// check for illegal input
+		if(max.length != k) {
+			throw new IllegalArgumentException("Length of nw array must match tree dimension");
+		}
+		
+		if(min.length != k) {
+			throw new IllegalArgumentException("Length of se array must match tree dimension");
+		}
+		
+		// create linked list for results
+		LinkedList<T> results = new LinkedList<T>();
+		
+		// if tree not empty call helper function
+		if(root != null) {
+			boxHelper(max, min, root, 0, results);
+		}
+		
+
+		return results;
+	}
+
+	private void boxHelper(double[] max, double[] min, KDNode<T> node, int depth, LinkedList<T> results) {
+		int dim = depth%k;
+		
+		boolean contained = true;
+		double[] coords = node.getCoords();
+		for(int i=0; i<k; i++) {
+			if(coords[i] > max[i] || coords[i] < min[i]) {
+				contained = false;
+				break;
+			}
+		}
+		if(contained) {
+			results.add(node.entry);
+		}
+		
+		// left subtree
+		if(min[dim] < node.getPlane()) {
+			if(node.hasLeft()) {
+				boxHelper(max, min, node.getLeft(), depth+1, results);
+			}
+
+		}
+
+		// right subtree
+		if(max[dim] >= node.getPlane()) {
+			if(node.hasRight()) {
+				boxHelper(max, min, node.getRight(), depth+1, results);
+			}
+		}
+	}
 }

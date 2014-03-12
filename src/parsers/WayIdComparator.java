@@ -1,11 +1,11 @@
 package parsers;
-
 import java.util.Comparator;
 
-public class NodeIdComparator implements Comparator<String>{
+
+public class WayIdComparator implements Comparator<String> {
 	private int _id;
 
-	public NodeIdComparator(int id) {
+	public WayIdComparator(int id) {
 		_id = id;
 	}
 	@Override
@@ -13,4 +13,5 @@ public class NodeIdComparator implements Comparator<String>{
 		String[] line = current.split("\t");
 		return line[_id].compareTo(query);
 	}
+
 }
