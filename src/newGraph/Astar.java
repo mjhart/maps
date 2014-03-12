@@ -109,7 +109,7 @@ public class Astar {
 		return list;
 	}
 	
-	public double getD(Node a, Node b){
+	public static double getD(Node a, Node b){
 		if(a!=null && b!=null){
 			return Math.abs(a.getLat()-b.getLat())+Math.abs(a.getLon()-b.getLon());
 		}

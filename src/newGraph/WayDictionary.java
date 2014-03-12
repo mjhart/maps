@@ -17,8 +17,9 @@ public class WayDictionary {
 	private int _id;
 	private int _start;
 	private int _end;
+	private NodeDictionary _nodes;
 	
-	public WayDictionary(String filename) throws FileNotFoundException {
+	public WayDictionary(String filename, NodeDictionary nd) throws FileNotFoundException {
 		_file = new RandomAccessFile(filename, "r");
 		
 		// set up indices
@@ -57,6 +58,8 @@ public class WayDictionary {
 			System.err.println("ERROR: No end field in " + filename);
 			System.exit(1);
 		}
+		
+		_nodes = nd;
 	}
 	
 	public Edge getWay(String id) {
@@ -86,7 +89,21 @@ public class WayDictionary {
 	
 	private Edge createEdge(String[] data) {
 		// should insert into hashtable
-		return null;
+		String sid = data[_start];
+		String eid = data[_end];
+		String id = data[_id];
+		
+		Node start = _nodes.getNode(sid);
+		Node end = _nodes.getNode(eid);
+		
+		Edge e = null;
+		
+		if(start!=null && end!=null){
+			e = new Edge(_ways.size(), start, end, id, Astar.getD(start,end));
+			_ways.put(id, e);
+		}
+		
+		return e;
 	}
 	
 	private void importBox(Edge entry, long pos) {
