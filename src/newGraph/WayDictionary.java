@@ -108,7 +108,6 @@ public class WayDictionary {
 	}
 	
 	private Edge createEdge(String[] data) {
-		// should insert into hashtable
 		String sid = data[_start];
 		String eid = data[_end];
 		String id = data[_id];

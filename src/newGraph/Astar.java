@@ -111,7 +111,7 @@ public class Astar {
 	
 	public static double getD(Node a, Node b){
 		if(a!=null && b!=null){
-			return Math.abs(a.getLat()-b.getLat())+Math.abs(a.getLon()-b.getLon());
+			return Math.sqrt((a.getLat()-b.getLat())*(a.getLat()-b.getLat())+(a.getLon()-b.getLon())*(a.getLon()-b.getLon()));
 		}
 		else{
 			return Double.MAX_VALUE;
