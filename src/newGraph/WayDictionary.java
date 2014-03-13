@@ -3,6 +3,7 @@ package newGraph;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import parsers.FileSearcher;
@@ -63,6 +64,10 @@ public class WayDictionary {
 		_ways = new HashMap<String, Edge>();
 	}
 	
+	public ArrayList<Edge> wayList() {
+		return new ArrayList<Edge>(_ways.values());
+	}
+	
 	public Edge getWay(String id) {
 		if(_ways.containsKey(id)) {
 			return _ways.get(id);
@@ -119,6 +124,9 @@ public class WayDictionary {
 		Node end = _nodes.getNode(eid);
 		
 		Edge e = null;
+		
+		System.out.println(start);
+		System.out.println(end);
 		
 		if(start!=null && end!=null){
 			e = new Edge(_ways.size(), start, end, id, Astar.getD(start,end));

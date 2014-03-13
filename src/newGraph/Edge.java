@@ -1,5 +1,7 @@
 package newGraph;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
 
 /***
@@ -64,6 +66,13 @@ public class Edge extends Line2D.Double{
 	@Override
 	public String toString(){
 		return _film;
+	}
+
+	public void paint(Graphics2D brush, double _maxLat, double _minLat,
+			double _maxLon, double _minLon, int height, int width) {
+		//System.out.println("here");
+		brush.setColor(Color.BLACK);
+		brush.draw(new Line2D.Double(_source, _dest));
 	}
 
 }

@@ -40,6 +40,7 @@ public class Node extends Point2D.Double implements Comparable<Object>, KDTreeEn
 	private int latToY(double min, double max, double scale){
 		//System.out.println("Y: "+(int) ((max-_lat)/(max-min) * scale));
 		//System.out.println(max-_lat);
+		this.setLocation(this.getX(), (int) ((max-_lat)/(max-min) * scale));
 		return (int) ((max-_lat)/(max-min) * scale);
 	}
 	
@@ -47,6 +48,7 @@ public class Node extends Point2D.Double implements Comparable<Object>, KDTreeEn
 		//System.out.println("X: "+(int) ((_lon-min)/(max-min) * scale));
 		//System.out.println(min);
 		//System.out.println(_lon);
+		this.setLocation((int) ((_lon-min)/(max-min) * scale), this.getY());
 		return (int) ((_lon-min)/(max-min) * scale);
 	}
 	

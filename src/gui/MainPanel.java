@@ -2,12 +2,13 @@ package gui;
 
 import java.awt.*;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import javax.swing.*;
 
 public class MainPanel extends JFrame{
 	
-	public MainPanel() throws FileNotFoundException{
+	public MainPanel() throws IOException{
 		super();
 		this.setLayout(new BorderLayout());
 		this.setLocation(500, 250);
@@ -28,7 +29,7 @@ public class MainPanel extends JFrame{
 		this.setVisible(true);
 	}
 	
-	public static void main(String[] args) throws FileNotFoundException{
+	public static void main(String[] args) throws IOException{
 		new MainPanel();
 	}
 	

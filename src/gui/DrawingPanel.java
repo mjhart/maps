@@ -2,6 +2,8 @@ package gui;
 
 import java.awt.*;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
@@ -17,8 +19,14 @@ public class DrawingPanel extends JPanel {
 	private double _delta;
 	
 	private ArrayList<Node> _nodes;
+	private ArrayList<Edge> _ways;
 	
-	public DrawingPanel() throws FileNotFoundException {
+	private int _idcol;
+	private int _namecol;
+	private int _srccol;
+	private int _dstcol;
+	
+	public DrawingPanel() throws IOException {
 		super();
 		this.setLayout(new BorderLayout());
 		this.setPreferredSize(new Dimension(750,750));
@@ -32,8 +40,41 @@ public class DrawingPanel extends JPanel {
 		
 		NodeDictionary nd = new NodeDictionary("smallnodes.tsv");
 		_nodes = nd.nodeList();
+		//WayDictionary wd = new WayDictionary("smallways.tsv", nd);
+		//_ways = wd.wayList();
+		RandomAccessFile ways = new RandomAccessFile("smallways.tsv", "r");
+		String[] header = ways.readLine().split("\t");
+		for(int i=0; i<header.length; i++) {
+			if(header[i].equals("id")) {
+				_idcol = i;
+			}
+			if(header[i].equals("start")) {
+				_srccol = i;
+			}
+			if(header[i].equals("end")) {
+				_dstcol = i;
+			}
+			if(header[i].equals("name")){
+				_namecol = i;
+			}
+		}
+		_ways = new ArrayList<Edge>();
+		while(ways.getFilePointer()< ways.length()){
+			String line = ways.readLine();
+			String[] l = line.split("\t");
+			//System.out.println(l.length);
+			if(l.length!=9){
+				break;
+			}
+			Node src = nd.getNode(l[_srccol]);
+			Node dst = nd.getNode(l[_dstcol]);
+			if(src!=null && dst!=null){
+				Edge e = new Edge(_ways.size(), src, dst, l[_namecol], 1);
+				_ways.add(e);
+			}
+		}
 		
-		//this.update(nd);
+		//this.update(nd,wd);
 		//System.out.println("DONE");
 	}
 
@@ -63,16 +104,22 @@ public class DrawingPanel extends JPanel {
 		//int counter = 0;
 		for(Node n : _nodes){
 			//if(counter < 5)
-			System.out.println("NODE: "+n.toString());
-			System.out.println("LAT: "+n.getLat());
-			System.out.println("LON: "+n.getLon());
-				n.paint(brush, _maxLat, _minLat, _maxLon, _minLon, this.getHeight(), this.getWidth());
+			//System.out.println("NODE: "+n.toString());
+			//System.out.println("LAT: "+n.getLat());
+			//System.out.println("LON: "+n.getLon());
+			n.paint(brush, _maxLat, _minLat, _maxLon, _minLon, this.getHeight(), this.getWidth());
 			//counter++;
+		}
+		//System.out.println(_ways.size());
+		for(Edge e : _ways){
+			System.out.println("WAY: "+e.toString());
+			e.paint(brush, _maxLat, _minLat, _maxLon, _minLon, this.getHeight(), this.getWidth());
 		}
 	}
 	
-	public void update(NodeDictionary nd){
+	public void update(NodeDictionary nd, WayDictionary wd){
 		_nodes = nd.nodeList();
+		_ways = wd.wayList();
 		this.repaint();
 	}
 
