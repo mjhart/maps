@@ -51,15 +51,20 @@ public class NodeParser {
 		long min = 0;
 		long max = _len;
 		while(max>min){
+			System.out.println("max "+max);
+			System.out.println("min "+min);
 			long mid = (long) Math.floor(max-(max-min)/2.0);
+			
 			if(max==min+1){
 				break;
 			}
+			
 			_raf.seek(mid);
 			int ch = _raf.read();
 			if(ch > 128){
 				ch = _raf.read();
 			}// seek to first relevant byte
+			
 			while(_raf.getFilePointer()>min){
 				if(ch == 10){
 					break;
@@ -67,18 +72,22 @@ public class NodeParser {
 				_raf.seek(_raf.getFilePointer()-2);
 				ch = _raf.read();
 			}
+			
 			if(_raf.getFilePointer()==min){
-				while(true){
+				while(true && _raf.getFilePointer() < _raf.length()){
 					if(ch == 10){
 						break;
 					}
 					ch = _raf.read();
+					System.out.println(_raf.getFilePointer());
 				}
 			}// seek to first newline
+			
 			String l = _raf.readLine();
 			if(l!=null){
 				String[] line = l.split("\t");
-				System.out.println("currently on line "+line[_idcol]);
+				System.out.println("currently on line "+line[_idcol]+" and latlon: "+latlon);
+				System.out.println("looking for       "+id);
 				System.out.println(line[_idcol].compareTo(id));
 				if(line[_idcol].compareTo(id) < 0){
 					min = mid;

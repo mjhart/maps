@@ -108,17 +108,23 @@ public class Astar {
 				System.out.println(nodes[0]);
 				System.out.println(nodes[1]);
 				System.out.println(nodes[2]);
+				int counter = 0;
 				if(nodes!=null){
-					String[] slatlon = np.search(nodes[1], true);
+					counter++;
+					System.out.println("counter "+counter);
+					//String[] slatlon = np.search(nodes[1], true);
+					//System.out.println("finished first search");
 					String[] dlatlon = np.search(nodes[2], true);
-					System.out.println("slatlon "+slatlon.length);
+					//System.out.println("slatlon "+slatlon.length);
 					System.out.println("dlatlon "+dlatlon.length);
-					double slat = Double.parseDouble(slatlon[0]);
-					double slon = Double.parseDouble(slatlon[1]);
+					//double slat = Double.parseDouble(slatlon[0]);
+					//double slon = Double.parseDouble(slatlon[1]);
 					double dlat = Double.parseDouble(dlatlon[0]);
 					double dlon = Double.parseDouble(dlatlon[1]);
 					if(source.toString().equals(nodes[1])){
-						g.insertEdge(nodes[1], slat, slon, dlat, dlon, nodes[2], nodes[0], Math.sqrt(((slat-dlat)*(slat-dlat)+(slon-dlon)*(slon-dlon))));
+						g.insertEdge(nodes[1], source.getLat()/*slat*/, source.getLon()/*slon*/, 
+								dlat, dlon, nodes[2], nodes[0], Math.sqrt(((source.getLat()/*slat*/-dlat)*(source.getLat()/*slat*/-dlat)+
+										(source.getLon()/*slon*/-dlon)*(source.getLon()/*slon*/-dlon))));
 						System.out.println("added way to graph");
 						list.add(g.findNode(nodes[2]));
 						System.out.println("added node to list of neighbors");
