@@ -17,6 +17,12 @@ import parsers.WayParser;
 
 public class Astar {
 	
+	public void printSearch(Graph g, String src, String dst, WayParser wp, NodeParser np) throws IOException{
+		List<Node> list = this.search(g, src, dst, wp, np);
+		for(Node n: list){
+			System.out.print(n.toString());
+		}
+	}
 	
 	public List<Node> search(Graph g, String src, String dst, WayParser wp, NodeParser np) throws IOException{
 		Node _src = g.findNode(src);
