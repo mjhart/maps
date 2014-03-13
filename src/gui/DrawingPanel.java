@@ -38,7 +38,7 @@ public class DrawingPanel extends JPanel {
 		double maxLon = -71.4;
 		double minLon = -71.409999999999999999999999;
 		
-		_zoom = 10;
+		_zoom = 8;
 		
 		this.init(minLat, maxLat, minLon, maxLon);
 		
@@ -117,7 +117,7 @@ public class DrawingPanel extends JPanel {
 		}
 		//System.out.println(_ways.size());
 		for(Edge e : _ways){
-			System.out.println("WAY: "+e.toString());
+			//System.out.println("WAY: "+e.toString());
 			e.paint(brush, _maxLat, _minLat, _maxLon, _minLon, this.getHeight(), this.getWidth());
 		}
 	}
@@ -125,8 +125,8 @@ public class DrawingPanel extends JPanel {
 	
 	public void updateZoom(int zoom){
 		_zoom = zoom;
-		_delta = (_zoom * _zoom * 1.0)/(10*10)*.5*_maxDim; // set 10 as inital zoom and max zoomed out
-		if(_zoom == 10){
+		_delta = (_zoom * _zoom * 1.0)/(8*8)*.5*_maxDim; // set 10 as inital zoom and max zoomed out
+		if(_zoom == 8){
 			_delta = _delta * ZOOM_OUT;
 		}
 		

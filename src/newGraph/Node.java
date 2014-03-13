@@ -56,7 +56,6 @@ public class Node extends Point2D.Double implements Comparable<Object>, KDTreeEn
 		int y = this.latToY(minLat, maxLat, height);
 		int x = this.lonToX(minLon, maxLon, width);
 		brush.setColor(Color.BLACK);
-		//brush.draw((Shape) new Point(x,y));
 		brush.drawRect(x,y,1,1);
 	}
 	
