@@ -26,8 +26,8 @@ public class Astar {
 	
 	public List<Node> search(Graph g, String src, String dst, WayParser wp, NodeParser np) throws IOException{
 		String[] latlon = np.search(src, true);
-		//System.out.println(latlon[0]);
-		//System.out.println(latlon[1]);
+		System.out.println(latlon[0]);
+		System.out.println(latlon[1]);
 		g.insertNode(src, Double.parseDouble(latlon[0]), Double.parseDouble(latlon[1]));
 		Node _src = g.findNode(src);
 		//System.out.println(_src);

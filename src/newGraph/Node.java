@@ -1,5 +1,7 @@
 package newGraph;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 
 import kdTree.KDTreeEntry;
@@ -31,6 +33,21 @@ public class Node extends Point2D.Double implements Comparable<Object>, KDTreeEn
 		_lat = lat;
 		_lon = lon;
 		_prev = null;
+	}
+	
+	private int latToY(double min, double max, double scale){
+		return (int) ((max-_lat)/(max-min) * scale);
+	}
+	
+	private int lonToX(double min, double max, double scale){
+		return (int) ((max-_lon)/(max-min) * scale);
+	}
+	
+	public void paint(Graphics2D brush, double maxLat, double minLat, double maxLon, double minLon, double height, double width){
+		int y = this.latToY(minLat, maxLat, height);
+		int x = this.lonToX(minLon, maxLon, width);
+		brush.setColor(Color.BLACK);
+		brush.drawRect(x,y,2,2);
 	}
 	
 	public double getLat(){

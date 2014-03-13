@@ -89,15 +89,14 @@ public class NodeParser {
 				else{// if(line[_idcol].compareTo(id) == 0){
 					if(latlon){
 						System.out.println("Should be here....");
-						String[] temp = new String[2];//{line[_latcol], line[_loncol]};
+						String[] temp = {line[_latcol], line[_loncol]};
 						temp[0] = line[_latcol];
 						temp[1] = line[_loncol];
 						System.out.println("and here...");
 						for(String s : temp){
 							System.out.println(s);
 						}
-						String[] s = temp;
-						return s;// WHY NO RETURN???????????
+						return temp;// WHY NO RETURN???????????
 					}
 					else{
 						return line[_wayscol].split(",");
