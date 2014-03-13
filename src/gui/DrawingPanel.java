@@ -25,6 +25,7 @@ public class DrawingPanel extends JPanel {
 	private int _namecol;
 	private int _srccol;
 	private int _dstcol;
+	private int _zoom;
 	
 	public DrawingPanel() throws IOException {
 		super();
@@ -36,6 +37,9 @@ public class DrawingPanel extends JPanel {
 		double maxLat = 41.829999999999999999999999;
 		double maxLon = -71.4;
 		double minLon = -71.409999999999999999999999;
+		
+		_zoom = 10;
+		
 		this.init(minLat, maxLat, minLon, maxLon);
 		
 		NodeDictionary nd = new NodeDictionary("smallnodes.tsv");
@@ -73,6 +77,7 @@ public class DrawingPanel extends JPanel {
 				_ways.add(e);
 			}
 		}
+		this.updateZoom(8);
 		
 		//this.update(nd,wd);
 		//System.out.println("DONE");
@@ -117,9 +122,14 @@ public class DrawingPanel extends JPanel {
 		}
 	}
 	
-	public void update(NodeDictionary nd, WayDictionary wd){
-		_nodes = nd.nodeList();
-		_ways = wd.wayList();
+	
+	public void updateZoom(int zoom){
+		_zoom = zoom;
+		_delta = (_zoom * _zoom * 1.0)/(10*10)*.5*_maxDim; // set 10 as inital zoom and max zoomed out
+		if(_zoom == 10){
+			_delta = _delta * ZOOM_OUT;
+		}
+		
 		this.repaint();
 	}
 
