@@ -18,10 +18,26 @@ public class WayParser {
 		File f = new File(path);
 		_len = f.length();
 		_raf = new RandomAccessFile(f,"r");
-		_idcol = this.findCols(1);
+		/*_idcol = this.findCols(1);
 		_namecol = this.findCols(2);
 		_srccol = this.findCols(3);
-		_dstcol = this.findCols(4);
+		_dstcol = this.findCols(4);*/
+		_raf.seek(0);
+		String[] header = _raf.readLine().split("\t");
+		for(int i=0; i<header.length; i++) {
+			if(header[i].equals("id")) {
+				_idcol = i;
+			}
+			if(header[i].equals("start")) {
+				_srccol = i;
+			}
+			if(header[i].equals("end")) {
+				_dstcol = i;
+			}
+			if(header[i].equals("name")){
+				_namecol = i;
+			}
+		}
 		if(_idcol==Integer.MAX_VALUE || _namecol==Integer.MAX_VALUE || _srccol==Integer.MAX_VALUE || _dstcol==Integer.MAX_VALUE){
 			System.err.println("ERROR: Improper Columns in Ways file");
 			System.exit(1);

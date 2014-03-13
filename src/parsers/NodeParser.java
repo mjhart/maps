@@ -18,14 +18,32 @@ public class NodeParser {
 		File f = new File(path);
 		_len = f.length();
 		_raf = new RandomAccessFile(f,"r");
-		_idcol = this.findCols(1);
+		/*_idcol = this.findCols(1);
 		_wayscol = this.findCols(2);
 		_latcol = this.findCols(3);
-		_loncol = this.findCols(4);
+		_loncol = this.findCols(4);*/
+		_raf.seek(0);
+		String[] header = _raf.readLine().split("\t");
+		for(int i=0; i<header.length; i++) {
+			if(header[i].equals("id")) {
+				_idcol = i;
+			}
+			if(header[i].equals("latitude")) {
+				_latcol = i;
+			}
+			if(header[i].equals("longitude")) {
+				_loncol = i;
+			}
+			if(header[i].equals("ways")) {
+				_wayscol = i;
+			}
+		}
 		if(_idcol==Integer.MAX_VALUE || _wayscol==Integer.MAX_VALUE || _latcol==Integer.MAX_VALUE || _loncol==Integer.MAX_VALUE){
 			System.err.println("ERROR: Improper Columns in Nodes file");
 			System.exit(1);
 		}
+		//System.out.println("lat col "+_latcol);
+		//System.out.println("lon col "+_loncol);
 	}
 	
 	public String[] search(String id, boolean latlon) throws IOException{
@@ -60,16 +78,26 @@ public class NodeParser {
 			String l = _raf.readLine();
 			if(l!=null){
 				String[] line = l.split("\t");
+				System.out.println("currently on line "+line[_idcol]);
+				System.out.println(line[_idcol].compareTo(id));
 				if(line[_idcol].compareTo(id) < 0){
 					min = mid;
 				}
 				else if(line[_idcol].compareTo(id) > 0){
 					max = mid - 1;
 				}
-				else{
+				else{// if(line[_idcol].compareTo(id) == 0){
 					if(latlon){
-						String[] temp = {line[_latcol], line[_loncol]};
-						return temp;
+						System.out.println("Should be here....");
+						String[] temp = new String[2];//{line[_latcol], line[_loncol]};
+						temp[0] = line[_latcol];
+						temp[1] = line[_loncol];
+						System.out.println("and here...");
+						for(String s : temp){
+							System.out.println(s);
+						}
+						String[] s = temp;
+						return s;// WHY NO RETURN???????????
 					}
 					else{
 						return line[_wayscol].split(",");
@@ -87,6 +115,9 @@ public class NodeParser {
 		_raf.seek(0);
 		String header = _raf.readLine();
 		String split[] = header.split("\t");
+		for(int i = 0; i < split.length; i++){
+			
+		}
 		int i = 0;
 		if(col==1){
 			for(String s : split){
