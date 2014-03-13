@@ -10,7 +10,7 @@ import parsers.WayIdComparator;
 
 public class WayDictionary {
 	
-	public static int BUFFER_SIZE = 10000; 
+	public static int BUFFER_SIZE = 1024; 
 	
 	private RandomAccessFile _file;
 	private HashMap<String, Edge> _ways;
@@ -60,6 +60,7 @@ public class WayDictionary {
 		}
 		
 		_nodes = nd;
+		_ways = new HashMap<String, Edge>();
 	}
 	
 	public Edge getWay(String id) {
@@ -73,15 +74,17 @@ public class WayDictionary {
 		
 		Edge result = null;
 		
-		try {
-			_file.seek(pos);
-			String[] line = _file.readLine().split("\t");
-			result = createEdge(line);
-			
-			importBox(result, pos);
-			
-		} catch (IOException e) {
-			e.printStackTrace();
+		if(pos > 0) {
+			try {
+				_file.seek(pos);
+				String[] line = _file.readLine().split("\t");
+				result = createEdge(line);
+
+				importBox(result, pos);
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		return result;
@@ -142,27 +145,64 @@ public class WayDictionary {
 			
 			// read buffer from below input
 			
-			//long bottom;
+			long size = BUFFER_SIZE;
+			
 			if(pos - BUFFER_SIZE < 0) {
 				_file.seek(0);
+				size = pos;
 			}
 			else {
 				_file.seek(pos-BUFFER_SIZE);
 			}
 			
-			byte[] buf = new byte[BUFFER_SIZE];
+			System.out.println(size);
+			
+			byte[] buf = new byte[(int) size];
 			_file.read(buf);
 			
 			int i = 0;
 			while(buf[i] != '\n') {
 				i++;
 			}
+			i++;
 			
-			while(i<BUFFER_SIZE) {
+			while(i<size) {
 				StringBuilder sb = new StringBuilder();
-				while(buf[i] != '\n') {
-					// TODO 
+				while(buf[i] != '\n' && i<size) {
+					sb.append((char)buf[i]);
+					i++;
 				}
+				System.out.println(sb.toString());
+				createEdge(sb.toString().split("\t"));
+				i++;
+			}
+			
+			_file.seek(pos);
+			_file.readLine();
+			
+			size = BUFFER_SIZE;
+			
+			if(pos + BUFFER_SIZE >= _file.length()) {
+				size = _file.length() - _file.getFilePointer();
+			}
+			
+			_file.read(buf);
+			
+			i = 0;
+			while(buf[i] != '\n') {
+				i++;
+			}
+			i++;
+			
+			while(i<size) {
+				StringBuilder sb = new StringBuilder();
+				while(buf[i] != '\n' && i<size) {
+					sb.append((char)buf[i]);
+					i++;
+				}
+				System.out.println(sb.toString());
+				createEdge(sb.toString().split("\t"));
+				i++;
 			}
 			
 			
@@ -170,12 +210,5 @@ public class WayDictionary {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
-		
-		
-		
-		
-		
 	}
 }
