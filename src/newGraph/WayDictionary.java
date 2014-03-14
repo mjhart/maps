@@ -139,14 +139,14 @@ public class WayDictionary {
 	private void importBox(Edge entry, long pos) {
 		
 		// take position of source (arbitrary)
-		double lat = entry.getSource().getLat();
-		double lon = entry.getSource().getLon();
+//		double lat = entry.getSource().getLat();
+//		double lon = entry.getSource().getLon();
 		
 		// find borders of bounding box
-		double min_lat = lat - lat%0.01;
-		double min_lon = lon - lon%0.01;
-		double max_lat = lat + 0.01 - lat%0.01;
-		double max_lon = lon + 0.01 - lon%0.01;
+//		double min_lat = lat - lat%0.01;
+//		double min_lon = lon - lon%0.01;
+//		double max_lat = lat + 0.01 - lat%0.01;
+//		double max_lon = lon + 0.01 - lon%0.01;
 		
 		
 		try {

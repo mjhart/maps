@@ -8,18 +8,20 @@ import javax.swing.*;
 
 import tmp.Controller;
 
-public class MainPanel extends JFrame{
+public class AltMainPanel extends JFrame{
 	
-	public MainPanel() throws IOException{
+	private Controller controller;
+	
+	public AltMainPanel(Controller controller) {
 		super();
 		this.setLayout(new BorderLayout());
 		this.setLocation(500, 250);
 		this.setTitle("Maps");
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
-		DrawingPanel dp = new DrawingPanel();
+		AltDrawingPanel dp = new AltDrawingPanel(controller);
 		//InputPanel ip = new InputPanel(dp);
-		ZoomPanel zp = new ZoomPanel(dp, 10, 10);
+		AltZoomPanel zp = new AltZoomPanel(dp, 10, 10);
 		//dp.setIPan(ip);
 		//dp.setZPan(zp);
 		
@@ -29,6 +31,8 @@ public class MainPanel extends JFrame{
 		this.setResizable(false);
 		this.pack();
 		this.setVisible(true);
+		
+		this.controller = controller;
 	}
 	
 	public static void main(String[] args) throws IOException{
