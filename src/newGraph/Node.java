@@ -5,6 +5,9 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Shape;
 import java.awt.geom.Point2D;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 import kdTree.KDTreeEntry;
 
@@ -24,6 +27,8 @@ public class Node extends Point2D.Double implements Comparable<Object>, KDTreeEn
 	private double _h;
 	private double _f;
 	private Node _prev;
+	
+	private List<Edge> _edges;
 	
 	public Node(int my_id, String id, double lat, double lon){
 		super();
@@ -153,6 +158,21 @@ public class Node extends Point2D.Double implements Comparable<Object>, KDTreeEn
 	public void setLoc(double x, double y){
 		//some transform here
 		this.setLocation(x, y);
+	}
+	
+	public void addEdge(Edge e) {
+		if(_edges == null) {
+			_edges = new LinkedList<Edge>();
+		}
+		_edges.add(e);
+	}
+	
+	public boolean edgesLoaded() {
+		return _edges != null;
+	}
+	
+	public List<Edge> getEdges() {
+		return Collections.unmodifiableList(_edges);
 	}
 
 }

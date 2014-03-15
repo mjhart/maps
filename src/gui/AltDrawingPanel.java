@@ -28,7 +28,7 @@ public class AltDrawingPanel extends JPanel {
 	public AltDrawingPanel(Controller c) {
 		super();
 		this.setLayout(new BorderLayout());
-		this.setPreferredSize(new Dimension(750,750));
+		this.setPreferredSize(new Dimension(500,500));
 		this.setBackground(new Color(255,252,173));
 		
 		max = new double[2];
@@ -43,6 +43,10 @@ public class AltDrawingPanel extends JPanel {
 		_nodes = new HashSet<Node>();
 		_ways = new HashSet<Edge>();
 		
+		PanListener pan = new PanListener(this);
+		this.addMouseListener(pan);
+		this.addMouseMotionListener(pan);
+		
 		
 	}
 	
@@ -52,11 +56,14 @@ public class AltDrawingPanel extends JPanel {
 		Graphics2D brush = (Graphics2D) g;
 		
 		_nodes = new HashSet<Node>();
+		_ways = new HashSet<Edge>();
 		
-		_nodes.addAll(c.nodeBoundingBox(max, min));
+		c.getData(max, min, _nodes, _ways);
 		
 		System.out.println("Nodes being painted " + _nodes.size());
+		System.out.println("Ways being painted " + _ways.size());
 		System.out.println("Bounding box: " + Arrays.toString(max) + " " + Arrays.toString(min));
+		
 		
 		brush.clearRect(0, 0, this.getWidth(), this.getHeight());
 		
@@ -79,5 +86,14 @@ public class AltDrawingPanel extends JPanel {
 		this.zoom = zoom;
 		this.repaint();
 	}
+	
+	public void moveWindow(double[] delta) {
+		max[0]+=delta[1];
+		max[1]-=delta[0];
+		min[0]+=delta[1];
+		min[1]-=delta[0];
+		this.repaint();
+	}
+	
 
 }

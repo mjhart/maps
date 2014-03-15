@@ -20,6 +20,12 @@ public class WayDictionary {
 	private int _end;
 	private NodeDictionary _nodes;
 	
+	// debugging
+	public int toDisk = 0;
+	public int inMem = 0;
+	public int calls = 0;
+	public int nullWays = 0;
+	
 	public WayDictionary(String filename, NodeDictionary nd) throws FileNotFoundException {
 		_file = new RandomAccessFile(filename, "r");
 		
@@ -70,8 +76,17 @@ public class WayDictionary {
 	
 	public Edge getWay(String id) {
 		if(_ways.containsKey(id)) {
+			inMem++;
 			return _ways.get(id);
 		}
+		
+		/*
+		if(calls > 2) {
+			System.out.println("returning early");
+			return null;
+		}
+		*/
+		toDisk++;
 		
 		WayIdComparator comp = new WayIdComparator(_id);
 		FileSearcher fs = new FileSearcher(_file, comp);
@@ -85,11 +100,15 @@ public class WayDictionary {
 				String[] line = _file.readLine().split("\t");
 				result = createEdge(line);
 
-				importBox(result, pos);
+				//importBox(result, pos);
 
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+		}
+		
+		if(result == null) {
+			nullWays++;
 		}
 		
 		return result;
@@ -125,8 +144,8 @@ public class WayDictionary {
 		
 		Edge e = null;
 		
-		System.out.println(start);
-		System.out.println(end);
+		//System.out.println(start);
+		//System.out.println(end);
 		
 		if(start!=null && end!=null){
 			e = new Edge(_ways.size(), start, end, id, Astar.getD(start,end));
