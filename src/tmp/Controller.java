@@ -107,9 +107,12 @@ public class Controller {
 		}
 		System.out.println("Null ways: " + _ways.nullWays);
 		System.out.println(String.format("Ways loaded - Disk: %d Mem: %d", _ways.toDisk, _ways.inMem));
+		System.out.println("Buffer read: " + _ways.bufferRead);
+		_ways.bufferRead = 0;
 		_ways.toDisk = 0;
 		_ways.inMem = 0;
 		System.out.println("Total ways searched: " + count);
+		System.out.println();
 		return _tree.withinBox(max, min);
 	}
 	

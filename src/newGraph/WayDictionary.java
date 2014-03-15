@@ -25,6 +25,7 @@ public class WayDictionary {
 	public int inMem = 0;
 	public int calls = 0;
 	public int nullWays = 0;
+	public int bufferRead = 0;
 	
 	public WayDictionary(String filename, NodeDictionary nd) throws FileNotFoundException {
 		_file = new RandomAccessFile(filename, "r");
@@ -100,7 +101,9 @@ public class WayDictionary {
 				String[] line = _file.readLine().split("\t");
 				result = createEdge(line);
 
-				//importBox(result, pos);
+				if(result != null) {
+					importBox(result, pos);
+				}
 
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -182,7 +185,7 @@ public class WayDictionary {
 				_file.seek(pos-BUFFER_SIZE);
 			}
 			
-			System.out.println(size);
+			//System.out.println(size);
 			
 			byte[] buf = new byte[(int) size];
 			_file.read(buf);
@@ -199,36 +202,45 @@ public class WayDictionary {
 					sb.append((char)buf[i]);
 					i++;
 				}
-				System.out.println(sb.toString());
+				//System.out.println(sb.toString());
 				createEdge(sb.toString().split("\t"));
+				bufferRead++;
 				i++;
 			}
 			
 			_file.seek(pos);
 			_file.readLine();
 			
+			/*
 			size = BUFFER_SIZE;
 			
 			if(pos + BUFFER_SIZE >= _file.length()) {
 				size = _file.length() - _file.getFilePointer();
 			}
-			
-			_file.read(buf);
+			*/
+			size = _file.read(buf);
 			
 			i = 0;
-			while(buf[i] != '\n') {
+			while(i<size && buf[i] != '\n') {
 				i++;
 			}
 			i++;
 			
 			while(i<size) {
 				StringBuilder sb = new StringBuilder();
-				while(buf[i] != '\n' && i<size) {
+				while(true) {
+					if(i>=size) {
+						return;
+					}
+					if(buf[i] == '\n') {
+						break;
+					}
 					sb.append((char)buf[i]);
 					i++;
 				}
-				System.out.println(sb.toString());
+				//System.out.println(sb.toString());
 				createEdge(sb.toString().split("\t"));
+				bufferRead++;
 				i++;
 			}
 			
