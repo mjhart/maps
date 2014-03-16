@@ -12,6 +12,8 @@ import newGraph.NodeDictionary;
 
 import org.junit.Test;
 
+import tmp.Controller;
+
 public class NodeDictionaryTest {
 
 	@Test
@@ -27,5 +29,4 @@ public class NodeDictionaryTest {
 		assertTrue(result.size() == 1);
 		assertTrue(result.get(0).equals("/w/4015.7374.42295268.0.1"));
 	}
-
 }

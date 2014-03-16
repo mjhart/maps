@@ -28,15 +28,15 @@ public class AltDrawingPanel extends JPanel {
 	public AltDrawingPanel(Controller c) {
 		super();
 		this.setLayout(new BorderLayout());
-		this.setPreferredSize(new Dimension(500,500));
+		this.setPreferredSize(new Dimension(750,750));
 		this.setBackground(new Color(255,252,173));
 		
 		max = new double[2];
 		min = new double[2];
-		max[0] = 41.83;
+		max[0] = 41.8299;
 		max[1] = -71.40;
 		min[0] = 41.82;
-		min[1] = -71.41;
+		min[1] = -71.4099;
 		
 		this.c = c;
 		
@@ -68,11 +68,11 @@ public class AltDrawingPanel extends JPanel {
 		brush.clearRect(0, 0, this.getWidth(), this.getHeight());
 		
 		for(Node n : _nodes){
-			n.paint(brush, max[0], min[0], max[1], min[1], this.getHeight(), this.getWidth());
+			paintNode(brush, n);
 		}
 		
 		for(Edge e : _ways){
-			e.paint(brush, max[0], min[0], max[1], min[1], this.getHeight(), this.getWidth());
+			paintWay(brush, e);
 		}
 	}
 	
@@ -93,6 +93,34 @@ public class AltDrawingPanel extends JPanel {
 		min[0]+=delta[1];
 		min[1]-=delta[0];
 		this.repaint();
+	}
+	
+	private int latToY(double lat){
+		//System.out.println("Y: "+(int) ((max-_lat)/(max-min) * scale));
+		//System.out.println(max-_lat);
+		return (int) ((max[0]-lat)/(max[0]-min[0]) * this.getHeight());
+	}
+	
+	private int lonToX(double lon){
+		//System.out.println("Y: "+(int) ((max-_lat)/(max-min) * scale));
+		//System.out.println(max-_lat);
+		return (int) ((lon - min[1])/(max[1]-min[1]) * this.getWidth());
+	}
+	
+	private void paintNode(Graphics2D brush, Node node) {
+		int x = lonToX(node.getLon());
+		int y = latToY(node.getLat());
+		System.out.println(String.format("X: %d Y: %d", x, y));
+		brush.setColor(Color.BLACK);
+		brush.drawRect(x,y,1,1);
+	}
+	
+	private void paintWay(Graphics2D brush, Edge way) {
+		int x1 = lonToX(way.getSource().getLon());
+		int y1 = latToY(way.getSource().getLat());
+		int x2 = lonToX(way.getDest().getLon());
+		int y2 = latToY(way.getDest().getLat());
+		brush.drawLine(x1, y1, x2, y2);
 	}
 	
 

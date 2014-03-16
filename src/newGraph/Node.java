@@ -60,6 +60,13 @@ public class Node extends Point2D.Double implements Comparable<Object>, KDTreeEn
 	public void paint(Graphics2D brush, double maxLat, double minLat, double maxLon, double minLon, double height, double width){
 		int y = this.latToY(minLat, maxLat, height);
 		int x = this.lonToX(minLon, maxLon, width);
+		
+		if(this.getLat() > maxLat) {
+			System.out.println(this.getY());
+		}
+		if(this.getLon() > maxLon) {
+			System.out.println(this.getX());
+		}
 		//System.out.println("x: " + x);
 		//System.out.println("y: " + y);
 		brush.setColor(Color.BLACK);
