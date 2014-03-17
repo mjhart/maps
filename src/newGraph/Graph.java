@@ -97,6 +97,8 @@ public class Graph {
 					if(!_edges.contains(e)){
 						_edges.add(e);
 					}
+					this.findNode(source).addEdge(e);
+					//e.getSource().addEdge(e);
 					return _edges.indexOf(e);
 				}
 				else if(!_nodes.contains(src) && _nodes.contains(dst)){
@@ -106,6 +108,7 @@ public class Graph {
 					if(!_edges.contains(e)){
 						_edges.add(e);
 					}
+					e.getSource().addEdge(e);
 					return _edges.indexOf(e);
 
 				}
@@ -116,6 +119,8 @@ public class Graph {
 					if(!_edges.contains(e)){
 						_edges.add(e);
 					}
+					this.findNode(source).addEdge(e);
+					//e.getSource().addEdge(e);
 					return _edges.indexOf(e);
 
 				}
@@ -127,6 +132,7 @@ public class Graph {
 					if(!_edges.contains(e)){
 						_edges.add(e);
 					}
+					e.getSource().addEdge(e);
 					return _edges.indexOf(e);
 
 				}
