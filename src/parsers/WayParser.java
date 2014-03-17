@@ -58,14 +58,14 @@ public class WayParser {
 			if(ch > 128){
 				ch = _raf.read();
 			}// seek to first relevant byte
-			while(_raf.getFilePointer()>min){
+			while(_raf.getFilePointer()>min+1){
 				if(ch == 10){
 					break;
 				}
 				_raf.seek(_raf.getFilePointer()-2);
 				ch = _raf.read();
 			}
-			if(_raf.getFilePointer()==min){
+			if(_raf.getFilePointer()==min+1){
 				while(true){
 					if(ch == 10){
 						break;

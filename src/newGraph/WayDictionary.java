@@ -151,13 +151,22 @@ public class WayDictionary {
 		//System.out.println(end);
 		
 		if(start!=null && end!=null){
-			e = new Edge(_ways.size(), start, end, id, Astar.getD(start,end));
+			e = new Edge(_ways.size(), start, end, id, this.getD(start,end));
 			_ways.put(id, e);
 		}
 		
 		return e;
 	}
 	
+	private double getD(Node a, Node b) {
+		if(a!=null && b!=null){
+			return Math.sqrt((a.getLat()-b.getLat())*(a.getLat()-b.getLat())+(a.getLon()-b.getLon())*(a.getLon()-b.getLon()));
+		}
+		else{
+			return Double.MAX_VALUE;
+		}
+	}
+
 	private void importBox(Edge entry, long pos) {
 		
 		// take position of source (arbitrary)
