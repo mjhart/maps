@@ -12,6 +12,8 @@ import parsers.FileSearcher;
 import parsers.NodeIdComparator;
 
 public class NodeDictionary {
+	
+	private static int BUFFER_SIZE = 2048;
 
 	private HashMap<String, Node> _nodes;
 	private RandomAccessFile _file;
@@ -77,13 +79,39 @@ public class NodeDictionary {
 	private void buildDictionary() {
 		
 		try {
-			
+			int id = 0;
 			String line;
-			int i=0;
 			while((line = _file.readLine()) != null) {
 				String[] data = line.split("\t");
-				_nodes.put(data[_id], new Node(++i, data[_id], Double.parseDouble(data[_lat]), Double.parseDouble(data[_lon])));
+				_nodes.put(data[_id], new Node(++id, data[_id], Double.parseDouble(data[_lat]), Double.parseDouble(data[_lon])));
 			}
+			
+				/*
+			byte[] buffer = new byte[BUFFER_SIZE];
+			String line;
+			int id=0;
+			int read = 0;
+			int total = 0;
+			while((read = _file.read(buffer)) == BUFFER_SIZE) {
+				total+=read;
+				int i=0;
+				while(i<read) {
+					StringBuilder sb = new StringBuilder();
+					while(i<read) {
+						if(buffer[i] == '\n') {
+							System.out.println(sb);
+							String[] data = sb.toString().split("\t");
+							_nodes.put(data[_id], new Node(++id, data[_id], Double.parseDouble(data[_lat]), Double.parseDouble(data[_lon])));
+							sb = new StringBuilder();
+						}
+						else {
+							sb.append((char) buffer[i]);
+						}
+						i++;
+					}
+				}
+			}
+			*/
 		}
 		catch(IOException e) {
 			e.printStackTrace();

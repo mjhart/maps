@@ -42,6 +42,7 @@ public class AltZoomPanel extends JPanel {
 	
 	private class ZoomListener implements ChangeListener{
 		public void stateChanged(ChangeEvent e) {
+			/*
 			if(((JSlider) e.getSource()).getValueIsAdjusting()==false){
 				System.out.println("in here");
 				
@@ -52,6 +53,8 @@ public class AltZoomPanel extends JPanel {
 					_dp.updateZoom(zoom);
 				}
 			}
+			*/
+			_dp.loadData();
 		}
 	}
 	

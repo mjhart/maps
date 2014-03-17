@@ -1,6 +1,8 @@
 package gui;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -17,7 +19,7 @@ import newGraph.*;
 
 public class AltDrawingPanel extends JPanel {
 	
-	public static double TILE_SIZE = 0.05;
+	public static double TILE_SIZE = 0.01;
 
 	private double[] wMin;
 	private double[] wMax;
@@ -65,10 +67,10 @@ public class AltDrawingPanel extends JPanel {
 		
 	}
 	
-	private void loadData() {
+	public void loadData() {
 		//_nodes = new HashSet<Node>();
 		//_ways = new HashSet<Edge>();
-		
+		System.out.println("loading data");
 		
 		HashSet<Node> nodes;
 		HashSet<Edge> ways;
@@ -138,14 +140,24 @@ public class AltDrawingPanel extends JPanel {
 			paintWay(brush, e);
 		}
 		*/
+		/*
 		if(wMax[0] > dMax[0] || wMax[1] > dMax[1] || wMin[0] < dMin[0] || wMin[1] < wMin[1]) {
 			System.out.println("Loading data");
 			loadData();
 		}
+		*/
 		
 		brush.clearRect(0, 0, this.getWidth(), this.getHeight());
 		
 		for(Tile t : tiles) {
+			
+			Composite tmp = brush.getComposite();
+			brush.setColor(java.awt.Color.RED);
+			brush.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.2f));
+			
+			brush.drawRect(lonToX(t._min[0]), latToY(t._max[1]),(int) (TILE_SIZE/(wMax[0]-wMin[0])*this.getWidth()),(int) (TILE_SIZE/(wMax[1]-wMin[1])*this.getHeight()));
+			brush.fillRect(lonToX(t._min[0]), latToY(t._max[1]),(int) (TILE_SIZE/(wMax[0]-wMin[0])*this.getWidth()),(int) (TILE_SIZE/(wMax[1]-wMin[1])*this.getHeight()));
+			brush.setComposite(tmp);
 			for(Node n : t.nodes){
 				paintNode(brush, n);
 			}
@@ -198,7 +210,7 @@ public class AltDrawingPanel extends JPanel {
 		return (int) ((wMax[1]-lat)/(wMax[1]-wMin[1]) * this.getHeight());
 	}
 	
-	private int lonToX(double lon) {
+	private int lonToX(double lon) {// TODO Auto-generated method stub
 		//System.out.println("Y: "+(int) ((max-_lat)/(max-min) * scale));
 		//System.out.println(max-_lat);
 		return (int) ((lon - wMin[0])/(wMax[0]-wMin[0]) * this.getWidth());
@@ -227,6 +239,4 @@ public class AltDrawingPanel extends JPanel {
 		int y2 = latToY(way.getDest().getLat());
 		brush.drawLine(x1, y1, x2, y2);
 	}
-	
-
 }
