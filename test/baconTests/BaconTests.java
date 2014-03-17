@@ -1,5 +1,6 @@
 package baconTests;
 
+import java.io.RandomAccessFile;
 import java.util.ArrayList;
 
 import org.junit.Test;
@@ -26,6 +27,65 @@ public class BaconTests {
 					edges.add(e);
 					break;
 				}
+			}
+		}
+	}
+	
+	@Test
+	public void NodeParserTestIn() throws Exception{
+		NodeParser np = new NodeParser("smallnodes.tsv");
+		String[] test = np.search("/n/4182.7140.201260632", false);
+		System.out.println(test.length);
+	}
+	
+	@Test
+	public void NodeParserTestOut() throws Exception{
+		NodeParser np = new NodeParser("smallnodes.tsv");
+		String[] test = np.search("/n/4182.7139.201260632", false);
+		assertNull(test);
+	}
+	
+	@Test
+	public void NodeParserTestFull() throws Exception{
+		NodeParser np = new NodeParser("smallnodes.tsv");
+		RandomAccessFile raf = new RandomAccessFile("smallnodes.tsv","r");
+		int _idcol = Integer.MAX_VALUE;
+		int _latcol = Integer.MAX_VALUE;
+		int _loncol = Integer.MAX_VALUE;
+		int _wayscol = Integer.MAX_VALUE;
+		String[] header = raf.readLine().split("\t");
+		for(int i=0; i<header.length; i++) {
+			if(header[i].equals("id")) {
+				_idcol = i;
+			}
+			if(header[i].equals("latitude")) {
+				_latcol = i;
+			}
+			if(header[i].equals("longitude")) {
+				_loncol = i;
+			}
+			if(header[i].equals("ways")) {
+				_wayscol = i;
+			}
+		}
+		if(_idcol==Integer.MAX_VALUE || _wayscol==Integer.MAX_VALUE || _latcol==Integer.MAX_VALUE || _loncol==Integer.MAX_VALUE){
+			System.err.println("ERROR: Improper Columns in Nodes file");
+			System.exit(1);
+		}
+		while(raf.getFilePointer()<raf.length()){
+			String[] line = raf.readLine().split("\t");
+			String id = line[_idcol];
+			try{
+				if(line.length==np.getCols()){
+					assertNotNull(np.search(id, false));
+				}
+				else{
+					assertNull(np.search(id, false));
+				}
+			}
+			catch(AssertionError e){
+				System.out.println(id);
+				System.exit(1);
 			}
 		}
 	}

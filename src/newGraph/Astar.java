@@ -47,11 +47,8 @@ public class Astar {
 	
 	public List<Node> search(Graph g, String src, String dst, WayParser wp, NodeParser np) throws IOException{
 		String[] latlon = np.search(src, true);
-		//System.out.println(latlon[0]);
-		//System.out.println(latlon[1]);
 		g.insertNode(src, Double.parseDouble(latlon[0]), Double.parseDouble(latlon[1]));
 		Node _src = g.findNode(src);
-		//System.out.println(_src);
 		if(_src!=null){
 			Map<String, Node> open = new HashMap<String, Node>();
 			Map<String, Node> close = new HashMap<String, Node>();
@@ -64,6 +61,7 @@ public class Astar {
 			while(open.size() > 0){
 				Node n = q.poll();
 				//System.out.println("n is "+n.toString());
+				//System.out.println("g is "+dst);
 				open.remove(n.toString());
 				if(n.toString().equals(dst)){
 					goal = n;
@@ -108,10 +106,12 @@ public class Astar {
 				return list;
 			}
 			else{
+				System.out.println("Goal was Null");
 				return null;
 			}
 		}
 		else{
+			System.out.println("Start was Null");
 			return null;
 		}
 		//return null;
@@ -120,14 +120,14 @@ public class Astar {
 	public Set<Node> getBors(Node source, WayParser wp, NodeParser np, Graph g) throws IOException{
 		Set<Node> list = new HashSet<Node>();
 		String[] ways = np.search(source.toString(), false);
-		System.out.println("ways.length "+ways.length);
+		//System.out.println("ways.length "+ways.length);
 		if(ways!=null){
 			for(String w : ways){
 				//System.out.println("Way "+w);
 				String[] nodes = wp.search(w);
 				int counter = 0;
 				if(nodes!=null){
-					System.out.println("Nodes "+nodes.length);
+					//System.out.println("Nodes "+nodes.length);
 					//System.out.println(nodes[0]);
 					//System.out.println(nodes[1]);
 					//System.out.println(nodes[2]);
@@ -141,7 +141,7 @@ public class Astar {
 					//double slat = Double.parseDouble(slatlon[0]);
 					//double slon = Double.parseDouble(slatlon[1]);
 					if(dlatlon!=null){
-						System.out.println(dlatlon.length);
+						//System.out.println(dlatlon.length);
 						double dlat = Double.parseDouble(dlatlon[0]);
 						double dlon = Double.parseDouble(dlatlon[1]);
 						if(source.toString().equals(nodes[1])){
@@ -151,6 +151,7 @@ public class Astar {
 											(source.getLon()/*slon*/-dlon)*(source.getLon()/*slon*/-dlon))));
 							//System.out.println("added way to graph");
 							list.add(g.findNode(nodes[2]));
+							//if(nodes[2].equals("/n/4182.7140.201260632")) System.out.println("END FOUND");
 							//System.out.println(g.findNode(nodes[2]));
 							//System.out.println("added node to list of neighbors");
 						}
