@@ -143,17 +143,17 @@ public class Node extends Point2D.Double implements Comparable<Object>, KDTreeEn
 	@Override
 	public double getCoord(int dim) {
 		if(dim==0) {
-			return _lat;
+			return _lon;
 		}
 		if(dim==1) {
-			return _lon;
+			return _lat;
 		}
 		throw new IllegalArgumentException("dim only valid for 0 or 1");
 	}
 
 	@Override
 	public double[] getCoords() {
-		double[] array = {_lat, _lon};
+		double[] array = {_lon, _lat};
 		return array;
 	}
 
