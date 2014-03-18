@@ -4,13 +4,14 @@ import java.io.RandomAccessFile;
 import java.util.ArrayList;
 
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 import newGraph.*;
 import parsers.*;
 
 public class BaconTests {
 	
-	/*@Test
+	//@Test
 	public void baconTest1() throws Exception{
 		//NodeParser np = new NodeParser("smallnodes.tsv");
 		//WayParser wp = new WayParser("smallways.tsv");
@@ -29,11 +30,10 @@ public class BaconTests {
 				}
 			}
 		}
-	}*/
+	}
 	
-	@Test
+	//@Test
 	public void baconTest2() throws Exception{
-		System.out.println("Hello WOrld");
 		//NodeParser np = new NodeParser("smallnodes.tsv");
 		//WayParser wp = new WayParser("smallways.tsv");
 		Astar astar = new Astar("smallnodes.tsv","smallways.tsv");
@@ -53,12 +53,33 @@ public class BaconTests {
 		}
 	}
 	
+	@Test
+	public void baconTest1reverse() throws Exception{
+		//NodeParser np = new NodeParser("smallnodes.tsv");
+				//WayParser wp = new WayParser("smallways.tsv");
+				Astar astar = new Astar("smallnodes.tsv","smallways.tsv");
+				//Astar astar = new Astar("/course/cs032/data/maps/nodes.tsv", "/course/cs032/data/maps/ways.tsv");
+				Graph g  = new Graph();
+				//astar.printSearch(g, "/n/4182.7140.201312088", "/n/4182.7140.201260632", wp, np);
+				ArrayList<Node> path = (ArrayList<Node>) astar.getPath("/n/4182.7140.201260632", "/n/4182.7140.201312088");
+				ArrayList<Edge> edges = new ArrayList();
+				for(int i = 0; i < path.size()-2; i++){
+					for(Edge e: path.get(i).getEdges()){
+						if(e.getDest().equals(path.get(i+1))){
+							System.out.println(e.getSource()+" -> "+e.getDest()+" : "+e.getFilm());
+							edges.add(e);
+							break;
+						}
+					}
+				}
+	}
+	
 	
 	@Test
 	public void NodeParserTestIn() throws Exception{
 		NodeParser np = new NodeParser("smallnodes.tsv");
 		String[] test = np.search("/n/4182.7140.201260632", false);
-		//System.out.println(test.length);
+		assertNotNull(test);//System.out.println(test.length);
 	}
 	
 	@Test
@@ -66,6 +87,13 @@ public class BaconTests {
 		NodeParser np = new NodeParser("smallnodes.tsv");
 		String[] test = np.search("/n/4182.7139.201260632", false);
 		assertNull(test);
+	}
+	
+	@Test
+	public void NodeParserTestCol() throws Exception{
+		NodeParser np = new NodeParser("smallnodes.tsv");
+		String[] test = np.search("/n/4182.7140.366687983", false);
+		assertNotNull(test);//System.out.println(test.length);
 	}
 	
 	@Test
@@ -99,12 +127,14 @@ public class BaconTests {
 			String[] line = raf.readLine().split("\t");
 			String id = line[_idcol];
 			try{
-				if(line.length==np.getCols()){
+				//if(line.length==np.getCols()){
 					assertNotNull(np.search(id, false));
-				}
-				else{
-					assertNull(np.search(id, false));
-				}
+				//}
+				//else{
+				//	for(int i = 0; i < line.length; i++){
+				//		System.out.println("i: "+i+", "+line[i]);
+				//	}
+				//}
 			}
 			catch(AssertionError e){
 				System.out.println(id);

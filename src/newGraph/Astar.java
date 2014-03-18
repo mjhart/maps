@@ -61,7 +61,7 @@ public class Astar {
 			q.add(_src);
 			
 			Node goal = null;
-			while(open.size() > 0){
+			/*while(open.size() > 0){
 				Node n = q.poll();
 				//System.out.println("n is "+n.toString());
 				//System.out.println("g is "+dst);
@@ -94,9 +94,9 @@ public class Astar {
 						
 					}
 				}
-			}
+			}*/
 			
-			/*while(open.size() > 0){
+			while(open.size() > 0){
 				Node n = q.poll();
 				//System.out.println("n is "+n.toString());
 				//System.out.println("g is "+dst);
@@ -128,7 +128,7 @@ public class Astar {
 						}
 					}
 				}
-			}*/
+			}
 			if(goal != null){
 				Stack<Node> stack = new Stack<Node>();
 				List<Node> list = new ArrayList<Node>();

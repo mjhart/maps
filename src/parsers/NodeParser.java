@@ -94,6 +94,7 @@ public class NodeParser {
 				//System.out.println("Should only happen once");
 				index++;
 			}//seek to first real byte
+			int tindex = index;
 			while(index>=0){
 				if(b[index]==10){
 					break;
@@ -101,39 +102,58 @@ public class NodeParser {
 				index-=2;
 			}
 			if(index<0){
-				index = 0;
+				//System.out.println("here");
+				index = tindex;
 				while(index < 10000){
+					byte[] temp = {b[index]};
+					//System.out.println(b[index]);//new String(temp, "UTF-8"));
 					if(b[index]==10){
+						//System.out.println("--------------------------");
 						break;
 					}
+					
 					index+=2;
 				}
 			}//see to first newline
+			//System.out.println(index);
+			//System.out.println(new String(b,"UTF-8"));
 			index++;
-			int endofbatchline = 0;
+			//int endofbatchline = 0;
 			String[] firstline = new String[_cols];
 			String[] lastline = new String[_cols];
+			if(index >= 10000 && _raf.getFilePointer()==_raf.length()){
+				//System.out.println(_raf.getFilePointer()+", "+_raf.length());
+				return null;
+			}
 			byte[] lines = new byte[10000-index];
 			for(int i = index; i < 10000; i++){
 				lines[i-index] = b[i];
 			}
-			String[] linearray = (new String(lines, "UTF-8")).split("\n");
+			String[] linearray = (new String(lines, "UTF-8")).split("[\\n]");
+			boolean ll = false;
 			for(String s : linearray){
 				//System.out.println(s.split("\t")[_idcol]+", "+s.split("\t").length);
-				if(s.split("\t").length==_cols){
-					lastline = s.split("\t");
+				if(s.split("[\\t]").length>=_cols-2){// || s.split("[\\t]").length==_cols-1 || s.split("")){
+					lastline = s.split("[\\t]");
+					ll = true;
+				}
+				if(ll==false){
+					//System.out.println(s);
 				}
 			}
-			firstline = linearray[0].split("\t");
-			//System.out.println("first line:  "+firstline[_idcol]);
-			//System.out.println("looking for: "+id);
-			//System.out.println("last line:   "+lastline[_idcol]);
+			firstline = linearray[0].split("[\\t]");
+			/*System.out.println("first line:  "+firstline[_idcol]);
+			System.out.println("looking for: "+id);
+			System.out.println("last line:   "+lastline[_idcol]);*/
 			if(lastline==null || lastline[_idcol]==null){
+				for(String s : lastline){
+					System.out.println(s);
+				}
 				return null;
 			}
 			if(firstline[_idcol].compareTo(id)<=0 && lastline[_idcol].compareTo(id)>=0){
 				for(String line : linearray){
-					String[] split = line.split("\t");
+					String[] split = line.split("[\\t]");
 					if(split[_idcol].compareTo(id)==0){
 						if(latlon){
 							String[] temp = {split[_latcol], split[_loncol]};
@@ -144,16 +164,19 @@ public class NodeParser {
 								return split[_wayscol].split(",");
 							}
 							else{
-								return null;
+								String[] here = {""};
+								return here;
 							}
 						}
 					}
 				}
 			}
 			else if(firstline[_idcol].compareTo(id)>0 && lastline[_idcol].compareTo(id)>=0){//batch is too far into file
+				//System.out.println("here");
 				max = mid;
 			}
 			else if(firstline[_idcol].compareTo(id)<=0 && lastline[_idcol].compareTo(id)<0){//batch isn't deep enough in file 
+				//System.out.println(new String(b,"UTF-8"));
 				min = mid;
 			}
 			
