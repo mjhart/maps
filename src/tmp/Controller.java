@@ -9,6 +9,8 @@ import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ThreadPoolExecutor;
 
 import newGraph.Edge;
 import newGraph.Node;
@@ -78,8 +80,6 @@ public class Controller {
 		//System.out.println("within box" + max + " " + min);
 		List<Node> nodes = _tree.withinBox(max, min);
 		System.out.println("Nodes loaded");
-		
-		HashSet<String> found = new HashSet<String>();
 		
 		int count = 0;
 		

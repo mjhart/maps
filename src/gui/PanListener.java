@@ -29,14 +29,14 @@ public class PanListener extends MouseInputAdapter {
 		double[] delta = new double[2];
 		delta[0] = (start.getX() - end.getX());
 		delta[1] = (start.getY() - end.getY());
-		System.out.println(Arrays.toString(delta));
+		//System.out.println(Arrays.toString(delta));
 		start = end;
 		dp.moveWindow(delta);
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		System.out.println("Clicked");
+		//System.out.println("Clicked");
 		start = e.getPoint();
 	}
 	
