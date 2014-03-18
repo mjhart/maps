@@ -10,7 +10,7 @@ import parsers.*;
 
 public class BaconTests {
 	
-	@Test
+	/*@Test
 	public void baconTest1() throws Exception{
 		//NodeParser np = new NodeParser("smallnodes.tsv");
 		//WayParser wp = new WayParser("smallways.tsv");
@@ -29,7 +29,30 @@ public class BaconTests {
 				}
 			}
 		}
+	}*/
+	
+	@Test
+	public void baconTest2() throws Exception{
+		System.out.println("Hello WOrld");
+		//NodeParser np = new NodeParser("smallnodes.tsv");
+		//WayParser wp = new WayParser("smallways.tsv");
+		Astar astar = new Astar("smallnodes.tsv","smallways.tsv");
+		//Astar astar = new Astar("/course/cs032/data/maps/nodes.tsv", "/course/cs032/data/maps/ways.tsv");
+		Graph g  = new Graph();
+		//astar.printSearch(g, "/n/4182.7140.201312088", "/n/4182.7140.201260632", wp, np);
+		ArrayList<Node> path = (ArrayList<Node>) astar.getPath("/n/4182.7140.201312088", "/n/4182.7140.201190086");
+		ArrayList<Edge> edges = new ArrayList();
+		for(int i = 0; i < path.size()-2; i++){
+			for(Edge e: path.get(i).getEdges()){
+				if(e.getDest().equals(path.get(i+1))){
+					System.out.println(e.getSource()+" -> "+e.getDest()+" : "+e.getFilm());
+					edges.add(e);
+					break;
+				}
+			}
+		}
 	}
+	
 	
 	@Test
 	public void NodeParserTestIn() throws Exception{

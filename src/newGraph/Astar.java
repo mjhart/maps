@@ -185,8 +185,8 @@ public class Astar {
 						if(source.toString().equals(nodes[1])){
 							//System.out.println("here");
 							g.insertEdge(nodes[1], source.getLat()/*slat*/, source.getLon()/*slon*/, 
-									dlat, dlon, nodes[2], nodes[0], Math.sqrt(((source.getLat()/*slat*/-dlat)*(source.getLat()/*slat*/-dlat)+
-											(source.getLon()/*slon*/-dlon)*(source.getLon()/*slon*/-dlon))));
+									dlat, dlon, nodes[2], nodes[0], this.getDdouble(source.getLat(), dlat,
+											source.getLon(), dlon));
 							//System.out.println("added way to graph");
 							list.add(g.findNode(nodes[2]));
 							//if(nodes[2].equals("/n/4182.7140.201260632")) System.out.println("END FOUND");
@@ -217,6 +217,15 @@ public class Astar {
 		else{
 			return Double.MAX_VALUE;
 		}
+	}
+	
+	public double getDdouble(double lat1, double lat2, double lon1, double lon2){
+		double dlat = (lat1-lat2)*Math.PI/180;
+		double dlon = (lon1-lon2)*Math.PI/180;
+		double a = Math.sin(dlat/2)*Math.sin(dlat/2) +
+				   Math.sin(dlon/2)*Math.sin(dlon/2) * Math.cos(lat1) * Math.cos(lat2);
+		double C = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+		return C*6378100;
 	}
 
 }
