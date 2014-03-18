@@ -19,7 +19,9 @@ import newGraph.*;
 
 public class AltDrawingPanel extends JPanel {
 	
-	public static double TILE_SIZE = 0.01;
+	public static double TILE_SIZE = 0.005;
+	public static double LON_INIT = -71.41;
+	public static double LAT_INIT = 41.82;
 
 	private double[] wMin;
 	private double[] wMax;
