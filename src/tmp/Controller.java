@@ -2,15 +2,21 @@ package tmp;
 
 import gui.AltMainPanel;
 import gui.MainPanel;
+import gui.Tile;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executor;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
+
+import javax.swing.SwingUtilities;
 
 import newGraph.Edge;
 import newGraph.Node;
@@ -35,6 +41,7 @@ public class Controller {
 		
 		_tree = new KDTree<Node>(2);
 		_tree.addAll(_nodes.nodeList());
+		
 		
 		if(gui) {
 			startGUI();
@@ -77,7 +84,7 @@ public class Controller {
 	}
 	
 	public List<Node> getData(double[] max, double[] min, HashSet<Node> nodeSet, HashSet<Edge> waySet) {
-		//System.out.println("within box" + max + " " + min);
+		System.out.println("within box" + Arrays.toString(max) + " " + Arrays.toString(min));
 		List<Node> nodes = _tree.withinBox(max, min);
 		System.out.println("Nodes loaded");
 		
@@ -117,8 +124,12 @@ public class Controller {
 	}
 	
 	public static void main(String[] args) {
-		new Controller("smallways.tsv", "smallnodes.tsv", "small_nodes.tsv", true);
-		//new Controller("/course/cs032/data/maps/ways.tsv", "/course/cs032/data/maps/nodes.tsv", "/course/cs032/data/maps/ways.tsv", true);
+		//new Controller("smallways.tsv", "smallnodes.tsv", "small_nodes.tsv", true);
+		new Controller("/course/cs032/data/maps/ways.tsv", "/course/cs032/data/maps/nodes.tsv", "/course/cs032/data/maps/ways.tsv", true);
 		//new Controller("small_ways.tsv", "small_nodes.tsv", "small_nodes.tsv", true);
 	}
+	
+
+	
+	
 }

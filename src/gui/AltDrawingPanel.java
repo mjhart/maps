@@ -8,8 +8,11 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.swing.JPanel;
 
@@ -29,7 +32,9 @@ public class AltDrawingPanel extends JPanel {
 	private int[] dMin;
 	private Controller c;
 	
-	private LinkedList<Tile> tiles;
+	private List<Tile> tiles;
+	private LinkedBlockingQueue<Tile> _tileQueue;
+	private TileLoader _tileLoader;
 	
 	int zoom = 10;
 	
@@ -57,7 +62,10 @@ public class AltDrawingPanel extends JPanel {
 		
 		this.c = c;
 		
-		tiles = new LinkedList<Tile>();
+		tiles = Collections.synchronizedList(new LinkedList<Tile>());
+		_tileQueue = new LinkedBlockingQueue<Tile>();
+		_tileLoader = new TileLoader(_tileQueue, tiles, c, this);
+		_tileLoader.start();
 		
 		loadData();
 		
@@ -128,8 +136,8 @@ public class AltDrawingPanel extends JPanel {
 				double[] max = {min[0]+TILE_SIZE, min[1]+TILE_SIZE};
 				nodes = new HashSet<Node>();
 				ways = new HashSet<Edge>();
-				c.getData(max, min, nodes, ways);
-				tiles.add(new Tile(i, j, nodes, ways));
+				//c.getData(max, min, nodes, ways);
+				_tileQueue.add(new Tile(i, j, nodes, ways));
 			}
 		}
 		
@@ -199,26 +207,28 @@ public class AltDrawingPanel extends JPanel {
 		
 		brush.clearRect(0, 0, this.getWidth(), this.getHeight());
 		
-		for(Tile t : tiles) {
-			
-			Composite tmp = brush.getComposite();
-			brush.setColor(java.awt.Color.RED);
-			brush.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.2f));
-			
-			brush.drawRect(lonToX(t.getMinLon()), latToY(t.getMaxLat()),(int) (TILE_SIZE/(wMax[0]-wMin[0])*this.getWidth()),(int) (TILE_SIZE/(wMax[1]-wMin[1])*this.getHeight()));
-			brush.fillRect(lonToX(t.getMinLon()), latToY(t.getMaxLat()),(int) (TILE_SIZE/(wMax[0]-wMin[0])*this.getWidth()),(int) (TILE_SIZE/(wMax[1]-wMin[1])*this.getHeight()));
-			brush.setColor(java.awt.Color.BLUE);
-			brush.drawRect(lonToX(txToLon(dMin[0])), latToY(tyToLat(dMax[1])), lonToX(txToLon(dMax[0]))-lonToX(txToLon(dMin[0])),latToY(tyToLat(dMin[1]))-latToY(tyToLat(dMax[1])));
-			brush.drawRect(lonToX(txToLon(0)), latToY(tyToLat(0)), 5, 5);
-			
-			
-			brush.setComposite(tmp);
-			for(Node n : t.nodes){
-				paintNode(brush, n);
-			}
-			
-			for(Edge e : t.ways){
-				paintWay(brush, e);
+		synchronized (tiles) {
+			for(Tile t : tiles) {
+
+				Composite tmp = brush.getComposite();
+				brush.setColor(java.awt.Color.RED);
+				brush.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.2f));
+
+				brush.drawRect(lonToX(t.getMinLon()), latToY(t.getMaxLat()),(int) (TILE_SIZE/(wMax[0]-wMin[0])*this.getWidth()),(int) (TILE_SIZE/(wMax[1]-wMin[1])*this.getHeight()));
+				brush.fillRect(lonToX(t.getMinLon()), latToY(t.getMaxLat()),(int) (TILE_SIZE/(wMax[0]-wMin[0])*this.getWidth()),(int) (TILE_SIZE/(wMax[1]-wMin[1])*this.getHeight()));
+				brush.setColor(java.awt.Color.BLUE);
+				brush.drawRect(lonToX(txToLon(dMin[0])), latToY(tyToLat(dMax[1])), lonToX(txToLon(dMax[0]))-lonToX(txToLon(dMin[0])),latToY(tyToLat(dMin[1]))-latToY(tyToLat(dMax[1])));
+				brush.drawRect(lonToX(txToLon(0)), latToY(tyToLat(0)), 5, 5);
+
+
+				brush.setComposite(tmp);
+				for(Node n : t.nodes){
+					paintNode(brush, n);
+				}
+
+				for(Edge e : t.ways){
+					paintWay(brush, e);
+				}
 			}
 		}
 		
