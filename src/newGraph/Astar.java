@@ -158,14 +158,18 @@ public class Astar {
 	public Set<Node> getBors(Node source, WayParser wp, NodeParser np, Graph g) throws IOException{
 		Set<Node> list = new HashSet<Node>();
 		String[] ways = np.search(source.toString(), false);
-		//System.out.println("ways.length "+ways.length);
+		System.out.println("Finding bors for "+source.toString());
 		if(ways!=null){
 			for(String w : ways){
-				//System.out.println("Way "+w);
+				System.out.println("Way "+w);
+			}
+			for(String w : ways){
+				System.out.println("Way "+w);
 				String[] nodes = wp.search(w);
+				//System.out.println("Nodes length: "+nodes.length);
 				int counter = 0;
 				if(nodes!=null){
-					//System.out.println("Nodes "+nodes.length);
+					System.out.println("Nodes "+nodes.length);
 					//System.out.println(nodes[0]);
 					//System.out.println(nodes[1]);
 					//System.out.println(nodes[2]);
@@ -173,13 +177,15 @@ public class Astar {
 					//System.out.println("counter "+counter);
 					//String[] slatlon = np.search(nodes[1], true);
 					//System.out.println("finished first search");
+					System.out.println(nodes[2]);
 					String[] dlatlon = np.search(nodes[2], true);
+					System.out.println("no issue with node parser");
 					//System.out.println("slatlon "+slatlon.length);
 					//System.out.println("dlatlon "+dlatlon.length);
 					//double slat = Double.parseDouble(slatlon[0]);
 					//double slon = Double.parseDouble(slatlon[1]);
 					if(dlatlon!=null){
-						//System.out.println(dlatlon.length);
+						System.out.println("dlatlon: "+dlatlon.length);
 						double dlat = Double.parseDouble(dlatlon[0]);
 						double dlon = Double.parseDouble(dlatlon[1]);
 						if(source.toString().equals(nodes[1])){
@@ -200,7 +206,7 @@ public class Astar {
 		else{
 			return null;
 		}
-		//System.out.println("dafuq");
+		System.out.println("dafuq");
 		return list;
 	}
 	

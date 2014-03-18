@@ -53,7 +53,7 @@ public class BaconTests {
 		}
 	}
 	
-	@Test
+	//@Test
 	public void baconTest1reverse() throws Exception{
 		//NodeParser np = new NodeParser("smallnodes.tsv");
 				//WayParser wp = new WayParser("smallways.tsv");
@@ -74,15 +74,29 @@ public class BaconTests {
 				}
 	}
 	
+	//@Test
+	public void NodeParserTestLastLine() throws Exception{
+		NodeParser np = new NodeParser("smallnodes.tsv");
+		String[] test = np.search("/n/4182.7140.357257904", false);
+		assertNotNull(test);
+	}
 	
-	@Test
+	//@Test
+	public void WayParserTestIn() throws Exception{
+		WayParser wp = new WayParser("smallways.tsv");
+		String[] test = wp.search("/w/4182.7140.90092610.0.1");
+		assertNotNull(test);
+	}
+	
+	
+	//@Test
 	public void NodeParserTestIn() throws Exception{
 		NodeParser np = new NodeParser("smallnodes.tsv");
 		String[] test = np.search("/n/4182.7140.201260632", false);
 		assertNotNull(test);//System.out.println(test.length);
 	}
 	
-	@Test
+	//@Test
 	public void NodeParserTestOut() throws Exception{
 		NodeParser np = new NodeParser("smallnodes.tsv");
 		String[] test = np.search("/n/4182.7139.201260632", false);
@@ -96,7 +110,7 @@ public class BaconTests {
 		assertNotNull(test);//System.out.println(test.length);
 	}
 	
-	@Test
+	//@Test
 	public void NodeParserTestFull() throws Exception{
 		NodeParser np = new NodeParser("smallnodes.tsv");
 		RandomAccessFile raf = new RandomAccessFile("smallnodes.tsv","r");

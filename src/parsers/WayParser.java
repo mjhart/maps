@@ -13,6 +13,8 @@ public class WayParser {
 	private int _namecol;
 	private int _srccol;
 	private int _dstcol;
+	private int _cols;
+	private final int _buf = 40000;
 	
 	public WayParser(String path) throws Exception{
 		File f = new File(path);
@@ -24,6 +26,7 @@ public class WayParser {
 		_dstcol = this.findCols(4);*/
 		_raf.seek(0);
 		String[] header = _raf.readLine().split("\t");
+		_cols = header.length;
 		for(int i=0; i<header.length; i++) {
 			if(header[i].equals("id")) {
 				_idcol = i;
@@ -50,7 +53,128 @@ public class WayParser {
 		long max = _len;
 		while(max>min){
 			long mid = (long) Math.floor(max-(max-min)/2.0);
-			if(max==min+1){
+			//System.out.println("new max "+max);
+			//System.out.println("new min "+min);
+			_raf.seek(mid);
+			byte[] b = new byte[_buf];
+			_raf.read(b);
+			int index = 0;
+			while(b[index] > 128){
+				index++;
+			}//seek to first relevant byte
+			int tindex = index;//remember first relevant byte in case we need to go back
+			while(index >= 0){
+				if(b[index]==10){
+					break;
+				}
+				index -=2;
+			}
+			if(index < 0){
+				index = tindex;
+				while(index < _buf){
+					//System.out.println(b[index]);
+					if(b[index]==10){
+						break;
+					}
+					index += 2;
+				}
+			}
+			index++;
+			String[] firstline = new String[_cols];
+			String[] lastline = new String[_cols];
+			if(index>=_buf && _raf.getFilePointer()==_raf.length()){
+				System.out.println("null 1");
+				return null;
+			}
+			//System.out.println(index);
+			byte[] lines = new byte[_buf-index];
+			for(int i = index; i < _buf; i++){
+				lines[i-index] = b[i];
+			}
+			String[] linearray = (new String(lines, "UTF-8")).split("\n");
+			String[] fulllinearray = new String[linearray.length-1];
+			for(int i = 0; i < fulllinearray.length; i++){
+				fulllinearray[i] = linearray[i];
+			}
+			boolean ll = false;
+			for(String s : fulllinearray){
+				if(s.split("\t").length>=_cols){
+					lastline = s.split("\t");
+					ll = true;
+				}
+				if(ll==false){
+					System.out.println(s);
+				}
+			}
+			firstline = linearray[0].split("\t");
+			/*System.out.println("W first line:  "+firstline[_idcol]);
+			System.out.println("W looking for: "+id);
+			System.out.println("W last line:   "+lastline[_idcol]);*/
+			if(lastline==null || lastline[_idcol]==null){
+				for(String s : lastline){
+					System.out.println(s);
+				}
+				System.out.println("null 2");
+				return null;
+			}
+			if(firstline[_idcol].compareTo(id)<=0 && lastline[_idcol].compareTo(id)>=0){
+				//System.out.println("here 1");
+				for(String line : linearray){
+					String[] split = line.split("\t");
+					if(split[_idcol].compareTo(id)==0){
+						//System.out.println("here 2");
+						if(split.length==_cols){
+							//System.out.println("here 3");
+							if(split==lastline) System.out.println("PROBLEM WITH ALSTLINE");
+							String[] temp = {split[_namecol], split[_srccol], split[_dstcol]};
+							//System.out.println("here 4");
+							return temp;
+						}
+						else{
+							/*System.out.println("SP: "+split.length);
+							System.out.println("LL: "+lastline.length);
+							if(split==lastline){
+								byte[] finishline = new byte[100];
+								_raf.read(finishline);
+								int i = 0;
+								while(finishline[i]>128){
+									i++;
+								}
+								byte[] newfinish = new byte[100-i];
+								for(int j = i; j < 100; j++){
+									newfinish[j-i] = finishline[i];
+								}
+								String[] newlines = (new String(newfinish, "UTF-8")).split("\n");
+								String[] words = newlines[0].split("\t");
+								String[] newsplit = new String[_cols];
+								int k = 0;
+								for(String s: split){
+									newsplit[k] = s;
+									k++;
+								}
+								int q = 0;
+								while(k < _cols){
+									newsplit[k] = words[q];
+									k++;
+									q++;
+								}
+							}*/
+							System.out.println("line w/ few cols: "+line);
+							String[] here = {""};
+							return here;
+						}
+					}
+				}
+			}
+			else if(firstline[_idcol].compareTo(id)>0 && lastline[_idcol].compareTo(id)>=0){//batch is too far into file
+				//System.out.println("here");
+				max = mid;
+			}
+			else if(firstline[_idcol].compareTo(id)<=0 && lastline[_idcol].compareTo(id)<0){//batch isn't deep enough in file 
+				//System.out.println(new String(b,"UTF-8"));
+				min = mid;
+			}
+			/*if(max==min+1){
 				break;
 			}
 			_raf.seek(mid);
@@ -89,8 +213,9 @@ public class WayParser {
 			}
 			else{
 				break;
-			}
+			}*/
 		}
+		System.out.println("null 3");
 		return null;
 	}
 	
