@@ -11,15 +11,15 @@ import parsers.*;
 
 public class BaconTests {
 	
-	//@Test
-	public void baconTest1() throws Exception{
+	@Test
+	public void astarTest1() throws Exception{
 		//NodeParser np = new NodeParser("smallnodes.tsv");
 		//WayParser wp = new WayParser("smallways.tsv");
 		Astar astar = new Astar("smallnodes.tsv","smallways.tsv");
 		//Astar astar = new Astar("/course/cs032/data/maps/nodes.tsv", "/course/cs032/data/maps/ways.tsv");
 		Graph g  = new Graph();
 		//astar.printSearch(g, "/n/4182.7140.201312088", "/n/4182.7140.201260632", wp, np);
-		ArrayList<Node> path = (ArrayList<Node>) astar.getPath("/n/4182.7140.201312088", "/n/4182.7140.201260632");
+		ArrayList<Node> path = (ArrayList<Node>) astar.getPath("/n/4182.7140.201312088", "/n/4182.7140.201260636");
 		ArrayList<Edge> edges = new ArrayList();
 		for(int i = 0; i < path.size()-2; i++){
 			for(Edge e: path.get(i).getEdges()){
@@ -32,15 +32,15 @@ public class BaconTests {
 		}
 	}
 	
-	//@Test
-	public void baconTest2() throws Exception{
+	@Test
+	public void asterTest2() throws Exception{
 		//NodeParser np = new NodeParser("smallnodes.tsv");
 		//WayParser wp = new WayParser("smallways.tsv");
 		Astar astar = new Astar("smallnodes.tsv","smallways.tsv");
 		//Astar astar = new Astar("/course/cs032/data/maps/nodes.tsv", "/course/cs032/data/maps/ways.tsv");
 		Graph g  = new Graph();
 		//astar.printSearch(g, "/n/4182.7140.201312088", "/n/4182.7140.201260632", wp, np);
-		ArrayList<Node> path = (ArrayList<Node>) astar.getPath("/n/4182.7140.201312088", "/n/4182.7140.201190086");
+		ArrayList<Node> path = (ArrayList<Node>) astar.getPath("/n/4182.7140.201312088", "/n/4182.7140.2100936248");
 		ArrayList<Edge> edges = new ArrayList();
 		for(int i = 0; i < path.size()-2; i++){
 			for(Edge e: path.get(i).getEdges()){
@@ -53,15 +53,15 @@ public class BaconTests {
 		}
 	}
 	
-	//@Test
-	public void baconTest1reverse() throws Exception{
+	@Test
+	public void asterTest1reversed() throws Exception{
 		//NodeParser np = new NodeParser("smallnodes.tsv");
 				//WayParser wp = new WayParser("smallways.tsv");
 				Astar astar = new Astar("smallnodes.tsv","smallways.tsv");
 				//Astar astar = new Astar("/course/cs032/data/maps/nodes.tsv", "/course/cs032/data/maps/ways.tsv");
 				Graph g  = new Graph();
 				//astar.printSearch(g, "/n/4182.7140.201312088", "/n/4182.7140.201260632", wp, np);
-				ArrayList<Node> path = (ArrayList<Node>) astar.getPath("/n/4182.7140.201260632", "/n/4182.7140.201312088");
+				ArrayList<Node> path = (ArrayList<Node>) astar.getPath("/n/4182.7140.201260642", "/n/4182.7140.201312088");
 				ArrayList<Edge> edges = new ArrayList();
 				for(int i = 0; i < path.size()-2; i++){
 					for(Edge e: path.get(i).getEdges()){
@@ -103,11 +103,58 @@ public class BaconTests {
 		assertNull(test);
 	}
 	
-	@Test
+	//@Test
 	public void NodeParserTestCol() throws Exception{
 		NodeParser np = new NodeParser("smallnodes.tsv");
 		String[] test = np.search("/n/4182.7140.366687983", false);
 		assertNotNull(test);//System.out.println(test.length);
+	}
+	
+	//@Test
+	public void WayParserTestFull() throws Exception{
+		WayParser wp = new WayParser("smallways.tsv");
+		RandomAccessFile raf = new RandomAccessFile("smallways.tsv","r");
+		int _idcol = Integer.MAX_VALUE;
+		int _namecol = Integer.MAX_VALUE;
+		int _srccol = Integer.MAX_VALUE;
+		int _dstcol = Integer.MAX_VALUE;
+		String[] header = raf.readLine().split("\t");
+		for(int i=0; i<header.length; i++) {
+			if(header[i].equals("id")) {
+				_idcol = i;
+			}
+			if(header[i].equals("start")) {
+				_srccol = i;
+			}
+			if(header[i].equals("end")) {
+				_dstcol = i;
+			}
+			if(header[i].equals("name")){
+				_namecol = i;
+			}
+		}
+		if(_idcol==Integer.MAX_VALUE || _namecol==Integer.MAX_VALUE || _srccol==Integer.MAX_VALUE || _dstcol==Integer.MAX_VALUE){
+			System.err.println("ERROR: Improper Columns in Ways file");
+			System.exit(1);
+		}
+		while(raf.getFilePointer()<raf.length()){
+			String[] line = raf.readLine().split("\t");
+			String id = line[_idcol];
+			try{
+				//if(line.length==np.getCols()){
+					assertNotNull(wp.search(id));
+				//}
+				//else{
+				//	for(int i = 0; i < line.length; i++){
+				//		System.out.println("i: "+i+", "+line[i]);
+				//	}
+				//}
+			}
+			catch(AssertionError e){
+				System.out.println(id);
+				System.exit(1);
+			}
+		}
 	}
 	
 	//@Test

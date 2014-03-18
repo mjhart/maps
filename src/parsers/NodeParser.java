@@ -15,7 +15,8 @@ public class NodeParser {
 	private int _latcol;
 	private int _loncol;
 	private int _cols;
-	private final int _buf = 40000;
+	private final int _buf = 100000;
+	String[] _lastRec;
 	
 	public NodeParser(String path) throws Exception{
 		File f = new File(path);
@@ -48,10 +49,14 @@ public class NodeParser {
 		}
 		//System.out.println("lat col "+_latcol);
 		//System.out.println("lon col "+_loncol);
-		String oldine = "";
-		/*while(_raf.hasLine()){
-			
-		}*/
+		//_lastline = _raf.readLine();
+		while(_raf.getFilePointer() < _raf.length()){
+			String line = _raf.readLine();
+			String[] toKeep = line.split("\t");
+			if(toKeep.length>=3){
+				_lastRec = toKeep;
+			}
+		}
 	}
 
 	
@@ -64,8 +69,8 @@ public class NodeParser {
 		long oldmax = 0;
 		long oldmin = _len;
 		while(max>min){//oldmax!=max && oldmin!=min){
-			System.out.println("new max "+max);
-			System.out.println("new min "+min);
+			//System.out.println("new max "+max);
+			//System.out.println("new min "+min);
 			long mid = (long) Math.floor(max-(max-min)/2.0);
 			//System.out.println("Mid:   "+mid);
 			_raf.seek(mid);
@@ -129,7 +134,7 @@ public class NodeParser {
 			String[] lastline = new String[_cols];
 			if(index >= _buf && _raf.getFilePointer()==_raf.length()){
 				//System.out.println(_raf.getFilePointer()+", "+_raf.length());
-				return null;
+				break;
 			}
 			byte[] lines = new byte[_buf-index];
 			for(int i = index; i < _buf; i++){
@@ -164,9 +169,9 @@ public class NodeParser {
 				}
 			}
 			firstline = linearray[0].split("[\\t]");
-			System.out.println("N first line:  "+firstline[_idcol]);
-			System.out.println("N looking for: "+id);
-			System.out.println("N last line:   "+lastline[_idcol]);
+			//System.out.println("N first line:  "+firstline[_idcol]);
+			//System.out.println("N looking for: "+id);
+			//System.out.println("N last line:   "+lastline[_idcol]);
 			/*if(lastline==null || lastline[_idcol]==null){
 				for(String s : lastline){
 					System.out.println(s);
@@ -198,8 +203,8 @@ public class NodeParser {
 					//if(split==lastline) System.out.println("SHEEEEEEEET");
 					if(split[_idcol].compareTo(id)==0){
 						if(split.length==_cols && lastline.length==_cols){
-							System.out.println("N SP: "+split[_wayscol]);
-							System.out.println("N LL: "+lastline[_wayscol]);
+							//System.out.println("N SP: "+split[_wayscol]);
+							//System.out.println("N LL: "+lastline[_wayscol]);
 						}
 						if(latlon){
 							String[] temp = {split[_latcol], split[_loncol]};
@@ -225,15 +230,8 @@ public class NodeParser {
 				//System.out.println(new String(b,"UTF-8"));
 				min = mid;
 			}
-			System.out.println("first comp: "+firstline[_idcol].compareTo(id));
-			System.out.println("last  comp: "+lastline[_idcol].compareTo(id));
-			/*********
-			 * WHAT HAPPEND WHEN WE NEED THE LAST LINE OF THE FILE
-			 * 		because of how I deal with lastline (removing the last line
-			 * 		from lines (to avoid any clipping of waylist)
-			 * 
-			 */
-			
+			//System.out.println("first comp: "+firstline[_idcol].compareTo(id));
+			//System.out.println("last  comp: "+lastline[_idcol].compareTo(id));
 			/*start = _raf.getFilePointer();
 			String[] batch = new String[100];
 			int batchcount = 0;
@@ -324,6 +322,22 @@ public class NodeParser {
 			else{
 				break;
 			}*/
+		}
+		//System.out.println(_lastRec[_idcol]);
+		if(_lastRec[_idcol].compareTo(id)==0){
+			if(latlon){
+				String[] temp = {_lastRec[_latcol], _lastRec[_loncol]};
+				return temp;
+			}
+			else{
+				if(_lastRec.length==_cols){
+					return _lastRec[_wayscol].split(",");
+				}
+				else{
+					String[] here = {""};
+					return here;
+				}
+			}
 		}
 		return null;
 	}

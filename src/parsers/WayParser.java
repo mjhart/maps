@@ -14,7 +14,8 @@ public class WayParser {
 	private int _srccol;
 	private int _dstcol;
 	private int _cols;
-	private final int _buf = 40000;
+	private final int _buf = 100000;
+	String[] _lastRec;
 	
 	public WayParser(String path) throws Exception{
 		File f = new File(path);
@@ -44,6 +45,13 @@ public class WayParser {
 		if(_idcol==Integer.MAX_VALUE || _namecol==Integer.MAX_VALUE || _srccol==Integer.MAX_VALUE || _dstcol==Integer.MAX_VALUE){
 			System.err.println("ERROR: Improper Columns in Ways file");
 			System.exit(1);
+		}
+		while(_raf.getFilePointer() < _raf.length()){
+			String line = _raf.readLine();
+			String[] toKeep = line.split("\t");
+			if(toKeep.length>=3){
+				_lastRec = toKeep;
+			}
 		}
 	}
 	
@@ -83,8 +91,9 @@ public class WayParser {
 			String[] firstline = new String[_cols];
 			String[] lastline = new String[_cols];
 			if(index>=_buf && _raf.getFilePointer()==_raf.length()){
-				System.out.println("null 1");
-				return null;
+				//System.out.println("null 1");
+				//return null;
+				break;
 			}
 			//System.out.println(index);
 			byte[] lines = new byte[_buf-index];
@@ -112,9 +121,9 @@ public class WayParser {
 			System.out.println("W last line:   "+lastline[_idcol]);*/
 			if(lastline==null || lastline[_idcol]==null){
 				for(String s : lastline){
-					System.out.println(s);
+					//System.out.println(s);
 				}
-				System.out.println("null 2");
+				//System.out.println("null 2");
 				return null;
 			}
 			if(firstline[_idcol].compareTo(id)<=0 && lastline[_idcol].compareTo(id)>=0){
@@ -125,7 +134,7 @@ public class WayParser {
 						//System.out.println("here 2");
 						if(split.length==_cols){
 							//System.out.println("here 3");
-							if(split==lastline) System.out.println("PROBLEM WITH ALSTLINE");
+							//if(split==lastline) System.out.println("PROBLEM WITH ALSTLINE");
 							String[] temp = {split[_namecol], split[_srccol], split[_dstcol]};
 							//System.out.println("here 4");
 							return temp;
@@ -159,7 +168,7 @@ public class WayParser {
 									q++;
 								}
 							}*/
-							System.out.println("line w/ few cols: "+line);
+							//System.out.println("line w/ few cols: "+line);
 							String[] here = {""};
 							return here;
 						}
@@ -215,7 +224,12 @@ public class WayParser {
 				break;
 			}*/
 		}
-		System.out.println("null 3");
+		//System.out.println(_lastRec[_idcol]);
+		if(_lastRec[_idcol].compareTo(id)==0){
+			String[] temp = {_lastRec[_namecol], _lastRec[_srccol], _lastRec[_dstcol]};
+			return temp;
+		}
+		//System.out.println("null 3");
 		return null;
 	}
 	
