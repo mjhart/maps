@@ -77,8 +77,8 @@ public class DrawingPanel extends JPanel {
 				_ways.add(e);
 			}
 		}
-		this.updateZoom(8);
-		
+		//this.updateZoom(8);
+		//this.repaint();
 		//this.update(nd,wd);
 		//System.out.println("DONE");
 	}
@@ -97,8 +97,8 @@ public class DrawingPanel extends JPanel {
 	
 	public void paintComponent(Graphics g){
 		super.paintComponents(g);
-		g.setColor(getBackground());
-		System.out.println(g.getColor());
+		//g.setColor(getBackground());
+		//System.out.println(g.getColor());
 		Graphics2D brush = (Graphics2D) g;
 		
 		double _maxLat = maxLat();
@@ -125,7 +125,7 @@ public class DrawingPanel extends JPanel {
 	
 	public void updateZoom(int zoom){
 		_zoom = zoom;
-		_delta = (_zoom * _zoom * 1.0)/(10*10)*.5*_maxDim; // set 10 as inital zoom and max zoomed out
+		_delta = (_zoom * _zoom * 1.0)/(7*7)*.5*_maxDim;
 		if(_zoom == 8){
 			_delta = _delta * ZOOM_OUT;
 		}
