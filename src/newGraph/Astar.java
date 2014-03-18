@@ -47,6 +47,9 @@ public class Astar {
 	
 	public List<Node> search(Graph g, String src, String dst, WayParser wp, NodeParser np) throws IOException{
 		String[] latlon = np.search(src, true);
+		if(latlon==null){
+			return null;
+		}
 		g.insertNode(src, Double.parseDouble(latlon[0]), Double.parseDouble(latlon[1]));
 		Node _src = g.findNode(src);
 		if(_src!=null){
@@ -62,13 +65,48 @@ public class Astar {
 				Node n = q.poll();
 				//System.out.println("n is "+n.toString());
 				//System.out.println("g is "+dst);
+				//System.out.println(n+" what");
 				open.remove(n.toString());
+				close.put(n.toString(), n);
 				if(n.toString().equals(dst)){
 					goal = n;
 					break;
 				}
 				else{
-					close.put(n.toString(), n);
+					Set<Node> bors = this.getBors(n, wp, np,g);
+					//System.out.println("here");
+					for(Node bor: bors){
+						Node v = close.get(bor.toString());
+						if(v == null){
+							double newG = n.getG() + this.getD(n, bor);
+							v = open.get(bor.toString());
+							if(v == null || newG < bor.getG()){
+								bor.setPrev(n);
+								bor.setG(newG);
+								bor.setH(this.getD(bor, n));
+								Node opened = open.get(bor.toString());
+								if(opened==null){
+									open.put(bor.toString(), bor);
+									q.add(bor);
+								}
+							}
+						}
+						
+					}
+				}
+			}
+			
+			/*while(open.size() > 0){
+				Node n = q.poll();
+				//System.out.println("n is "+n.toString());
+				//System.out.println("g is "+dst);
+				open.remove(n.toString());
+				close.put(n.toString(), n);
+				if(n.toString().equals(dst)){
+					goal = n;
+					break;
+				}
+				else{
 					Set<Node> bors = this.getBors(n, wp, np,g);
 					//System.out.println("here");
 					for(Node bor : bors){
@@ -90,7 +128,7 @@ public class Astar {
 						}
 					}
 				}
-			}
+			}*/
 			if(goal != null){
 				Stack<Node> stack = new Stack<Node>();
 				List<Node> list = new ArrayList<Node>();

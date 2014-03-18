@@ -35,7 +35,7 @@ public class BaconTests {
 	public void NodeParserTestIn() throws Exception{
 		NodeParser np = new NodeParser("smallnodes.tsv");
 		String[] test = np.search("/n/4182.7140.201260632", false);
-		System.out.println(test.length);
+		//System.out.println(test.length);
 	}
 	
 	@Test
