@@ -32,8 +32,8 @@ public class BaconTests {
 		}
 	}
 	
-	//@Test
-	public void asterTest2() throws Exception{
+	@Test
+	public void astarTest2() throws Exception{
 		//NodeParser np = new NodeParser("smallnodes.tsv");
 		//WayParser wp = new WayParser("smallways.tsv");
 		Astar astar = new Astar("smallnodes.tsv","smallways.tsv");
@@ -62,8 +62,8 @@ public class BaconTests {
 		}
 	}
 	
-	//@Test
-	public void asterTest1reversed() throws Exception{
+	@Test
+	public void astarTest1reversed() throws Exception{
 		//NodeParser np = new NodeParser("smallnodes.tsv");
 				//WayParser wp = new WayParser("smallways.tsv");
 				Astar astar = new Astar("smallnodes.tsv","smallways.tsv");

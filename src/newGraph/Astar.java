@@ -53,14 +53,46 @@ public class Astar {
 		g.insertNode(src, Double.parseDouble(latlon[0]), Double.parseDouble(latlon[1]));
 		Node _src = g.findNode(src);
 		if(_src!=null){
-			Map<String, Node> open = new HashMap<String, Node>();
+			PriorityQueue<Node> open = new PriorityQueue<Node>(20, new NodeComparator());
+			Map<String, Node> close = new HashMap<String, Node>();
+			open.add(_src);
+			Node goal = null;
+			while(open.size() > 0){
+				Node current = open.poll();
+				if(current.toString().equals(dst)){
+					goal = current;
+					break;
+				}
+				close.put(current.toString(), current);
+				List<Node> neighbors = getBors(current, wp, np, g);
+				for(Node n : neighbors){
+					double cost = current.getG() + getD(current, n);
+					if(open.contains(n) && cost < n.getG()){
+						open.remove(n);
+					}
+					if(!open.contains(n) && cost < n.getG()){
+						close.remove(n.toString());
+					}
+					if(!open.contains(n) && !close.containsKey(n.toString())){
+						n.setG(cost);
+						n.setH(this.getD(_src, n));
+						open.add(n);
+						n.setPrev(current);
+					}
+				}
+			}
+			
+			
+			
+			
+			/*Map<String, Node> open = new HashMap<String, Node>();
 			Map<String, Node> close = new HashMap<String, Node>();
 			PriorityQueue<Node> q = new PriorityQueue<Node>(20, new NodeComparator());
 			
 			open.put(_src.toString(), _src);
 			q.add(_src);
 			
-			Node goal = null;
+			Node goal = null;*/
 			/*while(open.size() > 0){
 				Node n = q.poll();
 				//System.out.println("n is "+n.toString());
@@ -96,7 +128,7 @@ public class Astar {
 				}
 			}*/
 			
-			while(open.size() > 0){
+			/*while(open.size() > 0){
 				Node n = q.poll();
 				//System.out.println("n is "+n.toString());
 				//System.out.println("g is "+dst);
@@ -128,7 +160,7 @@ public class Astar {
 						}
 					}
 				}
-			}
+			}*/
 			if(goal != null){
 				Stack<Node> stack = new Stack<Node>();
 				List<Node> list = new ArrayList<Node>();
@@ -155,8 +187,8 @@ public class Astar {
 		//return null;
 	}
 	
-	public Set<Node> getBors(Node source, WayParser wp, NodeParser np, Graph g) throws IOException{
-		Set<Node> list = new HashSet<Node>();
+	public List<Node> getBors(Node source, WayParser wp, NodeParser np, Graph g) throws IOException{
+		List<Node> list = new ArrayList<Node>();
 		String[] ways = np.search(source.toString(), false);
 		//System.out.println("Finding bors for "+source.toString());
 		if(ways!=null){
