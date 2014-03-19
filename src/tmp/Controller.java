@@ -1,23 +1,12 @@
 package tmp;
 
 import gui.AltMainPanel;
-import gui.MainPanel;
-import gui.Tile;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.Executor;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-
-import javax.swing.SwingUtilities;
-
 import autocorrect.TrieEngine;
 
 import newGraph.Edge;
@@ -39,7 +28,9 @@ public class Controller {
 		_nodes = new NodeDictionary(nodeFile);
 		System.out.println("node dict built");
 		_ways = new WayDictionary(wayFile, _nodes);
+		System.out.println("here1");
 		_trie = new TrieEngine(indexFile);
+		System.out.println("here2");
 		}
 		catch(IOException e) {
 			e.printStackTrace();
@@ -90,9 +81,9 @@ public class Controller {
 	}
 	
 	public List<Node> getData(double[] max, double[] min, HashSet<Node> nodeSet, HashSet<Edge> waySet) {
-		System.out.println("within box" + Arrays.toString(max) + " " + Arrays.toString(min));
+		//System.out.println("within box" + Arrays.toString(max) + " " + Arrays.toString(min));
 		List<Node> nodes = _tree.withinBox(max, min);
-		System.out.println("Nodes loaded");
+		//System.out.println("Nodes loaded");
 		
 		int count = 0;
 		
@@ -118,14 +109,14 @@ public class Controller {
 				}
 			}
 		}
-		System.out.println("Null ways: " + _ways.nullWays);
-		System.out.println(String.format("Ways loaded - Disk: %d Mem: %d", _ways.toDisk, _ways.inMem));
-		System.out.println("Buffer read: " + _ways.bufferRead);
+		//System.out.println("Null ways: " + _ways.nullWays);
+		//System.out.println(String.format("Ways loaded - Disk: %d Mem: %d", _ways.toDisk, _ways.inMem));
+		//System.out.println("Buffer read: " + _ways.bufferRead);
 		_ways.bufferRead = 0;
 		_ways.toDisk = 0;
 		_ways.inMem = 0;
-		System.out.println("Total ways searched: " + count);
-		System.out.println();
+		//System.out.println("Total ways searched: " + count);
+		//System.out.println();
 		return _tree.withinBox(max, min);
 	}
 	

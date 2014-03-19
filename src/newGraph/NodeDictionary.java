@@ -92,39 +92,53 @@ public class NodeDictionary {
 			byte[] buffer = new byte[BUFFER_SIZE];
 			String line;
 			int id=0;
-			int read = 0;
-			int total = 0;
+			long read = 0;
+			long total = _file.getFilePointer();
+			int debugReads = 0;
 			while((read = _file.read(buffer)) == BUFFER_SIZE) {
+				debugReads++;
+				if(debugReads < 3) {
+					//System.out.println(new String(buffer, "UTF-8"));
+					//System.out.println();
+				}
+				//System.out.println(new String(buffer, "UTF-8"));
+				//System.out.println();
+				//System.out.println();
 				total+=read;
-				int i=0;
+				//int i=0;
+				String[] lines = new String(buffer, "UTF-8").split("\n");
+				
+				//System.out.println(lines[lines.length-1].length());
+				for(int j=0; j<lines.length-1; j++) {
+					String[] data = lines[j].split("\t");
+					_nodes.put(data[_id], new Node(++id, data[_id], Double.parseDouble(data[_lat]), Double.parseDouble(data[_lon])));
+				}
+				
+				//System.out.println("Pretotal: " + total);
+				for(int i=BUFFER_SIZE-1; i>=0; i--) {
+					if(buffer[i]=='\n') {
+						break;
+					}
+					total--;
+				}
+				//System.out.println("Total " + total);
+				//System.out.println("FP" + _file.getFilePointer());
+				_file.seek(total);
+			}
+			if(read != 0) {
+				System.out.println("went in here");
 				String[] lines = new String(buffer, "UTF-8").split("\n");
 				for(int j=0; j<lines.length-1; j++) {
 					String[] data = lines[j].split("\t");
-					if(data.length >= _ways-1) {
-						_nodes.put(data[_id], new Node(++id, data[_id], Double.parseDouble(data[_lat]), Double.parseDouble(data[_lon])));
-					}
-					else {
-						System.out.println(lines[j]);
-					}
+					_nodes.put(data[_id], new Node(++id, data[_id], Double.parseDouble(data[_lat]), Double.parseDouble(data[_lon])));
 				}
-				/*
-				while(i<read) {
-					StringBuilder sb = new StringBuilder();
-					while(i<read) {
-						if(buffer[i] == '\n') {
-							System.out.println(sb);
-							String[] data = sb.toString().split("\t");
-							_nodes.put(data[_id], new Node(++id, data[_id], Double.parseDouble(data[_lat]), Double.parseDouble(data[_lon])));
-							sb = new StringBuilder();
-						}
-						else {
-							sb.append((char) buffer[i]);
-						}
-						i++;
-					}
-				}
-				*/
+				
 			}
+			
+			System.out.println("FP " + _file.getFilePointer());
+			System.out.println(read);
+			System.out.println(new String(buffer));
+			
 			
 		}
 		catch(IOException e) {
