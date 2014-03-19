@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.List;
 import autocorrect.TrieEngine;
 
+import newGraph.Astar;
 import newGraph.Edge;
 import newGraph.Node;
 import newGraph.NodeDictionary;
@@ -20,6 +21,7 @@ public class Controller {
 	private WayDictionary _ways;
 	private NodeDictionary _nodes;
 	private TrieEngine _trie;
+	private Astar _astar;
 	
 	public Controller(String wayFile, String nodeFile, String indexFile, boolean gui) {
 		
@@ -31,8 +33,12 @@ public class Controller {
 		System.out.println("here1");
 		_trie = new TrieEngine(indexFile);
 		System.out.println("here2");
+		_astar = new Astar(nodeFile, wayFile);
 		}
 		catch(IOException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -146,8 +152,8 @@ public class Controller {
 		return null;
 	}
 	
-	public List<Node> getPath(String source, String dest) {
-		return null;
+	public List<Node> getPath(String source, String dest) throws IOException {
+		return _astar.getPath(source, dest);
 	}
 	
 }

@@ -352,4 +352,13 @@ public class AltDrawingPanel extends JPanel {
 		_start = c.nearestNeighbor(coords);
 		this.repaint();
 	}
+
+	public void startSearch(Node src, Node dst) {
+		try {
+			List<Node> path = c.getPath(src.toString(), dst.toString());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }

@@ -24,10 +24,13 @@ public class AltMainPanel extends JFrame{
 		AltZoomPanel zp = new AltZoomPanel(dp, 10, 10);
 		//dp.setIPan(ip);
 		//dp.setZPan(zp);
+		InputPanel ip = new InputPanel(dp, controller);
+		
 		
 		this.add(dp, BorderLayout.CENTER);
 		//this.add(ip, BorderLayout.WEST);
 		this.add(zp, BorderLayout.SOUTH);
+		this.add(ip, BorderLayout.WEST);
 		this.setResizable(false);
 		this.pack();
 		this.setVisible(true);
