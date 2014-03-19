@@ -11,7 +11,7 @@ import parsers.*;
 
 public class BaconTests {
 	
-	@Test
+	//@Test
 	public void astarTest1() throws Exception{
 		//NodeParser np = new NodeParser("smallnodes.tsv");
 		//WayParser wp = new WayParser("smallways.tsv");
@@ -32,7 +32,7 @@ public class BaconTests {
 		}
 	}
 	
-	@Test
+	//@Test
 	public void astarTest2() throws Exception{
 		//NodeParser np = new NodeParser("smallnodes.tsv");
 		//WayParser wp = new WayParser("smallways.tsv");
@@ -62,7 +62,7 @@ public class BaconTests {
 		}
 	}
 	
-	@Test
+	//@Test
 	public void astarTest1reversed() throws Exception{
 		//NodeParser np = new NodeParser("smallnodes.tsv");
 				//WayParser wp = new WayParser("smallways.tsv");
@@ -119,7 +119,7 @@ public class BaconTests {
 		assertNotNull(test);//System.out.println(test.length);
 	}
 	
-	//@Test
+	@Test
 	public void WayParserTestFull() throws Exception{
 		WayParser wp = new WayParser("smallways.tsv");
 		RandomAccessFile raf = new RandomAccessFile("smallways.tsv","r");
@@ -166,7 +166,7 @@ public class BaconTests {
 		}
 	}
 	
-	//@Test
+	@Test
 	public void NodeParserTestFull() throws Exception{
 		NodeParser np = new NodeParser("smallnodes.tsv");
 		RandomAccessFile raf = new RandomAccessFile("smallnodes.tsv","r");

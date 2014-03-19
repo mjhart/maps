@@ -46,13 +46,23 @@ public class WayParser {
 			System.err.println("ERROR: Improper Columns in Ways file");
 			System.exit(1);
 		}
-		while(_raf.getFilePointer() < _raf.length()){
+		/*while(_raf.getFilePointer() < _raf.length()){
 			String line = _raf.readLine();
 			String[] toKeep = line.split("\t");
 			if(toKeep.length>=3){
 				_lastRec = toKeep;
 			}
+		}*/
+		_raf.seek(_raf.length()-2);
+		byte b = 33;
+		while(b!=10){
+			b = _raf.readByte();
+			_raf.seek(_raf.getFilePointer()-2);
 		}
+		_raf.seek(_raf.getFilePointer()-1);
+		String test = _raf.readLine();
+		test = _raf.readLine();
+		_lastRec = test.split("\t");
 	}
 	
 	public String[] search(String id) throws IOException{
