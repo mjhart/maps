@@ -30,9 +30,6 @@ public class BaconTests {
 					String[] dlatlon = np.search(wayinfo[2], true);
 					assertNotNull(dlatlon);
 					assertTrue(dlatlon.length==2);
-					String[] endlatlon = np.search(wayinfo[2], true);
-					assertNotNull(endlatlon);
-					assertTrue(endlatlon.length==2);
 				}
 			}
 		}
