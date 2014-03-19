@@ -76,7 +76,77 @@ public class Controller {
 			}
 
 			// split line 
-			commands = line.split(" ");
+			commands = line.split("\"");
+			if(commands.length==1){// assuming input is valid, must be lat/lon lat/lon
+				commands = line.split(" ");
+				if(commands.length==4){
+					try{
+						double slat = Double.parseDouble(commands[0]);
+						double slon = Double.parseDouble(commands[1]);
+						double dlat = Double.parseDouble(commands[2]);
+						double dlon = Double.parseDouble(commands[3]);
+						double[] src = {slat,slon};
+						double[] dst = {dlat,dlon};
+						Node source = this.nearestNeighbor(src);
+						Node destination = this.nearestNeighbor(dst);
+						try{
+							List<Node> path = this.getPath(src.toString(), dst.toString());
+							if(path!=null){
+								for(int i = 0; i < path.size()-1; i++){
+									for(Edge e: path.get(i).getEdges()){
+										if(e.getDest().equals(path.get(i+1))){
+											System.out.println(e.getSource()+" -> "+e.getDest()+" : "+e.getFilm());
+											break;
+										}
+									}
+								}
+							}
+							else{
+								System.out.println(source.toString()+" -/- "+destination.toString());
+							}
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+					}
+					catch(NumberFormatException e){
+						System.err.println("ERROR: invalid lattidue/longitude value(s)");
+						continue;
+					}
+				}
+				else{
+					System.err.println("ERROR: invalid number of lattitude/longitude pairs");
+				}
+			}
+			else{
+				if(commands.length==4){
+					Node src = this.getIntersection(commands[0], commands[1]);
+					Node dst = this.getIntersection(commands[2], commands[3]);
+					try {
+						List<Node> path = this.getPath(src.toString(), dst.toString());
+						if(path!=null){
+							for(int i = 0; i < path.size()-1; i++){
+								for(Edge e: path.get(i).getEdges()){
+									if(e.getDest().equals(path.get(i+1))){
+										System.out.println(e.getSource()+" -> "+e.getDest()+" : "+e.getFilm());
+										break;
+									}
+								}
+							}
+						}
+						else{
+							System.out.println(src.toString()+" -/- "+dst.toString());
+						}
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				else{
+					System.out.println("ERROR: Invalid number of streets");
+				}
+			}
 		}
 			
 			
@@ -127,7 +197,7 @@ public class Controller {
 	}
 	
 	public static void main(String[] args) {
-		new Controller("smallways.tsv", "smallnodes.tsv", "smallindex.tsv", true);
+		new Controller("smallways.tsv", "smallnodes.tsv", "smallindex.tsv", false);
 		//new Controller("/course/cs032/data/maps/ways.tsv", "/course/cs032/data/maps/nodes.tsv", "/course/cs032/data/maps/ways.tsv", true);
 		//new Controller("small_ways.tsv", "small_nodes.tsv", "small_nodes.tsv", true);
 	}

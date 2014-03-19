@@ -30,9 +30,10 @@ public class Astar {
 	public List<Node> getPath(String src, String dst) throws IOException{
 		_graph = new Graph();
 		List<Node> list = this.search(_graph, src, dst, _wp, _np);
-		
-		for(Node n: list){
-			System.out.println(n.toString());
+		if(list!=null){
+			for(Node n: list){
+				System.out.println(n.toString());
+			}
 		}
 		
 		return list;
