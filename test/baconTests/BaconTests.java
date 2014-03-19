@@ -35,7 +35,7 @@ public class BaconTests {
 		}
 	}
 	
-	@Test
+	//@Test
 	public void astarTest1() throws Exception{
 		//NodeParser np = new NodeParser("smallnodes.tsv");
 		//WayParser wp = new WayParser("smallways.tsv");
@@ -56,7 +56,7 @@ public class BaconTests {
 		}
 	}
 	
-	@Test
+	//@Test
 	public void astarTest2() throws Exception{
 		//NodeParser np = new NodeParser("smallnodes.tsv");
 		//WayParser wp = new WayParser("smallways.tsv");
@@ -90,8 +90,8 @@ public class BaconTests {
 	public void astarTest1reversed() throws Exception{
 		//NodeParser np = new NodeParser("smallnodes.tsv");
 				//WayParser wp = new WayParser("smallways.tsv");
-				Astar astar = new Astar("smallnodes.tsv","smallways.tsv");
-				//Astar astar = new Astar("/course/cs032/data/maps/nodes.tsv", "/course/cs032/data/maps/ways.tsv");
+				//Astar astar = new Astar("smallnodes.tsv","smallways.tsv");
+				Astar astar = new Astar("/course/cs032/data/maps/nodes.tsv", "/course/cs032/data/maps/ways.tsv");
 				Graph g  = new Graph();
 				//astar.printSearch(g, "/n/4182.7140.201312088", "/n/4182.7140.201260632", wp, np);
 				ArrayList<Node> path = (ArrayList<Node>) astar.getPath("/n/4182.7140.201260642", "/n/4182.7140.201312088");
