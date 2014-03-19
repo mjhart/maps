@@ -18,6 +18,8 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 import javax.swing.SwingUtilities;
 
+import autocorrect.TrieEngine;
+
 import newGraph.Edge;
 import newGraph.Node;
 import newGraph.NodeDictionary;
@@ -28,12 +30,16 @@ public class Controller {
 	private KDTree<Node> _tree;
 	private WayDictionary _ways;
 	private NodeDictionary _nodes;
+	private TrieEngine _trie;
 	
 	public Controller(String wayFile, String nodeFile, String indexFile, boolean gui) {
 		
+		
 		try {
 		_nodes = new NodeDictionary(nodeFile);
+		System.out.println("node dict built");
 		_ways = new WayDictionary(wayFile, _nodes);
+		_trie = new TrieEngine(indexFile);
 		}
 		catch(IOException e) {
 			e.printStackTrace();
@@ -124,12 +130,33 @@ public class Controller {
 	}
 	
 	public static void main(String[] args) {
-		//new Controller("smallways.tsv", "smallnodes.tsv", "small_nodes.tsv", true);
-		new Controller("/course/cs032/data/maps/ways.tsv", "/course/cs032/data/maps/nodes.tsv", "/course/cs032/data/maps/ways.tsv", true);
+		new Controller("smallways.tsv", "smallnodes.tsv", "smallindex.tsv", true);
+		//new Controller("/course/cs032/data/maps/ways.tsv", "/course/cs032/data/maps/nodes.tsv", "/course/cs032/data/maps/ways.tsv", true);
 		//new Controller("small_ways.tsv", "small_nodes.tsv", "small_nodes.tsv", true);
 	}
 	
-
+	public Node nearestNeighbor(double[] coords) {
+		List<Node> result = _tree.nearestNeighbors(coords, 1);
+		if(result.size() == 1) {
+			return result.get(0);
+		}
+		return null;
+	}
 	
+	public List<String> getSuggestions(String query) {
+		return _trie.getSuggestion(query);
+	}
+	
+	public Node getIntersection(String street1, String street2) {
+		String nodeId = _trie.getIntersection(street1, street2);
+		if(nodeId != null) {
+			return _nodes.getNode(nodeId);
+		}
+		return null;
+	}
+	
+	public List<Node> getPath(String source, String dest) {
+		return null;
+	}
 	
 }

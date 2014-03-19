@@ -8,6 +8,7 @@ import java.util.HashMap;
 
 import parsers.FileSearcher;
 import parsers.WayIdComparator;
+import parsers.WayParser;
 
 public class WayDictionary {
 	
@@ -19,6 +20,7 @@ public class WayDictionary {
 	private int _start;
 	private int _end;
 	private NodeDictionary _nodes;
+	private WayParser _wayParser;
 	
 	// debugging
 	public int toDisk = 0;
@@ -69,6 +71,19 @@ public class WayDictionary {
 		
 		_nodes = nd;
 		_ways = new HashMap<String, Edge>();
+		
+		/*
+		try {
+			System.out.println("about to build way parser");
+			long start = System.currentTimeMillis();
+			_wayParser = new WayParser(filename);
+			long end = System.currentTimeMillis();
+			System.out.println(String.format("Building took %d seconds", (end-start)/1000));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		*/
 	}
 	
 	public ArrayList<Edge> wayList() {
@@ -88,6 +103,17 @@ public class WayDictionary {
 		}
 		*/
 		toDisk++;
+		/*
+		String[] data = null;
+		try {
+			data = _wayParser.search(id);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return createEdge(data);
+		*/
+		
 		
 		WayIdComparator comp = new WayIdComparator(_id);
 		FileSearcher fs = new FileSearcher(_file, comp);
@@ -115,6 +141,7 @@ public class WayDictionary {
 		}
 		
 		return result;
+		
 	}
 	
 	public Node getEnd(String id){

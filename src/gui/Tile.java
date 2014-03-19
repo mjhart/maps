@@ -19,14 +19,14 @@ public class Tile {
 		this.ways = ways;
 	}
 	
-	/*
-	public boolean intersects(double[] max, double[] min) {
-		return !(min[0] > _max[0] ||
-				 max[0] < _min[0] ||
-				 max[1] > _min[1] ||
-				 min[1] < _max[1]); 
+	
+	public boolean intersects(int[] max, int[] min) {
+		return !(min[0] > x+1 ||
+				 max[0] < x ||
+				 max[1] < y ||
+				 min[1] > y+1); 
 	}
-	*/
+	
 	
 	public double getMinLon() {
 		return AltDrawingPanel.txToLon(x);

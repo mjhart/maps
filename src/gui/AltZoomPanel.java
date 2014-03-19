@@ -54,7 +54,8 @@ public class AltZoomPanel extends JPanel {
 				}
 			}
 			*/
-			_dp.loadData();
+			//_dp.loadData();
+			_dp.load = !_dp.load;
 		}
 	}
 	

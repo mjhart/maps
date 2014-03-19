@@ -14,12 +14,13 @@ import javax.swing.event.MouseInputAdapter;
 public class PanListener extends MouseInputAdapter {
 	
 	public PanListener(AltDrawingPanel dp) {
-		this.dp = dp;
+		this._dp = dp;
 	}
 	
 	private Point start;
 	private Point end;
-	private AltDrawingPanel dp;
+	private AltDrawingPanel _dp;
+	private long _clicked;
 
 
 	@Override
@@ -31,23 +32,29 @@ public class PanListener extends MouseInputAdapter {
 		delta[1] = (start.getY() - end.getY());
 		//System.out.println(Arrays.toString(delta));
 		start = end;
-		dp.moveWindow(delta);
+		_dp.moveWindow(delta);
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
 		//System.out.println("Clicked");
 		start = e.getPoint();
+		
 	}
 	
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent e) {
 		if(e.getWheelRotation() > 0) {
-			dp.zoomOut();
+			_dp.zoomOut();
 		}
 		else {
-			dp.zoomIn();
+			_dp.zoomIn();
 		}
+	}
+	
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		_dp.clickAt(e.getX(), e.getY());
 	}
 
 

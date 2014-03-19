@@ -32,9 +32,14 @@ public class AltDrawingPanel extends JPanel {
 	private int[] dMin;
 	private Controller c;
 	
+	private Node _start;
+	private Node _end;
+	
 	private List<Tile> tiles;
 	private LinkedBlockingQueue<Tile> _tileQueue;
 	private TileLoader _tileLoader;
+	
+	public boolean load = false;
 	
 	int zoom = 10;
 	
@@ -109,37 +114,60 @@ public class AltDrawingPanel extends JPanel {
 		dMax[0] = lonToTx(wMax[0] + 2*TILE_SIZE - rMaxX);
 		dMax[1] = latToTy(wMax[1] + 2*TILE_SIZE - rMaxY);
 		
-		/*
-		for(int i=0; i<tiles.size(); i++) {
-			if(!tiles.get(i).intersects(dMax, dMin)) {
-				tiles.remove(i);
+		synchronized (tiles) {
+			for(int i=0; i<tiles.size(); i++) {
+				System.out.print("tile at " + tiles.get(i).x + ", " + tiles.get(i).y);
+				if(!tiles.get(i).intersects(dMax, dMin)) {
+					System.out.println(" is removed");
+					tiles.remove(i);
+				}
+				else {
+					System.out.println();
+				}
 			}
 		}
-		*/
 		
-		System.out.println("IMPORTANT STUFF");
+		
+		LinkedList<Tile> temp = new LinkedList<Tile>();
+		
+		System.out.println("LatLon Format");
+		System.out.println("min x: " + Double.toString(wMin[0] - rMinX - TILE_SIZE));
+		System.out.println("min y: " + Double.toString(wMin[1] - rMinY - TILE_SIZE));
+		System.out.println("max x: " + Double.toString(wMax[0] + 2*TILE_SIZE - rMaxX));
+		System.out.println("max y: " + Double.toString(wMax[1] + 2*TILE_SIZE - rMaxY));
+		
+		System.out.println("Tile Format");
 		System.out.println("min x: " + dMin[0]);
 		System.out.println("min y: " + dMin[1]);
 		System.out.println("max x: " + dMax[0]);
 		System.out.println("max y: " + dMax[1]);
 		
-		for(int i=dMin[0]; i<dMax[0]; i++) {
-			for(int j=dMin[1]; j<dMax[1]; j++) {
-				for(Tile t : tiles) {
-					if(t.x == i && t.y == j) {
-						continue;
+		for(int i=dMin[0]; i<=dMax[0]; i++) {
+			for(int j=dMin[1]; j<=dMax[1]; j++) {
+				
+				boolean loaded = false;
+				synchronized (tiles) {
+					for(Tile t : tiles) {
+						if(t.x == i && t.y == j) {
+							//System.out.println("Skipping: " + i + " " + j);
+							loaded = true;
+							break;
+						}
 					}
 				}
-				
-				//System.out.println(String.format("x: %f y: %f", i, j));
-				double[] min = {txToLon(i), tyToLat(j)};
-				double[] max = {min[0]+TILE_SIZE, min[1]+TILE_SIZE};
-				nodes = new HashSet<Node>();
-				ways = new HashSet<Edge>();
-				//c.getData(max, min, nodes, ways);
-				_tileQueue.add(new Tile(i, j, nodes, ways));
+				if(!loaded) {
+					System.out.println(String.format("x: %d y: %d", i, j));
+					double[] min = {txToLon(i), tyToLat(j)};
+					double[] max = {min[0]+TILE_SIZE, min[1]+TILE_SIZE};
+					nodes = new HashSet<Node>();
+					ways = new HashSet<Edge>();
+					//c.getData(max, min, nodes, ways);
+					//_tileQueue.add(new Tile(i, j, nodes, ways));
+					temp.add(new Tile(i, j, nodes, ways));
+				}
 			}
 		}
+		
 		
 		/*
 		dMax[0] = 2*wMax[0] - wMin[0];
@@ -148,8 +176,9 @@ public class AltDrawingPanel extends JPanel {
 		dMin[1] = 2*wMin[1] - wMax[1];
 		*/
 		//c.getData(dMax, dMin, _nodes, _ways);
-		for(Tile t :tiles) {
+		for(Tile t : temp) {
 			//System.out.println(Arrays.toString(t._min));
+			_tileQueue.add(t);
 		}
 		System.out.println("DMAX: " + Arrays.toString(dMax));
 		System.out.println("DMIN: " + Arrays.toString(dMin));
@@ -176,13 +205,15 @@ public class AltDrawingPanel extends JPanel {
 		g.setColor(getBackground());
 		Graphics2D brush = (Graphics2D) g;
 		
-		/*
-		if(wMax[0] > dMax[0] || wMax[1] > dMax[1] || wMin[0] < dMin[0] || wMin[1] < wMin[1]) {
-			System.out.println("Loading data");
-			loadData();
+		if(load) {
+			if(wMax[0] > txToLon(dMax[0]) || wMax[1] > tyToLat(dMax[1]) || 
+					wMin[0] < txToLon(dMin[0]) || wMin[1] < tyToLat(dMin[1])) {
+				//System.out.println("Loading data");
+				loadData();
+			}
 		}
 		
-		
+		/*
 		System.out.println("Nodes being painted " + _nodes.size());
 		System.out.println("Ways being painted " + _ways.size());
 		System.out.println("Bounding box: " + Arrays.toString(wMax) + " " + Arrays.toString(wMin));
@@ -206,6 +237,8 @@ public class AltDrawingPanel extends JPanel {
 		*/
 		
 		brush.clearRect(0, 0, this.getWidth(), this.getHeight());
+		//System.out.println(tiles.size());
+		
 		
 		synchronized (tiles) {
 			for(Tile t : tiles) {
@@ -219,6 +252,10 @@ public class AltDrawingPanel extends JPanel {
 				brush.setColor(java.awt.Color.BLUE);
 				brush.drawRect(lonToX(txToLon(dMin[0])), latToY(tyToLat(dMax[1])), lonToX(txToLon(dMax[0]))-lonToX(txToLon(dMin[0])),latToY(tyToLat(dMin[1]))-latToY(tyToLat(dMax[1])));
 				brush.drawRect(lonToX(txToLon(0)), latToY(tyToLat(0)), 5, 5);
+				
+				brush.setColor(java.awt.Color.GREEN);
+				String str = "(" + t.x +"," + t.y + ")";
+				brush.drawString(str, lonToX(t.getMinLon()), latToY(t.getMinLat()));
 
 
 				brush.setComposite(tmp);
@@ -230,6 +267,10 @@ public class AltDrawingPanel extends JPanel {
 					paintWay(brush, e);
 				}
 			}
+		}
+		if(_start != null) {
+			brush.setColor(java.awt.Color.GREEN);
+			brush.fillOval(lonToX(_start.getLon())-2, latToY(_start.getLat())-2, 5, 5);
 		}
 		
 	}
@@ -303,5 +344,12 @@ public class AltDrawingPanel extends JPanel {
 		int x2 = lonToX(way.getDest().getLon());
 		int y2 = latToY(way.getDest().getLat());
 		brush.drawLine(x1, y1, x2, y2);
+	}
+	
+	public void clickAt(int x, int y) {
+		double[] coords = {xToLon(x), yToLat(y)};
+		System.out.println("Called at " + Arrays.toString(coords));
+		_start = c.nearestNeighbor(coords);
+		this.repaint();
 	}
 }
