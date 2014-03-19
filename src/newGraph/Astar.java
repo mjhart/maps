@@ -267,4 +267,14 @@ public class Astar {
 		return C*6378100;
 	}
 
+	public NodeParser getNp() {
+		// TODO Auto-generated method stub
+		return _np;
+	}
+	
+	public WayParser getWp() {
+		// TODO Auto-generated method stub
+		return _wp;
+	}
+
 }

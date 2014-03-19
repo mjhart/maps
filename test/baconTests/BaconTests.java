@@ -11,6 +11,33 @@ import parsers.*;
 
 public class BaconTests {
 	
+	@Test
+	public void getBorsTest() throws Exception{
+		Astar astar = new Astar("smallnodes.tsv","smallways.tsv");
+		NodeParser np =  astar.getNp();
+		WayParser wp = astar.getWp();
+		String[] wayids = np.search("/n/4182.7140.1094902259", false);
+		assertNotNull(wayids);
+		//System.out.println(wayids.length);
+		assertTrue(wayids.length==4);
+		for(String s: wayids){
+			System.out.println("Examining way: "+s);
+			String[] wayinfo = wp.search(s);
+			if(wayinfo!=null){
+				assertTrue(wayinfo.length==3);
+				if(wayinfo[1].equals("/n/4182.7140.1094902259")){
+					System.out.println("Examining dst node: "+wayinfo[2]);
+					String[] dlatlon = np.search(wayinfo[2], true);
+					assertNotNull(dlatlon);
+					assertTrue(dlatlon.length==2);
+					String[] endlatlon = np.search(wayinfo[2], true);
+					assertNotNull(endlatlon);
+					assertTrue(endlatlon.length==2);
+				}
+			}
+		}
+	}
+	
 	//@Test
 	public void astarTest1() throws Exception{
 		//NodeParser np = new NodeParser("smallnodes.tsv");
@@ -119,7 +146,7 @@ public class BaconTests {
 		assertNotNull(test);//System.out.println(test.length);
 	}
 	
-	@Test
+	//@Test
 	public void WayParserTestFull() throws Exception{
 		WayParser wp = new WayParser("smallways.tsv");
 		RandomAccessFile raf = new RandomAccessFile("smallways.tsv","r");
@@ -151,7 +178,9 @@ public class BaconTests {
 			String id = line[_idcol];
 			try{
 				//if(line.length==np.getCols()){
-					assertNotNull(wp.search(id));
+				String[] nodeids = wp.search(id);
+				assertNotNull(nodeids);
+				assertTrue(nodeids.length==3);
 				//}
 				//else{
 				//	for(int i = 0; i < line.length; i++){
@@ -166,7 +195,7 @@ public class BaconTests {
 		}
 	}
 	
-	@Test
+	//@Test
 	public void NodeParserTestFull() throws Exception{
 		NodeParser np = new NodeParser("smallnodes.tsv");
 		RandomAccessFile raf = new RandomAccessFile("smallnodes.tsv","r");
@@ -175,6 +204,7 @@ public class BaconTests {
 		int _loncol = Integer.MAX_VALUE;
 		int _wayscol = Integer.MAX_VALUE;
 		String[] header = raf.readLine().split("\t");
+		int _cols = header.length;
 		for(int i=0; i<header.length; i++) {
 			if(header[i].equals("id")) {
 				_idcol = i;
@@ -198,7 +228,17 @@ public class BaconTests {
 			String id = line[_idcol];
 			try{
 				//if(line.length==np.getCols()){
-					assertNotNull(np.search(id, false));
+				String[] wayids = np.search(id, false);
+				assertNotNull(wayids);
+				if(line.length==_cols){
+					assertTrue(wayids.length==line[_wayscol].split(",").length);
+				}
+				else{
+					assertTrue(wayids.length==1);
+				}
+				String[] latlon = np.search(id, true);
+				assertNotNull(latlon);
+				assertTrue(latlon.length==2);
 				//}
 				//else{
 				//	for(int i = 0; i < line.length; i++){
