@@ -17,7 +17,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 import javax.swing.JPanel;
 
 import tmp.Controller;
-
 import newGraph.*;
 
 public class AltDrawingPanel extends JPanel {
@@ -34,6 +33,7 @@ public class AltDrawingPanel extends JPanel {
 	
 	private Node _start;
 	private Node _end;
+	private List<Node> _path;
 	
 	private List<Tile> tiles;
 	private LinkedBlockingQueue<Tile> _tileQueue;
@@ -79,7 +79,7 @@ public class AltDrawingPanel extends JPanel {
 		this.addMouseMotionListener(pan);
 		this.addMouseWheelListener(pan);
 		
-		
+		_path = null;
 	}
 	
 	public void loadData() {
@@ -210,6 +210,18 @@ public class AltDrawingPanel extends JPanel {
 					wMin[0] < txToLon(dMin[0]) || wMin[1] < tyToLat(dMin[1])) {
 				//System.out.println("Loading data");
 				loadData();
+			}
+		}
+		if(_path!=null){
+			brush.setColor(Color.WHITE);
+			for(int i = 0; i < _path.size()-1; i++){
+				for(Edge e: _path.get(i).getEdges()){
+					if(e.getDest().equals(_path.get(i+1))){
+						this.paintWay(brush, e);
+						//System.out.println(e.getSource()+" -> "+e.getDest()+" : "+e.getFilm());
+						break;
+					}
+				}
 			}
 		}
 		
@@ -366,6 +378,22 @@ public class AltDrawingPanel extends JPanel {
 	public void startSearch(Node src, Node dst) {
 		try {
 			List<Node> path = c.getPath(src.toString(), dst.toString());
+			if(path!=null){
+				System.out.println("Printing Path:");
+				for(int i = 0; i < path.size()-1; i++){
+					for(Edge e: path.get(i).getEdges()){
+						if(e.getDest().equals(path.get(i+1))){
+							System.out.println(e.getSource()+" -> "+e.getDest()+" : "+e.getFilm());
+							break;
+						}
+					}
+				}
+				_path = path;
+				this.repaint();
+			}
+			else{
+				System.out.println(src.toString()+" -/- "+dst.toString());
+			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

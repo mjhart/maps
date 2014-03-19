@@ -197,7 +197,7 @@ public class Controller {
 	}
 	
 	public static void main(String[] args) {
-		new Controller("smallways.tsv", "smallnodes.tsv", "smallindex.tsv", false);
+		new Controller("smallways.tsv", "smallnodes.tsv", "smallindex.tsv", true);
 		//new Controller("/course/cs032/data/maps/ways.tsv", "/course/cs032/data/maps/nodes.tsv", "/course/cs032/data/maps/ways.tsv", true);
 		//new Controller("small_ways.tsv", "small_nodes.tsv", "small_nodes.tsv", true);
 	}

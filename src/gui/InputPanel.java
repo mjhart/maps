@@ -114,9 +114,20 @@ public class InputPanel extends JPanel {
 				String cs1 = _sfs[1].getText().trim();
 				String s2 = _sfs[2].getText().trim();
 				String cs2 = _sfs[3].getText().trim();
+				System.out.println(s1+", "+cs1+", "+s2+", "+cs2);
 				Node src = _c.getIntersection(s1, cs1);
 				Node dst = _c.getIntersection(s2, cs2);
-				_dp.startSearch(src, dst);
+				try{
+					_dp.startSearch(src, dst);
+				}
+				catch(NullPointerException exc){
+					if(src==null){
+						System.err.println("ERROR: Source intersection couldn't be found");
+					}
+					if(dst==null){
+						System.err.println("ERROR: Destinations intersection couldn't be found");
+					}
+				}
 			}
 			else{
 				Node src = _dp.getStart();
