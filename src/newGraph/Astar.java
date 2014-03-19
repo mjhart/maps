@@ -47,6 +47,7 @@ public class Astar {
 	}
 	
 	public List<Node> search(Graph g, String src, String dst, WayParser wp, NodeParser np) throws IOException{
+		System.out.println("Searching for path between "+src+" and "+dst);
 		String[] latlon = np.search(src, true);
 		if(latlon==null){
 			return null;

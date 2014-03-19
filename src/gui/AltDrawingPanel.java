@@ -379,7 +379,7 @@ public class AltDrawingPanel extends JPanel {
 		try {
 			List<Node> path = c.getPath(src.toString(), dst.toString());
 			if(path!=null){
-				System.out.println("Printing Path:");
+				//System.out.println("Printing Path:");
 				for(int i = 0; i < path.size()-1; i++){
 					for(Edge e: path.get(i).getEdges()){
 						if(e.getDest().equals(path.get(i+1))){
