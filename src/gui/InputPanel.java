@@ -17,7 +17,8 @@ public class InputPanel extends JPanel {
 	
 	private JTextArea _text;
 	private JScrollPane _scroll;
-	private JButton _astar;
+	private JButton _astarText;
+	private JButton _astarMap;
 	private AltDrawingPanel _dp;
 	private Controller _c;
 	private List<SugField> _sfields;
@@ -40,8 +41,10 @@ public class InputPanel extends JPanel {
 			this.makeField();
 		}
 		
-		_astar = new JButton("Find Path");
-		_astar.addActionListener(new ButtonListener());
+		_astarText = new JButton("Find Path from Text");
+		_astarText.addActionListener(new ButtonListener(true));
+		_astarMap = new JButton("Find Path from Map (Green to Red)");
+		_astarMap.addActionListener(new ButtonListener(false));
 		
 		_text = new JTextArea();
 		_scroll = new JScrollPane(_text);
@@ -70,7 +73,8 @@ public class InputPanel extends JPanel {
 			this.addToGroups(pg, sg, _sfields.get(i));
 			this.addToGroups(pg, sg, _sboxes.get(i));
 		}
-		this.addToGroups(pg,sg,_astar);
+		this.addToGroups(pg,sg,_astarText);
+		this.addToGroups(pg,sg, _astarMap);
 		this.addToGroups(pg,sg,_scroll);
 		
 		layout.setHorizontalGroup(pg);
@@ -79,7 +83,9 @@ public class InputPanel extends JPanel {
 			this.add(_sfields.get(i));
 			this.add(_sboxes.get(i));
 		}
-		this.add(_astar);
+		this.add(_astarText);
+		this.add(_astarMap);
+		this.add(_scroll);
 	}
 	
 	private void addToGroups(ParallelGroup pg, SequentialGroup sg, Component c){
@@ -90,8 +96,10 @@ public class InputPanel extends JPanel {
 	private class ButtonListener implements ActionListener{
 		
 		private SugField[] _sfs = new SugField[4];
+		private boolean _text;
 		
-		public ButtonListener(){
+		public ButtonListener(Boolean text){
+			_text = text;
 			int i = 0;
 			for(SugField sf: _sfields){
 				_sfs[i] = sf;
@@ -101,13 +109,22 @@ public class InputPanel extends JPanel {
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			String s1 = _sfs[0].getText().trim();
-			String cs1 = _sfs[1].getText().trim();
-			String s2 = _sfs[2].getText().trim();
-			String cs2 = _sfs[3].getText().trim();
-			Node src = _c.getIntersection(s1, cs1);
-			Node dst = _c.getIntersection(s2, cs2);
-			_dp.startSearch(src, dst);
+			if(_text){
+				String s1 = _sfs[0].getText().trim();
+				String cs1 = _sfs[1].getText().trim();
+				String s2 = _sfs[2].getText().trim();
+				String cs2 = _sfs[3].getText().trim();
+				Node src = _c.getIntersection(s1, cs1);
+				Node dst = _c.getIntersection(s2, cs2);
+				_dp.startSearch(src, dst);
+			}
+			else{
+				Node src = _dp.getStart();
+				Node dst = _dp.getEnd();
+				if(src!=null && dst!=null){
+					_dp.startSearch(src, dst);
+				}
+			}
 		}
 		
 	}

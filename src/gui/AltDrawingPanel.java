@@ -272,6 +272,10 @@ public class AltDrawingPanel extends JPanel {
 			brush.setColor(java.awt.Color.GREEN);
 			brush.fillOval(lonToX(_start.getLon())-2, latToY(_start.getLat())-2, 5, 5);
 		}
+		if(_end!=null){
+			brush.setColor(java.awt.Color.RED);
+			brush.fillOval(lonToX(_end.getLon())-2, latToY(_end.getLat())-2, 5, 5);
+		}
 		
 	}
 	
@@ -349,7 +353,13 @@ public class AltDrawingPanel extends JPanel {
 	public void clickAt(int x, int y) {
 		double[] coords = {xToLon(x), yToLat(y)};
 		System.out.println("Called at " + Arrays.toString(coords));
-		_start = c.nearestNeighbor(coords);
+		if(_start==null){
+			_start = c.nearestNeighbor(coords);
+		}
+		else{
+			_end = _start;
+			_start = c.nearestNeighbor(coords);
+		}
 		this.repaint();
 	}
 
@@ -360,5 +370,15 @@ public class AltDrawingPanel extends JPanel {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	public Node getStart() {
+		// TODO Auto-generated method stub
+		return _start;
+	}
+
+	public Node getEnd() {
+		// TODO Auto-generated method stub
+		return _end;
 	}
 }
