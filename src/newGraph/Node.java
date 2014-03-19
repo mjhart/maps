@@ -34,9 +34,9 @@ public class Node extends Point2D.Double implements Comparable<Object>, KDTreeEn
 		super();
 		_my_id = my_id;
 		_id = id;
-		_g = java.lang.Double.MAX_VALUE;
-		_h = java.lang.Double.MAX_VALUE;
-		_f = java.lang.Double.MAX_VALUE;
+		_g = 0;//java.lang.Double.MAX_VALUE;
+		_h = 0;//java.lang.Double.MAX_VALUE;
+		_f = 0;//java.lang.Double.MAX_VALUE;
 		_lat = lat;
 		_lon = lon;
 		_prev = null;

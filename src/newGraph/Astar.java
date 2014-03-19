@@ -57,7 +57,9 @@ public class Astar {
 		if(_src!=null){
 			PriorityQueue<Node> open = new PriorityQueue<Node>(20, new NodeComparator());
 			Map<String, Node> close = new HashMap<String, Node>();
+			Map<Node, Double> gdist = new HashMap<Node, Double>();
 			open.add(_src);
+			//gdist.put(_src,0.0);
 			Node goal = null;
 			while(open.size() > 0){
 				Node current = open.poll();
@@ -68,15 +70,17 @@ public class Astar {
 				close.put(current.toString(), current);
 				List<Node> neighbors = getBors(current, wp, np, g);
 				for(Node n : neighbors){
+					//if(!gdist.containsKey(n)) gdist.put(n,getD(current,n));
+					//double cost = gdist.get(current)+getD(current,n);
 					double cost = current.getG() + getD(current, n);
-					if(open.contains(n) && cost < n.getG()){
+					if(open.contains(n) && cost < n.getG()){//gdist.get(n)){//n.getG()){
 						open.remove(n);
 					}
-					if(!open.contains(n) && cost < n.getG()){
+					if(!open.contains(n) && cost < n.getG()){//gdist.get(n)){//n.getG()){
 						close.remove(n.toString());
 					}
 					if(!open.contains(n) && !close.containsKey(n.toString())){
-						n.setG(cost);
+						n.setG(cost);//gdist.put(n,cost);//n.setG(cost);
 						n.setH(this.getD(_src, n));
 						open.add(n);
 						n.setPrev(current);

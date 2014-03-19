@@ -11,7 +11,7 @@ import parsers.*;
 
 public class BaconTests {
 	
-	@Test
+	//@Test
 	public void getBorsTest() throws Exception{
 		Astar astar = new Astar("smallnodes.tsv","smallways.tsv");
 		NodeParser np =  astar.getNp();
@@ -35,7 +35,7 @@ public class BaconTests {
 		}
 	}
 	
-	//@Test
+	@Test
 	public void astarTest1() throws Exception{
 		//NodeParser np = new NodeParser("smallnodes.tsv");
 		//WayParser wp = new WayParser("smallways.tsv");
@@ -56,7 +56,7 @@ public class BaconTests {
 		}
 	}
 	
-	//@Test
+	@Test
 	public void astarTest2() throws Exception{
 		//NodeParser np = new NodeParser("smallnodes.tsv");
 		//WayParser wp = new WayParser("smallways.tsv");
