@@ -21,7 +21,7 @@ public class BaconTests {
 		//astar.printSearch(g, "/n/4182.7140.201312088", "/n/4182.7140.201260632", wp, np);
 		ArrayList<Node> path = (ArrayList<Node>) astar.getPath("/n/4182.7140.201312088", "/n/4182.7140.201260636");
 		ArrayList<Edge> edges = new ArrayList();
-		for(int i = 0; i < path.size()-2; i++){
+		for(int i = 0; i < path.size()-1; i++){
 			for(Edge e: path.get(i).getEdges()){
 				if(e.getDest().equals(path.get(i+1))){
 					System.out.println(e.getSource()+" -> "+e.getDest()+" : "+e.getFilm());
@@ -33,7 +33,7 @@ public class BaconTests {
 	}
 	
 	@Test
-	public void asterTest2() throws Exception{
+	public void astarTest2() throws Exception{
 		//NodeParser np = new NodeParser("smallnodes.tsv");
 		//WayParser wp = new WayParser("smallways.tsv");
 		Astar astar = new Astar("smallnodes.tsv","smallways.tsv");
@@ -42,19 +42,28 @@ public class BaconTests {
 		//astar.printSearch(g, "/n/4182.7140.201312088", "/n/4182.7140.201260632", wp, np);
 		ArrayList<Node> path = (ArrayList<Node>) astar.getPath("/n/4182.7140.201312088", "/n/4182.7140.2100936248");
 		ArrayList<Edge> edges = new ArrayList();
-		for(int i = 0; i < path.size()-2; i++){
+		for(int i = 0; i < path.size()-1; i++){
 			for(Edge e: path.get(i).getEdges()){
-				if(e.getDest().equals(path.get(i+1))){
-					System.out.println(e.getSource()+" -> "+e.getDest()+" : "+e.getFilm());
-					edges.add(e);
-					break;
+				if(i==path.size()-1){
+					if(e.getDest().equals("/n/4182.7140.2100936248")){
+						System.out.println(e.getSource()+" -> "+e.getDest()+" : "+e.getFilm());
+						edges.add(e);
+						break;
+					}
+				}
+				else{
+					if(e.getDest().equals(path.get(i+1))){
+						System.out.println(e.getSource()+" -> "+e.getDest()+" : "+e.getFilm());
+						edges.add(e);
+						break;
+					}
 				}
 			}
 		}
 	}
 	
 	@Test
-	public void asterTest1reversed() throws Exception{
+	public void astarTest1reversed() throws Exception{
 		//NodeParser np = new NodeParser("smallnodes.tsv");
 				//WayParser wp = new WayParser("smallways.tsv");
 				Astar astar = new Astar("smallnodes.tsv","smallways.tsv");
