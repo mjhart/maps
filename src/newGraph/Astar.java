@@ -57,7 +57,7 @@ public class Astar {
 		if(_src!=null){
 			PriorityQueue<Node> open = new PriorityQueue<Node>(20, new NodeComparator());
 			Map<String, Node> close = new HashMap<String, Node>();
-			Map<Node, Double> gdist = new HashMap<Node, Double>();
+			//Map<Node, Double> gdist = new HashMap<Node, Double>();
 			open.add(_src);
 			//gdist.put(_src,0.0);
 			Node goal = null;
