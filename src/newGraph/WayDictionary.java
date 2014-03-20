@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import parsers.FileSearcher;
@@ -72,7 +73,7 @@ public class WayDictionary {
 		_nodes = nd;
 		_ways = new HashMap<String, Edge>();
 		
-		/*
+		
 		try {
 			System.out.println("about to build way parser");
 			long start = System.currentTimeMillis();
@@ -83,7 +84,7 @@ public class WayDictionary {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		*/
+		
 	}
 	
 	public ArrayList<Edge> wayList() {
@@ -103,7 +104,8 @@ public class WayDictionary {
 		}
 		*/
 		toDisk++;
-		/*
+		
+		///*
 		String[] data = null;
 		try {
 			data = _wayParser.search(id);
@@ -111,10 +113,14 @@ public class WayDictionary {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return createEdge(data);
-		*/
+		//System.out.println(id + " " + Arrays.toString(data));
+		if(data != null) {
+			return createEdge(id, data[1], data[2]);
+		}
+		return null;
+		//*/
 		
-		
+		/*
 		WayIdComparator comp = new WayIdComparator(_id);
 		FileSearcher fs = new FileSearcher(_file, comp);
 		long pos = fs.search(id);
@@ -125,7 +131,7 @@ public class WayDictionary {
 			try {
 				_file.seek(pos);
 				String[] line = _file.readLine().split("\t");
-				result = createEdge(line);
+				result = createEdge(id, line[_start], line[_end]);
 
 				if(result != null) {
 					importBox(result, pos);
@@ -141,10 +147,10 @@ public class WayDictionary {
 		}
 		
 		return result;
-		
+		*/
 	}
 	
-	public Node getEnd(String id){
+	private Node getEnd(String id){
 		Edge e = this.getWay(id);
 		if(e==null){
 			return null;
@@ -154,7 +160,7 @@ public class WayDictionary {
 		}
 	}
 	
-	public Node getStart(String id){
+	private Node getStart(String id){
 		Edge e = this.getWay(id);
 		if(e==null){
 			return null;
@@ -164,21 +170,18 @@ public class WayDictionary {
 		}
 	}
 	
-	private Edge createEdge(String[] data) {
-		String sid = data[_start];
-		String eid = data[_end];
-		String id = data[_id];
+	private Edge createEdge(String id, String start,  String end) {
 		
-		Node start = _nodes.getNode(sid);
-		Node end = _nodes.getNode(eid);
+		Node startN = _nodes.getNode(start);
+		Node endN = _nodes.getNode(end);
 		
 		Edge e = null;
 		
 		//System.out.println(start);
 		//System.out.println(end);
 		
-		if(start!=null && end!=null){
-			e = new Edge(_ways.size(), start, end, id, this.getD(start,end));
+		if(startN!=null && endN!=null){
+			e = new Edge(_ways.size(), startN, endN, id, this.getD(startN,endN));
 			_ways.put(id, e);
 		}
 		
@@ -245,7 +248,7 @@ public class WayDictionary {
 					i++;
 				}
 				//System.out.println(sb.toString());
-				createEdge(sb.toString().split("\t"));
+				//createEdge(sb.toString().split("\t"));
 				bufferRead++;
 				i++;
 			}
@@ -281,7 +284,7 @@ public class WayDictionary {
 					i++;
 				}
 				//System.out.println(sb.toString());
-				createEdge(sb.toString().split("\t"));
+				//createEdge(sb.toString().split("\t"));
 				bufferRead++;
 				i++;
 			}
