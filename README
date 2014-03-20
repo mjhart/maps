@@ -1,0 +1,134 @@
+README
+
+maps
+
+by:
+sbreslow
+mjhart
+
+Previous Projects
+=================
+
+The autocorrect and stars code came from mjhart.
+The bacon code came from sbreslow.
+
+Known Bugs
+==========
+
+Can crash if too much data is loaded at once.
+
+Design Details
+==============
+
+The Controller is our top level class which delegates 
+between the backend code and either the REPL or GUI. 
+
+GUI
+---
+The map is divided into tiles. When a tile is needed
+to be displayed to the user, it is initialized, then 
+put on a queue to be filled with data. A seperate 
+thread in the GUI makes calls to the Controller to 
+get the nodes and ways that are inside the bounding 
+box defined by the Tile. When a tile has been completed,
+is is put into a thread safe list in the DrawingPanel. 
+Whenever the DrawingPanel repaints, it calculates
+which tiles are needed to display. If any are needed 
+which are not currently in the Tile list, it calls 
+getData() which first removes Tiles that are no
+longer needed, then requests any new Tiles needed.
+Finally, all the Tiles in the tile list are painted
+to the screen. 
+
+The InputPanel is where the various parts of our
+project come together. SugFields generate queries 
+for the autocorrect module and results are returned 
+in SugBoxes. At the same time the user can click either
+of the search buttons to launch an Astar search based 
+off either the text currently in the sug fields or 
+the two points highlighted on the map.
+
+The DrawingPanel can also start up a new thread to 
+run an astar search on the graph. The actual search 
+is delegated to a back end class through the 
+Controller. When the Astar search is completed, 
+the nodes in the path are added to a list in the 
+DrawingPanel, which is drawn on repaints.
+
+Autocorrect in the street search is delegated to
+a trie in the backend. Whenever the text in the 
+input boxes is changed, the string is sent to 
+the backend and a sorted list of suggestions is 
+returned. 
+
+Zooming and panning are handled by manipulating a 
+bounding box defined by max and min lat and lon 
+values. 
+
+Astar
+-----
+
+The Astar class builds and searches a graph from 
+one node to another. If the start node or end node 
+are not found in the data, the search returns null.  
+Every time a new search starts, the old graph is 
+thrown out and Astar builds a new one.  This was a 
+difficult design decision, but during testing I 
+determined that it was possible for two nodes to 
+exist in a graph such that it would be possible 
+to go from A to B, but not back from B to A, so it 
+seemed safer (albeit slower) to rebuild the graph 
+each time.
+
+NodeParser
+----------
+
+The NodeParser class is how we binary search through 
+the nodes.tsv file.  During the binary search, it 
+reads in buffers of 500kB at a time, and even binary 
+searches through the buffer to improve performance.  
+Search in the NodeParser can be used to return both 
+the list of ways associate with a given Node, or the 
+latitude and longitude associated with a given Node.
+
+WayParser
+---------
+
+The NodeParser class is how we binary search through 
+the ways.tsv file.  During the binary search, it reads 
+in buffers of 500kB at a time, and even binary searches 
+through the buffer to improve performance.
+
+Graph, Node, Edge
+-----------------
+
+These classes are virtually identical to their counterparts 
+in sbreslow's Bacon, with the minor exception of Node, which 
+now extends mjhart's KDEntry for consistency and also now 
+features fields to store the necessary distance data for the 
+Astar search.
+
+KDTree
+------
+
+The KDTree perfoms several functions. It performs bounding box
+searches to fill tiles with nodes. It also returns the closest
+Node to a point on the screen when a user clicks.
+
+Testing Suite
+=============
+
+JUnit tests are located in a tests directory. They perform 
+unit tests on our subcomponents. 
+
+To run system tests use the command "ant my_test".
+
+Some Astar tests were run by hand with a smaller data set.
+We also tested Astar by comparing the results to an online 
+mapping utility.
+
+Building and Running from the Command Line
+==========================================
+
+To build use the ant tool with the provided build.xml
+file. To run use ./bin/maps [--gui] <ways> <nodes> <index>.
