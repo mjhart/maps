@@ -4,16 +4,18 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
 import parsers.FileSearcher;
 import parsers.NodeIdComparator;
+import parsers.NodeParser;
 
 public class NodeDictionary {
 	
-	private static int BUFFER_SIZE = 10000;
+	private static int BUFFER_SIZE = 1000;
 
 	private HashMap<String, Node> _nodes;
 	private RandomAccessFile _file;
@@ -22,9 +24,12 @@ public class NodeDictionary {
 	private int _lon;
 	private int _ways;
 	
-	public NodeDictionary(String filename) throws FileNotFoundException {
+	private NodeParser _np;
+	
+	public NodeDictionary(String filename) throws Exception {
 		
 		_file = new RandomAccessFile(filename, "r");
+		_np = new NodeParser(filename);
 		
 		// set up indices
 		_id = -1;
@@ -143,6 +148,16 @@ public class NodeDictionary {
 	}
 	
 	public List<String> getWayIds(String nodeId) {
+		///*
+		try {
+			return new ArrayList<String>(Arrays.asList(_np.search(nodeId, false)));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return new ArrayList<String>();
+		//*/
+		/*
 		LinkedList<String> results = new LinkedList<String>();
 		NodeIdComparator nc = new NodeIdComparator(_id);
 		FileSearcher fs = new FileSearcher(_file, nc);
@@ -162,6 +177,117 @@ public class NodeDictionary {
 			}
 		}
 		return results;
+		//*/
+		
+		/*
+		try {
+
+			// set top
+			long t = _file.length();
+			
+
+			// set bottom
+			_file.seek(0);
+			_file.readLine();
+			long b = _file.getFilePointer();
+			
+			long mid = b;
+			
+			byte[] buf = new byte[BUFFER_SIZE];
+
+			while(t > b+BUFFER_SIZE) {
+				
+				for(int i=0; i<BUFFER_SIZE; i++) {
+					buf[i] = 0;
+				}
+
+				mid = (t-b)/2 + b;
+
+				// move to midpoint
+				_file.seek(mid);
+
+				// read
+				int read = _file.read(buf);
+				
+				// move to beginning of line on bottom
+				int start = 0;
+				while(buf[start] != '\n') {
+					mid++;
+					start++;
+				}
+				
+				// move to beginning of line on top
+				int newTop = read-1;
+				while(buf[newTop] != '\n') {
+					newTop--;
+				}
+
+				// read buffer into string
+				String str = new String(buf, "UTF-8");
+				
+				String[] data = str.split("\n");
+				String[] first = data[0].split("\t");
+				String[] last = data[data.length-2].split("\t");
+				
+				// check if we should look above or below block
+				if(nodeId.compareTo(first[_id]) < 0) {
+					System.out.println("going down");
+					t = mid;
+					continue;
+				}
+				
+				if(nodeId.compareTo(last[_id]) > 0) {
+					System.out.println("going up");
+					b = newTop;
+					continue;
+				}
+				
+				// look in block
+				for(int i=0; i<data.length-1; i++) {
+					String[] line = data[i].split("\t");
+					if(line[_id].equals(nodeId)) {
+						return new ArrayList<String>(Arrays.asList(line[_ways].split("\t")));
+					}
+				}
+			}
+
+			// read
+			int read = _file.read(buf);
+
+			// move to beginning of line on bottom
+			while(buf[(int) mid] != '\n') {
+				mid++;
+			}
+
+			// move to beginning of line on top
+			int newTop = read;
+			while(buf[newTop] != '\n') {
+				newTop--;
+			}
+
+			// read buffer into string
+			String str = new String(buf, "UTF-8");
+
+			String[] data = str.split("\n");
+			String[] first = data[0].split("\t");
+			String[] last = data[data.length-2].split("\t");
+
+			// look in block
+			for(int i=0; i<data.length-1; i++) {
+				String[] line = data[i].split("\t");
+				if(line[_id].equals(nodeId)) {
+					return new ArrayList<String>(Arrays.asList(line[_ways].split("\t")));
+				}
+			}
+
+
+		} catch (IOException e) {
+			System.err.println(e.getMessage());
+			System.exit(1);
+		}
+		return new ArrayList<String>();
+		
+		*/
 	}
 	
 	public Node getNode(String id) {

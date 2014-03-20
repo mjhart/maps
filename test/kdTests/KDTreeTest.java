@@ -6,7 +6,6 @@ import java.io.FileNotFoundException;
 import java.util.List;
 
 import kdTree.KDTree;
-
 import newGraph.Node;
 import newGraph.NodeDictionary;
 
@@ -15,14 +14,14 @@ import org.junit.Test;
 public class KDTreeTest {
 
 	@Test
-	public void insertTest() throws FileNotFoundException {
+	public void insertTest() throws Exception {
 		KDTree<Node> tree = new KDTree<Node>(2);
 		NodeDictionary dict = new NodeDictionary("small_nodes.tsv");
 		tree.addAll(dict.nodeList());
 	}
 	
 	@Test
-	public void nearestNeighborTest() throws FileNotFoundException {
+	public void nearestNeighborTest() throws Exception {
 		KDTree<Node> tree = new KDTree<Node>(2);
 		NodeDictionary dict = new NodeDictionary("small_nodes.tsv");
 		tree.addAll(dict.nodeList());
@@ -33,7 +32,7 @@ public class KDTreeTest {
 	}
 	
 	@Test
-	public void boundingBoxTest() throws FileNotFoundException {
+	public void boundingBoxTest() throws Exception {
 		KDTree<Node> tree = new KDTree<Node>(2);
 		NodeDictionary dict = new NodeDictionary("small_nodes.tsv");
 		tree.addAll(dict.nodeList());

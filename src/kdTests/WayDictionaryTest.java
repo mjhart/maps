@@ -17,7 +17,7 @@ public class WayDictionaryTest {
 	}
 
 	@Test
-	public void test() throws FileNotFoundException {
+	public void test() throws Exception {
 		NodeDictionary nodes = new NodeDictionary("small_nodes.tsv");
 		WayDictionary ways = new WayDictionary("small_ways.tsv", nodes);
 		assertTrue(ways.getWay("/w/4016.7374.42295268.4.1").getFilm().equals("/w/4016.7374.42295268.4.1"));

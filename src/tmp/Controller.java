@@ -157,6 +157,11 @@ public class Controller {
 	}
 	
 	public List<Node> getData(double[] max, double[] min, HashSet<Node> nodeSet, HashSet<Edge> waySet) {
+		
+		long time = 0;
+		long time2 = 0;
+		long time3 = 0-System.currentTimeMillis();
+		
 		//System.out.println("within box" + Arrays.toString(max) + " " + Arrays.toString(min));
 		List<Node> nodes = _tree.withinBox(max, min);
 		//System.out.println("Nodes loaded");
@@ -166,6 +171,7 @@ public class Controller {
 		_ways.calls++;
 		_ways.nullWays = 0;
 		
+		
 		for(Node n : nodes) {
 			nodeSet.add(n);
 			if(n.edgesLoaded()) {
@@ -174,20 +180,33 @@ public class Controller {
 				}
 			}
 			else {
+				long start = System.currentTimeMillis();
 				List<String> wayIds = _nodes.getWayIds(n.getId());
+				long end = System.currentTimeMillis();
+				time+=end;
+				time-=start;
 				for(String s : wayIds) {
 					count++;
+					long start2 = System.currentTimeMillis();
 					Edge e = _ways.getWay(s);
+					long end2 = System.currentTimeMillis();
+					time2+=end2;
+					time2-=start2;
 					if(e != null) {
 						waySet.add(e);
 						n.addEdge(e);
 					}
 				}
 			}
+			
 		}
+		time3+=System.currentTimeMillis();
 		//System.out.println("Null ways: " + _ways.nullWays);
 		//System.out.println(String.format("Ways loaded - Disk: %d Mem: %d", _ways.toDisk, _ways.inMem));
 		//System.out.println("Buffer read: " + _ways.bufferRead);
+		System.out.println("Time spent getting way ids " + time);
+		System.out.println("Time spend getting ways " + time2);
+		System.out.println("Total time spent getting tile: " + time3);
 		_ways.bufferRead = 0;
 		_ways.toDisk = 0;
 		_ways.inMem = 0;

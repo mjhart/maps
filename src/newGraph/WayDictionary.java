@@ -105,7 +105,7 @@ public class WayDictionary {
 		*/
 		toDisk++;
 		
-		///*
+		/*
 		String[] data = null;
 		try {
 			data = _wayParser.search(id);
@@ -118,9 +118,9 @@ public class WayDictionary {
 			return createEdge(id, data[1], data[2]);
 		}
 		return null;
-		//*/
+		*/
 		
-		/*
+		///*
 		WayIdComparator comp = new WayIdComparator(_id);
 		FileSearcher fs = new FileSearcher(_file, comp);
 		long pos = fs.search(id);
@@ -147,7 +147,7 @@ public class WayDictionary {
 		}
 		
 		return result;
-		*/
+		//*/
 	}
 	
 	private Node getEnd(String id){

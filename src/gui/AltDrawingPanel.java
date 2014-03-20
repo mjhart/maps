@@ -116,20 +116,20 @@ public class AltDrawingPanel extends JPanel {
 		
 		synchronized (tiles) {
 			for(int i=0; i<tiles.size(); i++) {
-				System.out.print("tile at " + tiles.get(i).x + ", " + tiles.get(i).y);
+				//System.out.print("tile at " + tiles.get(i).x + ", " + tiles.get(i).y);
 				if(!tiles.get(i).intersects(dMax, dMin)) {
 					System.out.println(" is removed");
 					tiles.remove(i);
 				}
 				else {
-					System.out.println();
+					//System.out.println();
 				}
 			}
 		}
 		
 		
 		LinkedList<Tile> temp = new LinkedList<Tile>();
-		
+		/*
 		System.out.println("LatLon Format");
 		System.out.println("min x: " + Double.toString(wMin[0] - rMinX - TILE_SIZE));
 		System.out.println("min y: " + Double.toString(wMin[1] - rMinY - TILE_SIZE));
@@ -141,7 +141,7 @@ public class AltDrawingPanel extends JPanel {
 		System.out.println("min y: " + dMin[1]);
 		System.out.println("max x: " + dMax[0]);
 		System.out.println("max y: " + dMax[1]);
-		
+		*/
 		for(int i=dMin[0]; i<=dMax[0]; i++) {
 			for(int j=dMin[1]; j<=dMax[1]; j++) {
 				
