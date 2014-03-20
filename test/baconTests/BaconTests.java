@@ -35,7 +35,7 @@ public class BaconTests {
 		}
 	}
 	
-	//@Test
+	@Test
 	public void astarTest1() throws Exception{
 		//NodeParser np = new NodeParser("smallnodes.tsv");
 		//WayParser wp = new WayParser("smallways.tsv");
@@ -56,7 +56,7 @@ public class BaconTests {
 		}
 	}
 	
-	//@Test
+	@Test
 	public void astarTest2() throws Exception{
 		//NodeParser np = new NodeParser("smallnodes.tsv");
 		//WayParser wp = new WayParser("smallways.tsv");
@@ -193,7 +193,7 @@ public class BaconTests {
 		}
 	}
 	
-	@Test
+	//@Test
 	public void NodeParserTestFull() throws Exception{
 		NodeParser np = new NodeParser("smallnodes.tsv");
 		RandomAccessFile raf = new RandomAccessFile("smallnodes.tsv","r");

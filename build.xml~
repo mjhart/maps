@@ -74,13 +74,6 @@
     </javadoc>
   </target>
 
-  <target name="my_test" depends="compile,jar">
-    <exec executable="sh">
-      <arg value="-c"/>
-      <arg value="python /course/cs032/bin/tester.py -t5.0 -aTime: bin/${project} ${basedir}/systemtests/*"/>
-    </exec>
-  </target>
-
   <target name="clean">
     <delete dir="${app.derived}"/>
   </target>
