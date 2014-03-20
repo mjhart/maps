@@ -31,9 +31,7 @@ public class TileLoader extends Thread {
 				double[] max = {t.getMaxLon(), t.getMaxLat()};
 				double[] min = {t.getMinLon(), t.getMinLat()};
 				_c.getData(max, min, t.nodes, t.ways);
-				synchronized (_tileList) {
-					_tileList.add(t);
-				}
+				t.setLoaded();
 				SwingUtilities.invokeLater(paint);
 			} catch (InterruptedException e) {}
 			
