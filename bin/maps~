@@ -1,2 +1,2 @@
 #! /bin/bash
-java -cp derived/maps.jar tmp.Controller "$@"
+java -cp derived/maps.jar maps.Main "$@"

@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import autocorrect.TrieEngine;
 
@@ -126,9 +127,38 @@ public class Controller {
 				}
 			}
 			else{
-				if(commands.length==4){
-					Node src = this.getIntersection(commands[0], commands[1]);
-					Node dst = this.getIntersection(commands[2], commands[3]);
+				int j = 0;
+				StringBuilder sb = new StringBuilder();
+				List<String> args = new LinkedList<String>();
+				while(j < line.length()){
+					if(line.charAt(j)=='\"'){
+						if(sb.length()>0){
+							args.add(sb.toString());
+						}
+						sb = new StringBuilder();
+					}
+					else{
+						if(!(sb.length()==0 && line.charAt(j)==' ')){
+							sb.append(line.charAt(j));
+						}
+					}
+					j++;
+				}
+				/*for(String s:  args){
+					System.out.println(s);
+				}*/
+				//System.out.println(commands.length);
+				if(args.size()==4){
+					//String s1 = (new StringBuilder(commands[0]).append(commands[1])).toString();
+					//String cs1 = (new StringBuilder(commands[2].substring(1)).append(commands[3])).toString();
+					//String s2 = (new StringBuilder(commands[4].substring(1)).append(commands[5])).toString();
+					//String cs2 = (new StringBuilder(commands[6].substring(1)).append(commands[7])).toString();
+					//System.out.println(s1);
+					//System.out.println(cs1);
+					//System.out.println(s2);
+					//System.out.println(cs2);
+					Node src = this.getIntersection(args.get(0), args.get(1));
+					Node dst = this.getIntersection(args.get(2), args.get(3));
 					try {
 						List<Node> path = this.getPath(src.toString(), dst.toString());
 						if(path!=null){
