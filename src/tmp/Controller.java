@@ -78,19 +78,26 @@ public class Controller {
 			// split line 
 			commands = line.split("\"");
 			if(commands.length==1){// assuming input is valid, must be lat/lon lat/lon
+				//System.out.println(line);
 				commands = line.split(" ");
+				//System.out.println(commands.length);
 				if(commands.length==4){
 					try{
 						double slat = Double.parseDouble(commands[0]);
 						double slon = Double.parseDouble(commands[1]);
 						double dlat = Double.parseDouble(commands[2]);
 						double dlon = Double.parseDouble(commands[3]);
-						double[] src = {slat,slon};
-						double[] dst = {dlat,dlon};
+						System.out.println(slat);
+						System.out.println(slon);
+						System.out.println(dlat);
+						System.out.println(dlon);
+						double[] src = {slon,slat};
+						double[] dst = {dlon,dlat};
 						Node source = this.nearestNeighbor(src);
+						System.out.println(source.toString());
 						Node destination = this.nearestNeighbor(dst);
 						try{
-							List<Node> path = this.getPath(src.toString(), dst.toString());
+							List<Node> path = this.getPath(source.toString(), destination.toString());
 							if(path!=null){
 								for(int i = 0; i < path.size()-1; i++){
 									for(Edge e: path.get(i).getEdges()){
@@ -216,7 +223,12 @@ public class Controller {
 	}
 	
 	public static void main(String[] args) {
-		new Controller("smallways.tsv", "smallnodes.tsv", "smallindex.tsv", true);
+		if(args.length==4){
+			new Controller("smallways.tsv", "smallnodes.tsv", "smallindex.tsv", false);
+		}
+		else{
+			new Controller("smallways.tsv", "smallnodes.tsv", "smallindex.tsv", false);
+		}
 		//new Controller("/course/cs032/data/maps/ways.tsv", "/course/cs032/data/maps/nodes.tsv", "/course/cs032/data/maps/index.tsv", true);
 		//new Controller("small_ways.tsv", "small_nodes.tsv", "small_nodes.tsv", true);
 	}
