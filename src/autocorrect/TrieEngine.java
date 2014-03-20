@@ -38,7 +38,8 @@ public class TrieEngine {
 		
 	}
 	
-	public List<String> getSuggestion(String query) {
+	public List<String> getSuggestion(String street) {
+		String query = formatStreet(street);
 		LinkedList<String> results = new LinkedList<String>();
 		results.addAll(_preGen.suggest(query));
 		results.addAll(_wsGen.suggest(query));
@@ -49,9 +50,10 @@ public class TrieEngine {
 	
 	public String getIntersection(String street1, String street2) {
 		
+		System.out.println(formatStreet(street1));
 		
-		String list1 = _trie.getNode(street1).getData();
-		String list2 = _trie.getNode(street2).getData();
+		String list1 = _trie.getNode(formatStreet(street1)).getData();
+		String list2 = _trie.getNode(formatStreet(street2)).getData();
 		
 		if(list1 == null || list2 == null) {
 			return null;
@@ -72,5 +74,29 @@ public class TrieEngine {
 			}
 		}
 		return null;
+	}
+	
+	private String formatStreet(String street) {
+		StringBuilder sb = new StringBuilder();
+		if(street.length() == 0) {
+			return sb.toString();
+		}
+		sb.append(Character.toUpperCase(street.charAt(0)));
+		for(int i=1; i<street.length(); i++) {
+			if(street.charAt(i)==' ') {
+				while(street.charAt(i)==' ') {
+					sb.append(' ');
+					i++;
+					if(i==street.length()) {
+						return sb.toString();
+					}
+				}
+				sb.append(Character.toUpperCase(street.charAt(i)));
+			}
+			else {
+				sb.append(Character.toLowerCase(street.charAt(i)));
+			}
+		}
+		return sb.toString();
 	}
 }

@@ -212,18 +212,7 @@ public class AltDrawingPanel extends JPanel {
 				loadData();
 			}
 		}
-		if(_path!=null){
-			brush.setColor(Color.WHITE);
-			for(int i = 0; i < _path.size()-1; i++){
-				for(Edge e: _path.get(i).getEdges()){
-					if(e.getDest().equals(_path.get(i+1))){
-						this.paintWay(brush, e);
-						//System.out.println(e.getSource()+" -> "+e.getDest()+" : "+e.getFilm());
-						break;
-					}
-				}
-			}
-		}
+		
 		
 		/*
 		System.out.println("Nodes being painted " + _nodes.size());
@@ -287,6 +276,13 @@ public class AltDrawingPanel extends JPanel {
 		if(_end!=null){
 			brush.setColor(java.awt.Color.RED);
 			brush.fillOval(lonToX(_end.getLon())-2, latToY(_end.getLat())-2, 5, 5);
+		}
+		
+		if(_path!=null){
+			brush.setColor(java.awt.Color.GREEN);
+			for(int i = 1; i < _path.size(); i++){
+				brush.drawLine(lonToX(_path.get(i-1).getLon()), latToY(_path.get(i-1).getLat()), lonToX(_path.get(i).getLon()), latToY(_path.get(i).getLat()));
+			}
 		}
 		
 	}

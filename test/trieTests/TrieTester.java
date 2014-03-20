@@ -40,8 +40,15 @@ public class TrieTester {
 	}
 	
 	@Test
+	public void suggestLowerTest() throws FileNotFoundException {
+		TrieEngine eng = new TrieEngine("smallindex.tsv");
+		assertTrue(eng.getSuggestion("brow").get(0).equals("Brown University"));
+	}
+	
+	@Test
 	public void intersectTest() throws FileNotFoundException {
 		TrieEngine eng = new TrieEngine("smallindex.tsv");
+		System.out.println(eng.getIntersection("Charlesfield Street", "Brown Street"));
 		assertTrue(eng.getIntersection("Charlesfield Street", "Brown Street").equals("/n/4182.7140.201515126"));
 	}
 	
