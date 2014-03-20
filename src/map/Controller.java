@@ -86,14 +86,14 @@ public class Controller {
 						double slon = Double.parseDouble(commands[1]);
 						double dlat = Double.parseDouble(commands[2]);
 						double dlon = Double.parseDouble(commands[3]);
-						System.out.println(slat);
-						System.out.println(slon);
-						System.out.println(dlat);
-						System.out.println(dlon);
+						//System.out.println(slat);
+						//System.out.println(slon);
+						//System.out.println(dlat);
+						//System.out.println(dlon);
 						double[] src = {slon,slat};
 						double[] dst = {dlon,dlat};
 						Node source = this.nearestNeighbor(src);
-						System.out.println(source.toString());
+						//System.out.println(source.toString());
 						Node destination = this.nearestNeighbor(dst);
 						try{
 							List<Node> path = this.getPath(source.toString(), destination.toString());
