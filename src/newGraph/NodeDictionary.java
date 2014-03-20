@@ -13,7 +13,7 @@ import parsers.NodeIdComparator;
 
 public class NodeDictionary {
 	
-	private static int BUFFER_SIZE = 8000;
+	private static int BUFFER_SIZE = 10000;
 
 	private HashMap<String, Node> _nodes;
 	private RandomAccessFile _file;
@@ -79,18 +79,10 @@ public class NodeDictionary {
 	private void buildDictionary() {
 		
 		try {
-			/*
-			int id = 0;
-			String line;
-			while((line = _file.readLine()) != null) {
-				String[] data = line.split("\t");
-				_nodes.put(data[_id], new Node(++id, data[_id], Double.parseDouble(data[_lat]), Double.parseDouble(data[_lon])));
-			}
-			*/
-			
-			
 			byte[] buffer = new byte[BUFFER_SIZE];
 			String line;
+			String[] lines;
+			String[] data;
 			int id=0;
 			long read = 0;
 			long total = _file.getFilePointer();
@@ -106,11 +98,11 @@ public class NodeDictionary {
 				//System.out.println();
 				total+=read;
 				//int i=0;
-				String[] lines = new String(buffer, "UTF-8").split("\n");
+				lines = new String(buffer, "UTF-8").split("\n");
 				
 				//System.out.println(lines[lines.length-1].length());
 				for(int j=0; j<lines.length-1; j++) {
-					String[] data = lines[j].split("\t");
+					data = lines[j].split("\t");
 					_nodes.put(data[_id], new Node(++id, data[_id], Double.parseDouble(data[_lat]), Double.parseDouble(data[_lon])));
 				}
 				
@@ -121,24 +113,24 @@ public class NodeDictionary {
 					}
 					total--;
 				}
+				
+				//System.out.println(new String(buffer, "UTF-8"));
+				
 				//System.out.println("Total " + total);
 				//System.out.println("FP" + _file.getFilePointer());
 				_file.seek(total);
+				for(int i=0; i<BUFFER_SIZE; i++) {
+					buffer[i] = 0;
+				}
 			}
 			if(read != 0) {
-				System.out.println("went in here");
-				String[] lines = new String(buffer, "UTF-8").split("\n");
+				lines = new String(buffer, "UTF-8").split("\n");
 				for(int j=0; j<lines.length-1; j++) {
-					String[] data = lines[j].split("\t");
+					data = lines[j].split("\t");
 					_nodes.put(data[_id], new Node(++id, data[_id], Double.parseDouble(data[_lat]), Double.parseDouble(data[_lon])));
 				}
 				
 			}
-			
-			System.out.println("FP " + _file.getFilePointer());
-			System.out.println(read);
-			System.out.println(new String(buffer));
-			
 			
 		}
 		catch(IOException e) {
