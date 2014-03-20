@@ -227,7 +227,7 @@ public class Controller {
 			new Controller("smallways.tsv", "smallnodes.tsv", "smallindex.tsv", false);
 		}
 		else{
-			new Controller("smallways.tsv", "smallnodes.tsv", "smallindex.tsv", false);
+			new Controller("smallways.tsv", "smallnodes.tsv", "smallindex.tsv", true);
 		}
 		//new Controller("/course/cs032/data/maps/ways.tsv", "/course/cs032/data/maps/nodes.tsv", "/course/cs032/data/maps/index.tsv", true);
 		//new Controller("small_ways.tsv", "small_nodes.tsv", "small_nodes.tsv", true);

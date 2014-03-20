@@ -40,12 +40,13 @@ public class TrieEngine {
 	
 	public List<String> getSuggestion(String street) {
 		String query = formatStreet(street);
-		LinkedList<String> results = new LinkedList<String>();
+		HashSet<String> results = new HashSet<String>();
 		results.addAll(_preGen.suggest(query));
 		results.addAll(_wsGen.suggest(query));
 		results.addAll(_ledGen.suggest(query));
-		_ranker.rank(results, query);
-		return results;
+		List<String> list = new LinkedList<String>(results);
+		_ranker.rank(list, query);
+		return list;
 	}
 	
 	public String getIntersection(String street1, String street2) {
@@ -99,4 +100,6 @@ public class TrieEngine {
 		}
 		return sb.toString();
 	}
+	
+	
 }
