@@ -79,7 +79,7 @@ public class AltDrawingPanel extends JPanel {
 		this.addMouseMotionListener(pan);
 		this.addMouseWheelListener(pan);
 		
-		_path = null;
+		_path = new LinkedList<Node>();
 	}
 	
 	public void loadData() {
@@ -278,10 +278,12 @@ public class AltDrawingPanel extends JPanel {
 			brush.fillOval(lonToX(_end.getLon())-2, latToY(_end.getLat())-2, 5, 5);
 		}
 		
-		if(_path!=null){
-			brush.setColor(java.awt.Color.GREEN);
-			for(int i = 1; i < _path.size(); i++){
-				brush.drawLine(lonToX(_path.get(i-1).getLon()), latToY(_path.get(i-1).getLat()), lonToX(_path.get(i).getLon()), latToY(_path.get(i).getLat()));
+		synchronized(_path) {
+			if(_path!=null){
+				brush.setColor(java.awt.Color.GREEN);
+				for(int i = 1; i < _path.size(); i++){
+					brush.drawLine(lonToX(_path.get(i-1).getLon()), latToY(_path.get(i-1).getLat()), lonToX(_path.get(i).getLon()), latToY(_path.get(i).getLat()));
+				}
 			}
 		}
 		
@@ -372,8 +374,10 @@ public class AltDrawingPanel extends JPanel {
 	}
 
 	public void startSearch(Node src, Node dst) {
-		try {
-			List<Node> path = c.getPath(src.toString(), dst.toString());
+		//try {
+			PathFinder pf = new PathFinder(src.toString(), dst.toString(), this, c);
+			pf.start();
+		/*
 			if(path!=null){
 				//System.out.println("Printing Path:");
 				for(int i = 0; i < path.size()-1; i++){
@@ -390,10 +394,12 @@ public class AltDrawingPanel extends JPanel {
 			else{
 				System.out.println(src.toString()+" -/- "+dst.toString());
 			}
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		*/
 	}
 
 	public Node getStart() {
@@ -405,4 +411,10 @@ public class AltDrawingPanel extends JPanel {
 		// TODO Auto-generated method stub
 		return _end;
 	}
+
+	public List<Node> getPath() {
+		// TODO Auto-generated method stub
+		return _path;
+	}
+
 }
