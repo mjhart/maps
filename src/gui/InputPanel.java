@@ -12,6 +12,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+
+import graph.Edge;
 import graph.Node;
 import gui.SugField;
 
@@ -149,6 +151,30 @@ public class InputPanel extends JPanel {
 		_sfields.add(sf);
 		_sboxes.add(sb);
 		sb.addField(sf);
+	}
+	
+	public void printDir(String header, List<Node> path){
+		_text.setText("");
+		_text.append(header+"\n");
+		StringBuilder sb = new StringBuilder(header+"\n");
+		if(path!=null){
+			for(int i = 0; i < path.size()-1; i++){
+				for(Edge e: path.get(i).getEdges()){
+					if(e.getDest().equals(path.get(i+1))){
+						//System.out.println("here IIIIII");
+						_text.append(e.getSource()+" -> "+e.getDest()+" : "+e.getFilm()+"\n");
+						sb.append(e.getSource()+" -> "+e.getDest()+" : "+e.getFilm()+"\n");
+						break;
+					}
+				}
+			}
+			System.out.println(_text.getText());
+			_text.setText(sb.toString());
+		}
+		else{
+			_text.append("No Path Found");
+			_text.setText(sb.toString()+"No Path Found");
+		}
 	}
 
 }

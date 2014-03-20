@@ -97,7 +97,7 @@ public class BaconTests {
 				//astar.printSearch(g, "/n/4182.7140.201312088", "/n/4182.7140.201260632", wp, np);
 				ArrayList<Node> path = (ArrayList<Node>) astar.getPath("/n/4182.7140.201260642", "/n/4182.7140.201312088");
 				ArrayList<Edge> edges = new ArrayList();
-				for(int i = 0; i < path.size()-2; i++){
+				for(int i = 0; i < path.size()-1; i++){
 					for(Edge e: path.get(i).getEdges()){
 						if(e.getDest().equals(path.get(i+1))){
 							System.out.println(e.getSource()+" -> "+e.getDest()+" : "+e.getFilm());

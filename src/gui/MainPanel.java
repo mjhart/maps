@@ -27,7 +27,7 @@ public class MainPanel extends JFrame{
 		//dp.setZPan(zp);
 		InputPanel ip = new InputPanel(dp, controller);
 		
-		
+		dp.setIp(ip);
 		this.add(dp, BorderLayout.CENTER);
 		//this.add(ip, BorderLayout.WEST);
 		this.add(zp, BorderLayout.SOUTH);

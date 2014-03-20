@@ -47,6 +47,7 @@ public class DrawingPanel extends JPanel {
 	
 	private HashSet<Node> _nodes;
 	private HashSet<Edge> _ways;
+	private InputPanel _ip;
 	
 	public DrawingPanel(Controller c) {
 		super();
@@ -82,6 +83,7 @@ public class DrawingPanel extends JPanel {
 		this.addMouseWheelListener(pan);
 		
 		_path = new LinkedList<Node>();
+		_ip = new InputPanel(this, c);
 	}
 	
 	public void loadData() {
@@ -377,7 +379,7 @@ public class DrawingPanel extends JPanel {
 
 	public void startSearch(Node src, Node dst) {
 		//try {
-			PathFinder pf = new PathFinder(src.toString(), dst.toString(), this, c);
+			PathFinder pf = new PathFinder(src.toString(), dst.toString(), this, c, _ip);
 			pf.start();
 		/*
 			if(path!=null){
@@ -417,6 +419,10 @@ public class DrawingPanel extends JPanel {
 	public List<Node> getPath() {
 		// TODO Auto-generated method stub
 		return _path;
+	}
+	
+	public void setIp(InputPanel ip){
+		_ip = ip;
 	}
 
 }

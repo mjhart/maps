@@ -115,11 +115,6 @@ The KDTree perfoms several functions. It performs bounding box
 searches to fill tiles with nodes. It also returns the closest
 Node to a point on the screen when a user clicks.
 
-Bonus Features
-==============
-
-Directions print in the GUI like they do in the REPL.
-
 Testing Suite
 =============
 
