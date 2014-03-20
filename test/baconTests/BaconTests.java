@@ -4,6 +4,8 @@ import graph.*;
 
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
+import java.util.List;
+
 
 import org.junit.Test;
 
@@ -44,13 +46,11 @@ public class BaconTests {
 		//Astar astar = new Astar("/course/cs032/data/maps/nodes.tsv", "/course/cs032/data/maps/ways.tsv");
 		Graph g  = new Graph();
 		//astar.printSearch(g, "/n/4182.7140.201312088", "/n/4182.7140.201260632", wp, np);
-		ArrayList<Node> path = (ArrayList<Node>) astar.getPath("/n/4182.7140.201312088", "/n/4182.7140.201260636");
-		ArrayList<Edge> edges = new ArrayList();
+		List<Node> path = astar.getPath("/n/4182.7140.201312088", "/n/4182.7140.201260636");
 		for(int i = 0; i < path.size()-1; i++){
 			for(Edge e: path.get(i).getEdges()){
 				if(e.getDest().equals(path.get(i+1))){
 					System.out.println(e.getSource()+" -> "+e.getDest()+" : "+e.getFilm());
-					edges.add(e);
 					break;
 				}
 			}
