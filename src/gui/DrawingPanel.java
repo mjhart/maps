@@ -1,5 +1,7 @@
 package gui;
 
+import graph.*;
+
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -16,10 +18,10 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.swing.JPanel;
 
-import tmp.Controller;
-import newGraph.*;
+import map.Controller;
 
-public class AltDrawingPanel extends JPanel {
+
+public class DrawingPanel extends JPanel {
 	
 	public static double TILE_SIZE = 0.005;
 	public static double LON_INIT = -71.41;
@@ -46,7 +48,7 @@ public class AltDrawingPanel extends JPanel {
 	private HashSet<Node> _nodes;
 	private HashSet<Edge> _ways;
 	
-	public AltDrawingPanel(Controller c) {
+	public DrawingPanel(Controller c) {
 		super();
 		this.setLayout(new BorderLayout());
 		this.setPreferredSize(new Dimension(750,750));

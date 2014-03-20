@@ -2,10 +2,11 @@ package kdTests;
 
 import static org.junit.Assert.*;
 
+import graph.NodeDictionary;
+import graph.WayDictionary;
+
 import java.io.FileNotFoundException;
 
-import newGraph.NodeDictionary;
-import newGraph.WayDictionary;
 
 import org.junit.Before;
 import org.junit.Test;

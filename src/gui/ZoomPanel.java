@@ -8,13 +8,13 @@ import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-public class AltZoomPanel extends JPanel {
+public class ZoomPanel extends JPanel {
 	
-	private AltDrawingPanel _dp;
+	private DrawingPanel _dp;
 	private JSlider _zoomSlide;
 	private int _curZoom;
 	
-	public AltZoomPanel(AltDrawingPanel dp, int maxzoom, int initzoom){
+	public ZoomPanel(DrawingPanel dp, int maxzoom, int initzoom){
 		super();
 		_dp = dp;
 		this.setLayout(new GridLayout(0,1));

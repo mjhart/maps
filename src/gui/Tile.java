@@ -1,9 +1,10 @@
 package gui;
 
+import graph.Edge;
+import graph.Node;
+
 import java.util.HashSet;
 
-import newGraph.Edge;
-import newGraph.Node;
 
 public class Tile {
 	public final HashSet<Node> nodes;
@@ -29,15 +30,15 @@ public class Tile {
 	
 	
 	public double getMinLon() {
-		return AltDrawingPanel.txToLon(x);
+		return DrawingPanel.txToLon(x);
 	}
 	public double getMinLat() {
-		return AltDrawingPanel.tyToLat(y);
+		return DrawingPanel.tyToLat(y);
 	}
 	public double getMaxLon() {
-		return AltDrawingPanel.txToLon(x) + AltDrawingPanel.TILE_SIZE;
+		return DrawingPanel.txToLon(x) + DrawingPanel.TILE_SIZE;
 	}
 	public double getMaxLat() {
-		return AltDrawingPanel.tyToLat(y) + AltDrawingPanel.TILE_SIZE;
+		return DrawingPanel.tyToLat(y) + DrawingPanel.TILE_SIZE;
 	}
 }

@@ -4,17 +4,18 @@ import java.io.IOException;
 
 import javax.swing.SwingUtilities;
 
-import tmp.Controller;
+import map.Controller;
+
 
 public class PathFinder extends Thread {
 	
 	private String _src;
 	private String _dst; 
-	private AltDrawingPanel _dp;
+	private DrawingPanel _dp;
 	Controller _c;
 	
 	
-	public PathFinder(String src, String dst, AltDrawingPanel dp, Controller c) {
+	public PathFinder(String src, String dst, DrawingPanel dp, Controller c) {
 		_src = src;
 		_dst = dst;
 		_dp = dp;

@@ -1,12 +1,13 @@
 package baconTests;
 
+import graph.*;
+
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 
 import org.junit.Test;
 
 import static org.junit.Assert.*;
-import newGraph.*;
 import parsers.*;
 
 public class BaconTests {

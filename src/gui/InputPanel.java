@@ -4,14 +4,15 @@ import javax.swing.*;
 import javax.swing.GroupLayout.ParallelGroup;
 import javax.swing.GroupLayout.SequentialGroup;
 
-import newGraph.Node;
+import map.Controller;
+
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
-import tmp.Controller;
+import graph.Node;
 import gui.SugField;
 
 public class InputPanel extends JPanel {
@@ -20,13 +21,13 @@ public class InputPanel extends JPanel {
 	private JScrollPane _scroll;
 	private JButton _astarText;
 	private JButton _astarMap;
-	private AltDrawingPanel _dp;
+	private DrawingPanel _dp;
 	private Controller _c;
 	private List<SugField> _sfields;
 	private List<SugBox> _sboxes;
 	
 	
-	public InputPanel(AltDrawingPanel dp, Controller c){
+	public InputPanel(DrawingPanel dp, Controller c){
 		super();
 		_dp = dp;
 		_c = c;

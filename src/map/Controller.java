@@ -1,6 +1,10 @@
-package tmp;
-
-import gui.AltMainPanel;
+package map;
+import graph.Astar;
+import graph.Edge;
+import graph.Node;
+import graph.NodeDictionary;
+import graph.WayDictionary;
+import gui.MainPanel;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -9,11 +13,6 @@ import java.util.HashSet;
 import java.util.List;
 import autocorrect.TrieEngine;
 
-import newGraph.Astar;
-import newGraph.Edge;
-import newGraph.Node;
-import newGraph.NodeDictionary;
-import newGraph.WayDictionary;
 import kdTree.KDTree;
 
 public class Controller {
@@ -27,13 +26,13 @@ public class Controller {
 		
 		
 		try {
-		_nodes = new NodeDictionary(nodeFile);
-		System.out.println("node dict built");
-		_ways = new WayDictionary(wayFile, _nodes);
-		System.out.println("here1");
-		_trie = new TrieEngine(indexFile);
-		System.out.println("here2");
-		_astar = new Astar(nodeFile, wayFile);
+			_nodes = new NodeDictionary(nodeFile);
+			System.out.println("node dict built");
+			_ways = new WayDictionary(wayFile, _nodes);
+			System.out.println("here1");
+			_trie = new TrieEngine(indexFile);
+			System.out.println("here2");
+			_astar = new Astar(nodeFile, wayFile);
 		}
 		catch(IOException e) {
 			e.printStackTrace();
@@ -160,7 +159,7 @@ public class Controller {
 	}
 	
 	private void startGUI() {
-		new AltMainPanel(this);
+		new MainPanel(this);
 	}
 	
 	public List<Node> getData(double[] max, double[] min, HashSet<Node> nodeSet, HashSet<Edge> waySet) {
@@ -222,16 +221,7 @@ public class Controller {
 		return _tree.withinBox(max, min);
 	}
 	
-	public static void main(String[] args) {
-		if(args.length==4){
-			new Controller("smallways.tsv", "smallnodes.tsv", "smallindex.tsv", false);
-		}
-		else{
-			new Controller("smallways.tsv", "smallnodes.tsv", "smallindex.tsv", true);
-		}
-		//new Controller("/course/cs032/data/maps/ways.tsv", "/course/cs032/data/maps/nodes.tsv", "/course/cs032/data/maps/index.tsv", true);
-		//new Controller("small_ways.tsv", "small_nodes.tsv", "small_nodes.tsv", true);
-	}
+	
 	
 	public Node nearestNeighbor(double[] coords) {
 		List<Node> result = _tree.nearestNeighbors(coords, 1);

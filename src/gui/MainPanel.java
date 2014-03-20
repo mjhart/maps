@@ -6,22 +6,23 @@ import java.io.IOException;
 
 import javax.swing.*;
 
-import tmp.Controller;
+import map.Controller;
 
-public class AltMainPanel extends JFrame{
+
+public class MainPanel extends JFrame{
 	
 	private Controller controller;
 	
-	public AltMainPanel(Controller controller) {
+	public MainPanel(Controller controller) {
 		super();
 		this.setLayout(new BorderLayout());
 		this.setLocation(500, 250);
 		this.setTitle("Maps");
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
-		AltDrawingPanel dp = new AltDrawingPanel(controller);
+		DrawingPanel dp = new DrawingPanel(controller);
 		//InputPanel ip = new InputPanel(dp);
-		AltZoomPanel zp = new AltZoomPanel(dp, 10, 10);
+		ZoomPanel zp = new ZoomPanel(dp, 10, 10);
 		//dp.setIPan(ip);
 		//dp.setZPan(zp);
 		InputPanel ip = new InputPanel(dp, controller);

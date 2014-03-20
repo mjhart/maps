@@ -5,7 +5,8 @@ import java.util.concurrent.BlockingQueue;
 
 import javax.swing.SwingUtilities;
 
-import tmp.Controller;
+import map.Controller;
+
 
 import gui.Tile;
 
@@ -14,9 +15,9 @@ public class TileLoader extends Thread {
 	private BlockingQueue<Tile> _tileQueue;
 	private List<Tile> _tileList;
 	private Controller _c;
-	private AltDrawingPanel _dp;
+	private DrawingPanel _dp;
 	
-	public TileLoader(BlockingQueue<Tile> tq, List<Tile> tl, Controller c, AltDrawingPanel dp) {
+	public TileLoader(BlockingQueue<Tile> tq, List<Tile> tl, Controller c, DrawingPanel dp) {
 		_tileQueue = tq;
 		_c = c;
 		_tileList = tl;

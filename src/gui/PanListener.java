@@ -13,13 +13,13 @@ import javax.swing.event.MouseInputAdapter;
 
 public class PanListener extends MouseInputAdapter {
 	
-	public PanListener(AltDrawingPanel dp) {
+	public PanListener(DrawingPanel dp) {
 		this._dp = dp;
 	}
 	
 	private Point start;
 	private Point end;
-	private AltDrawingPanel _dp;
+	private DrawingPanel _dp;
 	private long _clicked;
 
 

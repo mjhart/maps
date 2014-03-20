@@ -1,4 +1,4 @@
-package newGraph;
+package graph;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;

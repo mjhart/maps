@@ -1,4 +1,9 @@
 package graph;
+
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.geom.Line2D;
+
 /***
  * This class models an Edge for my graph.  It stores its source, destination, the name
  * of the film that connects the two, and the weight of the edge, as well as a unique ID
@@ -6,7 +11,7 @@ package graph;
  * @author sbreslow
  *
  */
-public class Edge {
+public class Edge extends Line2D.Double{
 	
 	private int _id;
 	private Node _source;
@@ -15,6 +20,7 @@ public class Edge {
 	private double _weight;
 	
 	public Edge(int id, Node source, Node dest, String film, double weight){
+		super(source, dest);
 		_id = id;
 		_source = source;
 		_dest = dest;
@@ -60,6 +66,13 @@ public class Edge {
 	@Override
 	public String toString(){
 		return _film;
+	}
+
+	public void paint(Graphics2D brush, double _maxLat, double _minLat,
+			double _maxLon, double _minLon, int height, int width) {
+		//System.out.println("here");
+		brush.setColor(Color.BLACK);
+		brush.draw(new Line2D.Double(_source, _dest));
 	}
 
 }

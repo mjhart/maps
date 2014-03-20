@@ -1,6 +1,7 @@
-package newGraph;
+package graph;
 
-import newGraph.Node;
+
+import graph.Node;
 
 import java.io.IOException;
 import java.util.ArrayList;

@@ -2,12 +2,13 @@ package kdTests;
 
 import static org.junit.Assert.*;
 
+import graph.Node;
+import graph.NodeDictionary;
+
 import java.io.FileNotFoundException;
 import java.util.List;
 
 import kdTree.KDTree;
-import newGraph.Node;
-import newGraph.NodeDictionary;
 
 import org.junit.Test;
 
