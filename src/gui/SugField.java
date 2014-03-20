@@ -33,7 +33,7 @@ public class SugField extends JTextField {
 
 		private void update() {
 			if(_field.getText().length()>0){
-				StringBuilder sb = new StringBuilder();
+				/*StringBuilder sb = new StringBuilder();
 				String[] parts = _field.getText().trim().split(" ");
 				for(String s: parts){
 					if(s.length()>0){
@@ -41,7 +41,8 @@ public class SugField extends JTextField {
 						sb.append(" ");
 					}
 				}
-				String query = sb.toString();
+				String query = sb.toString();*/
+				String query = _field.getText();
 				if(query.length()>0){
 					List<String> list = _c.getSuggestions(query);
 					System.out.println("here");

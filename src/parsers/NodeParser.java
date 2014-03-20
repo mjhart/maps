@@ -15,7 +15,7 @@ public class NodeParser {
 	private int _latcol;
 	private int _loncol;
 	private int _cols;
-	private final int _buf = 100000;
+	private final int _buf = 500000;
 	String[] _lastRec;
 	
 	public NodeParser(String path) throws Exception{

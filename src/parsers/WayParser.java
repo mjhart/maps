@@ -14,7 +14,7 @@ public class WayParser {
 	private int _srccol;
 	private int _dstcol;
 	private int _cols;
-	private final int _buf = 100000;
+	private final int _buf = 500000;
 	String[] _lastRec;
 	
 	public WayParser(String path) throws Exception{

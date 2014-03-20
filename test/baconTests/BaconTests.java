@@ -86,7 +86,7 @@ public class BaconTests {
 		}
 	}
 	
-	//@Test
+	@Test
 	public void astarTest1reversed() throws Exception{
 		//NodeParser np = new NodeParser("smallnodes.tsv");
 				//WayParser wp = new WayParser("smallways.tsv");
