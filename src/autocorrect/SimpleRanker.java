@@ -5,6 +5,12 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * Ranks words by their frequency in the corpus.
+ * 
+ * @author mjhart
+ *
+ */
 public class SimpleRanker implements Ranker {
 	private Trie _trie;
 	

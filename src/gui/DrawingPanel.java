@@ -23,14 +23,17 @@ import map.Controller;
 
 public class DrawingPanel extends JPanel {
 	
-	public static double TILE_SIZE = 0.005;
+	// data defining tile coordinate system
+	public static double TILE_SIZE = 0.01;
 	public static double LON_INIT = -71.41;
 	public static double LAT_INIT = 41.82;
 
+	// bounding boxes for window and data
 	private double[] wMin;
 	private double[] wMax;
 	private int[] dMax;
 	private int[] dMin;
+	
 	private Controller c;
 	
 	private Node _start;
@@ -113,22 +116,25 @@ public class DrawingPanel extends JPanel {
 		
 		System.out.println(wMin[1] - rMinY - TILE_SIZE);
 		
-		dMin[0] = lonToTx(wMin[0] - rMinX - TILE_SIZE);
-		dMin[1] = latToTy(wMin[1] - rMinY - TILE_SIZE);
-		dMax[0] = lonToTx(wMax[0] + 2*TILE_SIZE - rMaxX);
-		dMax[1] = latToTy(wMax[1] + 2*TILE_SIZE - rMaxY);
+		dMin[0] = lonToTx(wMin[0] - TILE_SIZE/2);
+		dMin[1] = latToTy(wMin[1] - TILE_SIZE/2);
+		dMax[0] = lonToTx(wMax[0] + 3*TILE_SIZE/2);
+		dMax[1] = latToTy(wMax[1] + 3*TILE_SIZE/2);
 		
 		synchronized (tiles) {
+			System.out.println(tiles);
+			List<Tile> toRemove = new LinkedList<Tile>();
 			for(int i=0; i<tiles.size(); i++) {
 				//System.out.print("tile at " + tiles.get(i).x + ", " + tiles.get(i).y);
 				if(!tiles.get(i).intersects(dMax, dMin)) {
-					System.out.println(" is removed");
-					tiles.remove(i);
+					toRemove.add(tiles.get(i));
+					System.out.println("is removed " + tiles.get(i).x + " " + tiles.get(i).y);
 				}
 				else {
-					//System.out.println();
+					System.out.println("not removed " + tiles.get(i).x + " " + tiles.get(i).y);
 				}
 			}
+			tiles.removeAll(toRemove);
 		}
 		
 		
@@ -146,20 +152,20 @@ public class DrawingPanel extends JPanel {
 		System.out.println("max x: " + dMax[0]);
 		System.out.println("max y: " + dMax[1]);
 		*/
-		for(int i=dMin[0]; i<=dMax[0]; i++) {
-			for(int j=dMin[1]; j<=dMax[1]; j++) {
+		for(int i=dMin[0]; i<dMax[0]; i++) {
+			for(int j=dMin[1]; j<dMax[1]; j++) {
 				
-				boolean loaded = false;
+				boolean inCache = false;
 				synchronized (tiles) {
 					for(Tile t : tiles) {
 						if(t.x == i && t.y == j) {
 							//System.out.println("Skipping: " + i + " " + j);
-							loaded = true;
+							inCache = true;
 							break;
 						}
 					}
 				}
-				if(!loaded) {
+				if(!inCache) {
 					System.out.println(String.format("x: %d y: %d", i, j));
 					double[] min = {txToLon(i), tyToLat(j)};
 					double[] max = {min[0]+TILE_SIZE, min[1]+TILE_SIZE};
@@ -182,6 +188,7 @@ public class DrawingPanel extends JPanel {
 		//c.getData(dMax, dMin, _nodes, _ways);
 		for(Tile t : temp) {
 			//System.out.println(Arrays.toString(t._min));
+			tiles.add(t);
 			_tileQueue.add(t);
 		}
 		System.out.println("DMAX: " + Arrays.toString(dMax));
@@ -244,32 +251,40 @@ public class DrawingPanel extends JPanel {
 		brush.clearRect(0, 0, this.getWidth(), this.getHeight());
 		//System.out.println(tiles.size());
 		
+		Stroke wayStroke = new BasicStroke(2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_BEVEL);
+		Stroke nodeStroke = new BasicStroke(3);
 		
 		synchronized (tiles) {
 			for(Tile t : tiles) {
 
-				Composite tmp = brush.getComposite();
-				brush.setColor(java.awt.Color.RED);
-				brush.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.2f));
+				if(t.isLoaded()) {
+					
+					//brush.setStroke(nodeStroke);
+					Composite tmp = brush.getComposite();
+					brush.setColor(java.awt.Color.RED);
+					brush.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.2f));
 
-				brush.drawRect(lonToX(t.getMinLon()), latToY(t.getMaxLat()),(int) (TILE_SIZE/(wMax[0]-wMin[0])*this.getWidth()),(int) (TILE_SIZE/(wMax[1]-wMin[1])*this.getHeight()));
-				brush.fillRect(lonToX(t.getMinLon()), latToY(t.getMaxLat()),(int) (TILE_SIZE/(wMax[0]-wMin[0])*this.getWidth()),(int) (TILE_SIZE/(wMax[1]-wMin[1])*this.getHeight()));
-				brush.setColor(java.awt.Color.BLUE);
-				brush.drawRect(lonToX(txToLon(dMin[0])), latToY(tyToLat(dMax[1])), lonToX(txToLon(dMax[0]))-lonToX(txToLon(dMin[0])),latToY(tyToLat(dMin[1]))-latToY(tyToLat(dMax[1])));
-				brush.drawRect(lonToX(txToLon(0)), latToY(tyToLat(0)), 5, 5);
-				
-				brush.setColor(java.awt.Color.GREEN);
-				String str = "(" + t.x +"," + t.y + ")";
-				brush.drawString(str, lonToX(t.getMinLon()), latToY(t.getMinLat()));
+					brush.drawRect(lonToX(t.getMinLon()), latToY(t.getMaxLat()),(int) (TILE_SIZE/(wMax[0]-wMin[0])*this.getWidth()),(int) (TILE_SIZE/(wMax[1]-wMin[1])*this.getHeight()));
+					brush.fillRect(lonToX(t.getMinLon()), latToY(t.getMaxLat()),(int) (TILE_SIZE/(wMax[0]-wMin[0])*this.getWidth()),(int) (TILE_SIZE/(wMax[1]-wMin[1])*this.getHeight()));
+					brush.setColor(java.awt.Color.BLUE);
+					brush.drawRect(lonToX(txToLon(dMin[0])), latToY(tyToLat(dMax[1])), lonToX(txToLon(dMax[0]))-lonToX(txToLon(dMin[0])),latToY(tyToLat(dMin[1]))-latToY(tyToLat(dMax[1])));
+					brush.drawRect(lonToX(txToLon(0)), latToY(tyToLat(0)), 5, 5);
+
+					brush.setColor(java.awt.Color.GREEN);
+					String str = "(" + t.x +"," + t.y + ")";
+					brush.drawString(str, lonToX(t.getMinLon()), latToY(t.getMinLat()));
 
 
-				brush.setComposite(tmp);
-				for(Node n : t.nodes){
-					paintNode(brush, n);
-				}
+					brush.setComposite(tmp);
+					brush.setColor(java.awt.Color.BLACK);
+					for(Node n : t.nodes){
+						paintNode(brush, n);
+					}
 
-				for(Edge e : t.ways){
-					paintWay(brush, e);
+					//brush.setStroke(wayStroke);
+					for(Edge e : t.ways){
+						paintWay(brush, e);
+					}
 				}
 			}
 		}
@@ -352,7 +367,6 @@ public class DrawingPanel extends JPanel {
 		int x = lonToX(node.getLon());
 		int y = latToY(node.getLat());
 		//System.out.println(String.format("X: %d Y: %d", x, y));
-		brush.setColor(Color.BLACK);
 		brush.drawRect(x,y,1,1);
 	}
 	

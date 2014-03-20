@@ -148,7 +148,7 @@ public class NodeDictionary {
 	}
 	
 	public List<String> getWayIds(String nodeId) {
-		///*
+		/*
 		try {
 			return new ArrayList<String>(Arrays.asList(_np.search(nodeId, false)));
 		} catch (IOException e) {
@@ -156,8 +156,8 @@ public class NodeDictionary {
 			e.printStackTrace();
 		}
 		return new ArrayList<String>();
-		//*/
-		/*
+		*/
+		///*
 		LinkedList<String> results = new LinkedList<String>();
 		NodeIdComparator nc = new NodeIdComparator(_id);
 		FileSearcher fs = new FileSearcher(_file, nc);
@@ -177,7 +177,7 @@ public class NodeDictionary {
 			}
 		}
 		return results;
-		*/
+		//*/
 		
 		/*
 		try {
