@@ -5,6 +5,15 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
+/*****
+ * This class is for binary search of the wasy tsv.
+ * 
+ * you can search by way id to get the start and end nodes as well as the name
+ * 
+ * it reads in buffers of 200kB and binary searches within the buffer as well
+ * 
+ */
+
 public class WayParser {
 	
 	private RandomAccessFile _raf;

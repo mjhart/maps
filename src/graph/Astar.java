@@ -1,5 +1,14 @@
 package graph;
 
+/****
+ * This class is for our Astar search.  It is a simple implementation of Astar
+ * that calls getBors when necessary to find neighbors from the data set.
+ * 
+ * Everytime Astar search is called, it throws out the old graph and starts over.
+ * 
+ * 
+ */
+
 
 import graph.Node;
 
@@ -91,83 +100,6 @@ public class Astar {
 			
 			
 			
-			
-			/*Map<String, Node> open = new HashMap<String, Node>();
-			Map<String, Node> close = new HashMap<String, Node>();
-			PriorityQueue<Node> q = new PriorityQueue<Node>(20, new NodeComparator());
-			
-			open.put(_src.toString(), _src);
-			q.add(_src);
-			
-			Node goal = null;*/
-			/*while(open.size() > 0){
-				Node n = q.poll();
-				//System.out.println("n is "+n.toString());
-				//System.out.println("g is "+dst);
-				//System.out.println(n+" what");
-				open.remove(n.toString());
-				close.put(n.toString(), n);
-				if(n.toString().equals(dst)){
-					goal = n;
-					break;
-				}
-				else{
-					Set<Node> bors = this.getBors(n, wp, np,g);
-					//System.out.println("here");
-					for(Node bor: bors){
-						Node v = close.get(bor.toString());
-						if(v == null){
-							double newG = n.getG() + this.getD(n, bor);
-							v = open.get(bor.toString());
-							if(v == null || newG < bor.getG()){
-								bor.setPrev(n);
-								bor.setG(newG);
-								bor.setH(this.getD(bor, n));
-								Node opened = open.get(bor.toString());
-								if(opened==null){
-									open.put(bor.toString(), bor);
-									q.add(bor);
-								}
-							}
-						}
-						
-					}
-				}
-			}*/
-			
-			/*while(open.size() > 0){
-				Node n = q.poll();
-				//System.out.println("n is "+n.toString());
-				//System.out.println("g is "+dst);
-				open.remove(n.toString());
-				close.put(n.toString(), n);
-				if(n.toString().equals(dst)){
-					goal = n;
-					break;
-				}
-				else{
-					Set<Node> bors = this.getBors(n, wp, np,g);
-					//System.out.println("here");
-					for(Node bor : bors){
-						Node v = close.get(bor.toString());
-						if(v == null){
-							double newg = n.getG() + this.getD(n,  bor);
-							Node t = open.get(bor.toString());
-							if(t==null){
-								open.put(bor.toString(), bor);
-								q.add(bor);
-								bor.setPrev(n);
-								bor.setG(newg);
-							}
-							else if (newg < t.getG()){
-								bor.setPrev(n);
-								bor.setG(newg);
-								bor.setH(this.getD(bor, null));
-							}
-						}
-					}
-				}
-			}*/
 			if(goal != null){
 				Stack<Node> stack = new Stack<Node>();
 				List<Node> list = new ArrayList<Node>();

@@ -1,5 +1,8 @@
 package gui;
-
+/****
+ * this class is for making suggestions based off of the Trie.
+ * 
+ */
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.List;

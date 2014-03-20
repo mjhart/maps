@@ -3,6 +3,12 @@ package graph;
 import java.util.Comparator;
 
 
+/*****
+ * this class lets me compare nodes based on calculated distance for the Astar priority queue.
+ * @author sbreslow
+ *
+ */
+
 public class NodeComparator implements Comparator<Node> {
 
 	@Override

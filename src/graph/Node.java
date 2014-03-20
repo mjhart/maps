@@ -12,8 +12,7 @@ import java.util.List;
 import kdTree.KDTreeEntry;
 
 /***
- * this class models a node for my graph.  It stores the name, first initial,
- * and second initial of the associated actor, as well as a unique ID for debugging.
+ * this class models a node for my graph.  It stores the id, latitude, longitude, and Astar data as well as a unique ID for debugging.
  * @author sbreslow
  *
  */

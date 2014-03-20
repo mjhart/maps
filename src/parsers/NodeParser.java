@@ -1,5 +1,16 @@
 package parsers;
 
+/*****
+ * This class is for binary search of the nodes tsv.
+ * 
+ * you can search by node id to get:
+ * 		Ways associated with the node
+ * 		Lat/Lon	associated with the node
+ * 
+ * it reads in buffers of 200kB and binary searches within the buffer as well
+ * 
+ */
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;

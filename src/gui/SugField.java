@@ -8,6 +8,14 @@ import javax.swing.event.DocumentListener;
 
 import map.Controller;
 
+/*****
+ * this class allows the user to input text into the field so that suggestions can be generated.
+ * 
+ * if the user does not select a suggestion, Astar will pull whatever is in the field for the search.
+ * @author sbreslow
+ *
+ */
+
 
 public class SugField extends JTextField {
 	

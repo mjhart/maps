@@ -6,7 +6,7 @@ import java.awt.geom.Line2D;
 
 /***
  * This class models an Edge for my graph.  It stores its source, destination, the name
- * of the film that connects the two, and the weight of the edge, as well as a unique ID
+ * of the street that connects the two, and the weight of the edge, as well as a unique ID
  * for debugging.
  * @author sbreslow
  *
