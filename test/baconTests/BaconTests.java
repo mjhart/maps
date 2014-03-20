@@ -86,7 +86,7 @@ public class BaconTests {
 		}
 	}
 	
-	@Test
+	//@Test
 	public void astarTest1reversed() throws Exception{
 		//NodeParser np = new NodeParser("smallnodes.tsv");
 				//WayParser wp = new WayParser("smallways.tsv");
@@ -175,6 +175,7 @@ public class BaconTests {
 			String id = line[_idcol];
 			try{
 				//if(line.length==np.getCols()){
+				//System.out.println("SEARCHING FOR "+id);
 				String[] nodeids = wp.search(id);
 				assertNotNull(nodeids);
 				assertTrue(nodeids.length==3);
@@ -192,7 +193,7 @@ public class BaconTests {
 		}
 	}
 	
-	//@Test
+	@Test
 	public void NodeParserTestFull() throws Exception{
 		NodeParser np = new NodeParser("smallnodes.tsv");
 		RandomAccessFile raf = new RandomAccessFile("smallnodes.tsv","r");
@@ -225,10 +226,15 @@ public class BaconTests {
 			String id = line[_idcol];
 			try{
 				//if(line.length==np.getCols()){
+				System.out.println("SEARCHING FOR "+id);
 				String[] wayids = np.search(id, false);
+				//System.out.println("aaaaaaaaaaaaaaaaaaaa");
 				assertNotNull(wayids);
-				if(line.length==_cols){
+				//System.out.println("line length: "+line.length);
+				if(line.length>=_cols){
+					//System.out.println("above");
 					assertTrue(wayids.length==line[_wayscol].split(",").length);
+					//System.out.println("HERERERERERRE");
 				}
 				else{
 					assertTrue(wayids.length==1);

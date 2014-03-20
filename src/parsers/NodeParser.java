@@ -15,7 +15,7 @@ public class NodeParser {
 	private int _latcol;
 	private int _loncol;
 	private int _cols;
-	private final int _buf = 500000;
+	private final int _buf = 200000;
 	String[] _lastRec;
 	
 	public NodeParser(String path) throws Exception{
@@ -208,7 +208,7 @@ public class NodeParser {
 				}
 			}
 			if(firstline[_idcol].compareTo(id)<=0 && lastline[_idcol].compareTo(id)>=0){
-				for(String line : linearray){
+				/*for(String line : linearray){
 					String[] split = line.split("[\\t]");
 					//if(split==lastline) System.out.println("SHEEEEEEEET");
 					if(split[_idcol].compareTo(id)==0){
@@ -222,6 +222,38 @@ public class NodeParser {
 						}
 						else{
 							if(split.length==_cols){
+								return split[_wayscol].split(",");
+							}
+							else{
+								String[] here = {""};
+								return here;
+							}
+						}
+					}
+				}*/
+				//System.out.println("here");
+				int mindex = 0;
+				int maxdex = linearray.length-1;
+				while(maxdex>=mindex){
+					//System.out.println("Mindex: "+ mindex);
+					//System.out.println("Maxdex: "+ maxdex);
+					int middex = maxdex-(maxdex-mindex)/2;
+					String[] split = linearray[middex].split("\t");
+					//System.out.println(split[_idcol].compareTo(id));
+					if(split[_idcol].compareTo(id)<0){
+						mindex = middex;
+					}
+					else if(split[_idcol].compareTo(id)>0){
+						maxdex = middex-1;
+					}
+					else{
+						if(latlon){
+							String[] temp = {split[_latcol], split[_loncol]};
+							return temp;
+						}
+						else{
+							if(split.length==_cols){
+								//System.out.println(split[_wayscol]);
 								return split[_wayscol].split(",");
 							}
 							else{

@@ -14,7 +14,7 @@ public class WayParser {
 	private int _srccol;
 	private int _dstcol;
 	private int _cols;
-	private final int _buf = 500000;
+	private final int _buf = 200000;
 	String[] _lastRec;
 	
 	public WayParser(String path) throws Exception{
@@ -137,48 +137,41 @@ public class WayParser {
 				return null;
 			}
 			if(firstline[_idcol].compareTo(id)<=0 && lastline[_idcol].compareTo(id)>=0){
-				//System.out.println("here 1");
-				for(String line : linearray){
+				/*for(String line : linearray){
 					String[] split = line.split("\t");
 					if(split[_idcol].compareTo(id)==0){
-						//System.out.println("here 2");
 						if(split.length==_cols){
-							//System.out.println("here 3");
-							//if(split==lastline) System.out.println("PROBLEM WITH ALSTLINE");
 							String[] temp = {split[_namecol], split[_srccol], split[_dstcol]};
-							//System.out.println("here 4");
 							return temp;
 						}
 						else{
-							/*System.out.println("SP: "+split.length);
-							System.out.println("LL: "+lastline.length);
-							if(split==lastline){
-								byte[] finishline = new byte[100];
-								_raf.read(finishline);
-								int i = 0;
-								while(finishline[i]>128){
-									i++;
-								}
-								byte[] newfinish = new byte[100-i];
-								for(int j = i; j < 100; j++){
-									newfinish[j-i] = finishline[i];
-								}
-								String[] newlines = (new String(newfinish, "UTF-8")).split("\n");
-								String[] words = newlines[0].split("\t");
-								String[] newsplit = new String[_cols];
-								int k = 0;
-								for(String s: split){
-									newsplit[k] = s;
-									k++;
-								}
-								int q = 0;
-								while(k < _cols){
-									newsplit[k] = words[q];
-									k++;
-									q++;
-								}
-							}*/
-							//System.out.println("line w/ few cols: "+line);
+							String[] here = {""};
+							return here;
+						}
+					}
+				}*/
+				//System.out.println("Here");
+				int mindex = 0;
+				int maxdex = linearray.length-1;
+				while(maxdex>=mindex){
+					//System.out.println("Mindex: "+ mindex);
+					//System.out.println("Maxdex: "+ maxdex);
+					int middex = maxdex-(maxdex-mindex)/2;
+					String[] split = linearray[middex].split("\t");
+					//System.out.println(split[_idcol].compareTo(id));
+					if(split[_idcol].compareTo(id)<0){
+						mindex = middex;
+					}
+					else if(split[_idcol].compareTo(id)>0){
+						maxdex = middex-1;
+					}
+					else{
+						//System.out.println("DAFUQ___________________________________");
+						if(split.length>=_cols){
+							String[] temp = {split[_namecol], split[_srccol], split[_dstcol]};
+							return temp;
+						}
+						else{
 							String[] here = {""};
 							return here;
 						}
