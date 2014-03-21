@@ -78,23 +78,16 @@ public class Controller {
 			// split line 
 			commands = line.split("\"");
 			if(commands.length==1){// assuming input is valid, must be lat/lon lat/lon
-				//System.out.println(line);
 				commands = line.split(" ");
-				//System.out.println(commands.length);
 				if(commands.length==4){
 					try{
 						double slat = Double.parseDouble(commands[0]);
 						double slon = Double.parseDouble(commands[1]);
 						double dlat = Double.parseDouble(commands[2]);
 						double dlon = Double.parseDouble(commands[3]);
-						//System.out.println(slat);
-						//System.out.println(slon);
-						//System.out.println(dlat);
-						//System.out.println(dlon);
 						double[] src = {slon,slat};
 						double[] dst = {dlon,dlat};
 						Node source = this.nearestNeighbor(src);
-						//System.out.println(source.toString());
 						Node destination = this.nearestNeighbor(dst);
 						try{
 							List<Node> path = this.getPath(source.toString(), destination.toString());
@@ -112,7 +105,6 @@ public class Controller {
 								System.out.println(source.toString()+" -/- "+destination.toString());
 							}
 						} catch (IOException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 						
@@ -144,19 +136,7 @@ public class Controller {
 					}
 					j++;
 				}
-				/*for(String s:  args){
-					System.out.println(s);
-				}*/
-				//System.out.println(commands.length);
 				if(args.size()==4){
-					//String s1 = (new StringBuilder(commands[0]).append(commands[1])).toString();
-					//String cs1 = (new StringBuilder(commands[2].substring(1)).append(commands[3])).toString();
-					//String s2 = (new StringBuilder(commands[4].substring(1)).append(commands[5])).toString();
-					//String cs2 = (new StringBuilder(commands[6].substring(1)).append(commands[7])).toString();
-					//System.out.println(s1);
-					//System.out.println(cs1);
-					//System.out.println(s2);
-					//System.out.println(cs2);
 					Node src = this.getIntersection(args.get(0), args.get(1));
 					Node dst = this.getIntersection(args.get(2), args.get(3));
 					try {
@@ -175,7 +155,6 @@ public class Controller {
 							System.out.println(src.toString()+" -/- "+dst.toString());
 						}
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
