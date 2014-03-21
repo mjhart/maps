@@ -30,16 +30,17 @@ public class PathFinder extends Thread {
 	
 	@Override
 	public void run() {
+		List<Node> path = null;
+		try {
+			path = _c.getPath(_src, _dst);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		synchronized(_dp.getPath()) {
-			try {
-				_dp.getPath().removeAll(_dp.getPath());
-				List<Node> path = _c.getPath(_src, _dst);
-				if(path!=null){
-					_dp.getPath().addAll(path);
-				}
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			_dp.getPath().removeAll(_dp.getPath());
+			if(path!=null){
+				_dp.getPath().addAll(path);
 			}
 		}
 		SwingUtilities.invokeLater(paint);

@@ -24,7 +24,7 @@ import map.Controller;
 public class DrawingPanel extends JPanel {
 	
 	// data defining tile coordinate system
-	public static double TILE_SIZE = 0.01;
+	public static double TILE_SIZE = 0.001;
 	public static double LON_INIT = -71.41;
 	public static double LAT_INIT = 41.82;
 
@@ -56,7 +56,8 @@ public class DrawingPanel extends JPanel {
 		super();
 		this.setLayout(new BorderLayout());
 		this.setPreferredSize(new Dimension(750,750));
-		this.setBackground(new Color(255,252,173));
+		this.setBackground(new Color(204,204,255));
+		this.setOpaque(false);
 		
 		wMax = new double[2];
 		wMin = new double[2];
@@ -64,9 +65,6 @@ public class DrawingPanel extends JPanel {
 		wMax[1] = 41.83;
 		wMin[0] = -71.41;
 		wMin[1] = 41.82;
-		
-		//wMax[0] = wMin[0] + TILE_SIZE;
-		//wMax[1] = wMax[1] + TILE_SIZE;
 		
 		dMax = new int[2];
 		dMin = new int[2];
@@ -90,31 +88,6 @@ public class DrawingPanel extends JPanel {
 	}
 	
 	public void loadData() {
-		//_nodes = new HashSet<Node>();
-		//_ways = new HashSet<Edge>();
-		System.out.println("loading data");
-		
-		HashSet<Node> nodes;
-		HashSet<Edge> ways;
-		
-		double rMinX = wMin[0]%TILE_SIZE;
-		if(rMinX < 0) {
-			rMinX += TILE_SIZE;
-		}
-		double rMinY = wMin[1]%TILE_SIZE;
-		if(rMinY < 0) {
-			rMinY += TILE_SIZE;
-		}
-		double rMaxX = wMax[0]%TILE_SIZE;
-		if(rMaxX < 0) {
-			rMaxX += TILE_SIZE;
-		}
-		double rMaxY = wMax[1]%TILE_SIZE;
-		if(rMaxY < 0) {
-			rMaxY += TILE_SIZE;
-		}
-		
-		System.out.println(wMin[1] - rMinY - TILE_SIZE);
 		
 		dMin[0] = lonToTx(wMin[0] - TILE_SIZE/2);
 		dMin[1] = latToTy(wMin[1] - TILE_SIZE/2);
@@ -122,16 +95,10 @@ public class DrawingPanel extends JPanel {
 		dMax[1] = latToTy(wMax[1] + 3*TILE_SIZE/2);
 		
 		synchronized (tiles) {
-			System.out.println(tiles);
 			List<Tile> toRemove = new LinkedList<Tile>();
 			for(int i=0; i<tiles.size(); i++) {
-				//System.out.print("tile at " + tiles.get(i).x + ", " + tiles.get(i).y);
 				if(!tiles.get(i).intersects(dMax, dMin)) {
 					toRemove.add(tiles.get(i));
-					System.out.println("is removed " + tiles.get(i).x + " " + tiles.get(i).y);
-				}
-				else {
-					System.out.println("not removed " + tiles.get(i).x + " " + tiles.get(i).y);
 				}
 			}
 			tiles.removeAll(toRemove);
@@ -139,19 +106,6 @@ public class DrawingPanel extends JPanel {
 		
 		
 		LinkedList<Tile> temp = new LinkedList<Tile>();
-		/*
-		System.out.println("LatLon Format");
-		System.out.println("min x: " + Double.toString(wMin[0] - rMinX - TILE_SIZE));
-		System.out.println("min y: " + Double.toString(wMin[1] - rMinY - TILE_SIZE));
-		System.out.println("max x: " + Double.toString(wMax[0] + 2*TILE_SIZE - rMaxX));
-		System.out.println("max y: " + Double.toString(wMax[1] + 2*TILE_SIZE - rMaxY));
-		
-		System.out.println("Tile Format");
-		System.out.println("min x: " + dMin[0]);
-		System.out.println("min y: " + dMin[1]);
-		System.out.println("max x: " + dMax[0]);
-		System.out.println("max y: " + dMax[1]);
-		*/
 		for(int i=dMin[0]; i<dMax[0]; i++) {
 			for(int j=dMin[1]; j<dMax[1]; j++) {
 				
@@ -159,40 +113,21 @@ public class DrawingPanel extends JPanel {
 				synchronized (tiles) {
 					for(Tile t : tiles) {
 						if(t.x == i && t.y == j) {
-							//System.out.println("Skipping: " + i + " " + j);
 							inCache = true;
 							break;
 						}
 					}
 				}
 				if(!inCache) {
-					System.out.println(String.format("x: %d y: %d", i, j));
-					double[] min = {txToLon(i), tyToLat(j)};
-					double[] max = {min[0]+TILE_SIZE, min[1]+TILE_SIZE};
-					nodes = new HashSet<Node>();
-					ways = new HashSet<Edge>();
-					//c.getData(max, min, nodes, ways);
-					//_tileQueue.add(new Tile(i, j, nodes, ways));
-					temp.add(new Tile(i, j, nodes, ways));
+					temp.add(new Tile(i, j, new HashSet<Node>(), new HashSet<Edge>()));
 				}
 			}
 		}
 		
-		
-		/*
-		dMax[0] = 2*wMax[0] - wMin[0];
-		dMax[1] = 2*wMax[1] - wMin[1];
-		dMin[0] = 2*wMin[0] - wMax[0];
-		dMin[1] = 2*wMin[1] - wMax[1];
-		*/
-		//c.getData(dMax, dMin, _nodes, _ways);
 		for(Tile t : temp) {
-			//System.out.println(Arrays.toString(t._min));
 			tiles.add(t);
 			_tileQueue.add(t);
 		}
-		System.out.println("DMAX: " + Arrays.toString(dMax));
-		System.out.println("DMIN: " + Arrays.toString(dMin));
 	}
 	
 	public static int lonToTx(double lon) {
@@ -219,69 +154,44 @@ public class DrawingPanel extends JPanel {
 		if(load) {
 			if(wMax[0] > txToLon(dMax[0]) || wMax[1] > tyToLat(dMax[1]) || 
 					wMin[0] < txToLon(dMin[0]) || wMin[1] < tyToLat(dMin[1])) {
-				//System.out.println("Loading data");
 				loadData();
 			}
 		}
 		
-		
-		/*
-		System.out.println("Nodes being painted " + _nodes.size());
-		System.out.println("Ways being painted " + _ways.size());
-		System.out.println("Bounding box: " + Arrays.toString(wMax) + " " + Arrays.toString(wMin));
-		
-		
 		brush.clearRect(0, 0, this.getWidth(), this.getHeight());
+		brush.setColor(new Color(204, 204, 255));
+		brush.fillRect(0, 0, this.getWidth(), this.getHeight());
 		
-		for(Node n : _nodes){
-			paintNode(brush, n);
-		}
-		
-		for(Edge e : _ways){
-			paintWay(brush, e);
-		}
-		*/
-		/*
-		if(wMax[0] > dMax[0] || wMax[1] > dMax[1] || wMin[0] < dMin[0] || wMin[1] < wMin[1]) {
-			System.out.println("Loading data");
-			loadData();
-		}
-		*/
-		
-		brush.clearRect(0, 0, this.getWidth(), this.getHeight());
-		//System.out.println(tiles.size());
-		
-		Stroke wayStroke = new BasicStroke(2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_BEVEL);
-		Stroke nodeStroke = new BasicStroke(3);
+		//Stroke wayStroke = new BasicStroke(2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_BEVEL);
+		//Stroke nodeStroke = new BasicStroke(3);
 		
 		synchronized (tiles) {
 			for(Tile t : tiles) {
 
 				if(t.isLoaded()) {
 					
+					
+					/*   Debugging info
 					//brush.setStroke(nodeStroke);
 					Composite tmp = brush.getComposite();
 					brush.setColor(java.awt.Color.RED);
 					brush.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.2f));
-
 					brush.drawRect(lonToX(t.getMinLon()), latToY(t.getMaxLat()),(int) (TILE_SIZE/(wMax[0]-wMin[0])*this.getWidth()),(int) (TILE_SIZE/(wMax[1]-wMin[1])*this.getHeight()));
 					brush.fillRect(lonToX(t.getMinLon()), latToY(t.getMaxLat()),(int) (TILE_SIZE/(wMax[0]-wMin[0])*this.getWidth()),(int) (TILE_SIZE/(wMax[1]-wMin[1])*this.getHeight()));
 					brush.setColor(java.awt.Color.BLUE);
 					brush.drawRect(lonToX(txToLon(dMin[0])), latToY(tyToLat(dMax[1])), lonToX(txToLon(dMax[0]))-lonToX(txToLon(dMin[0])),latToY(tyToLat(dMin[1]))-latToY(tyToLat(dMax[1])));
 					brush.drawRect(lonToX(txToLon(0)), latToY(tyToLat(0)), 5, 5);
-
 					brush.setColor(java.awt.Color.GREEN);
 					String str = "(" + t.x +"," + t.y + ")";
 					brush.drawString(str, lonToX(t.getMinLon()), latToY(t.getMinLat()));
-
-
 					brush.setComposite(tmp);
+					*/
+					
 					brush.setColor(java.awt.Color.BLACK);
 					for(Node n : t.nodes){
 						paintNode(brush, n);
 					}
 
-					//brush.setStroke(wayStroke);
 					for(Edge e : t.ways){
 						paintWay(brush, e);
 					}
@@ -344,14 +254,10 @@ public class DrawingPanel extends JPanel {
 	}
 	
 	private int latToY(double lat) {
-		//System.out.println("Y: "+(int) ((max-_lat)/(max-min) * scale));
-		//System.out.println(max-_lat);
 		return (int) ((wMax[1]-lat)/(wMax[1]-wMin[1]) * this.getHeight());
 	}
 	
-	private int lonToX(double lon) {// TODO Auto-generated method stub
-		//System.out.println("Y: "+(int) ((max-_lat)/(max-min) * scale));
-		//System.out.println(max-_lat);
+	private int lonToX(double lon) {
 		return (int) ((lon - wMin[0])/(wMax[0]-wMin[0]) * this.getWidth());
 	}
 	
@@ -366,7 +272,6 @@ public class DrawingPanel extends JPanel {
 	private void paintNode(Graphics2D brush, Node node) {
 		int x = lonToX(node.getLon());
 		int y = latToY(node.getLat());
-		//System.out.println(String.format("X: %d Y: %d", x, y));
 		brush.drawRect(x,y,1,1);
 	}
 	
@@ -380,7 +285,6 @@ public class DrawingPanel extends JPanel {
 	
 	public void clickAt(int x, int y) {
 		double[] coords = {xToLon(x), yToLat(y)};
-		System.out.println("Called at " + Arrays.toString(coords));
 		if(_start==null){
 			_start = c.nearestNeighbor(coords);
 		}
@@ -392,46 +296,19 @@ public class DrawingPanel extends JPanel {
 	}
 
 	public void startSearch(Node src, Node dst) {
-		//try {
-			PathFinder pf = new PathFinder(src.toString(), dst.toString(), this, c, _ip);
-			pf.start();
-		/*
-			if(path!=null){
-				//System.out.println("Printing Path:");
-				for(int i = 0; i < path.size()-1; i++){
-					for(Edge e: path.get(i).getEdges()){
-						if(e.getDest().equals(path.get(i+1))){
-							System.out.println(e.getSource()+" -> "+e.getDest()+" : "+e.getFilm());
-							break;
-						}
-					}
-				}
-				_path = path;
-				this.repaint();
-			}
-			else{
-				System.out.println(src.toString()+" -/- "+dst.toString());
-			}
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		*/
+		PathFinder pf = new PathFinder(src.toString(), dst.toString(), this, c, _ip);
+		pf.start();
 	}
 
 	public Node getStart() {
-		// TODO Auto-generated method stub
 		return _start;
 	}
 
 	public Node getEnd() {
-		// TODO Auto-generated method stub
 		return _end;
 	}
 
 	public List<Node> getPath() {
-		// TODO Auto-generated method stub
 		return _path;
 	}
 	

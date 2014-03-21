@@ -151,11 +151,12 @@ public class NodeDictionary {
 		/*
 		try {
 			return new ArrayList<String>(Arrays.asList(_np.search(nodeId, false)));
+			//return _np.search(nodeId, false);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return new ArrayList<String>();
+		return null;
 		*/
 		///*
 		LinkedList<String> results = new LinkedList<String>();
