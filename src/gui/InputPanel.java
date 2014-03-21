@@ -17,6 +17,11 @@ import graph.Edge;
 import graph.Node;
 import gui.SugField;
 
+/**
+ * @author mjhart
+ * Models the inputs on the left side of the 
+ * screen
+ */
 public class InputPanel extends JPanel {
 	
 	private JTextArea _text;

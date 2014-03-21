@@ -10,28 +10,45 @@ import map.Controller;
 
 import gui.Tile;
 
+/**
+ * @author mjhart
+ * Worker thread which takes tiles off of 
+ * a shared blocking queue and fills them 
+ * with data
+ */
 public class TileLoader extends Thread {
 	
 	private BlockingQueue<Tile> _tileQueue;
-	private List<Tile> _tileList;
 	private Controller _c;
 	private DrawingPanel _dp;
 	
 	public TileLoader(BlockingQueue<Tile> tq, List<Tile> tl, Controller c, DrawingPanel dp) {
 		_tileQueue = tq;
 		_c = c;
-		_tileList = tl;
 		_dp = dp;
 	}
 	
+	/**
+	 * Takes Tiles off of the queue and fills them 
+	 * with data
+	 */
 	public void run() {
 		while(true) {
 			try {
+				// take next tile
 				Tile t = _tileQueue.take();
+				
+				// get bounding box
 				double[] max = {t.getMaxLon(), t.getMaxLat()};
 				double[] min = {t.getMinLon(), t.getMinLat()};
+				
+				// get data
 				_c.getData(max, min, t.nodes, t.ways);
+				
+				// set tile to be loaded
 				t.setLoaded();
+				
+				// tell swing to repaint
 				SwingUtilities.invokeLater(paint);
 			} catch (InterruptedException e) {}
 			
