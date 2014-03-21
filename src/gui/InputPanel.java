@@ -161,7 +161,6 @@ public class InputPanel extends JPanel {
 			for(int i = 0; i < path.size()-1; i++){
 				for(Edge e: path.get(i).getEdges()){
 					if(e.getDest().equals(path.get(i+1))){
-						//System.out.println("here IIIIII");
 						_text.append(e.getSource()+" -> "+e.getDest()+" : "+e.getFilm()+"\n");
 						sb.append(e.getSource()+" -> "+e.getDest()+" : "+e.getFilm()+"\n");
 						break;
