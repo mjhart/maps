@@ -21,6 +21,13 @@ import javax.swing.JPanel;
 import map.Controller;
 
 
+/**
+ * This class handles much of the logic of the gui
+ * as well as drawing all the data.
+ * 
+ * @author mjhart
+ *
+ */
 public class DrawingPanel extends JPanel {
 	
 	// data defining tile coordinate system
@@ -57,7 +64,7 @@ public class DrawingPanel extends JPanel {
 		this.setLayout(new BorderLayout());
 		this.setPreferredSize(new Dimension(750,750));
 		this.setBackground(new Color(204,204,255));
-		this.setOpaque(false);
+		//this.setOpaque(false);
 		
 		wMax = new double[2];
 		wMin = new double[2];

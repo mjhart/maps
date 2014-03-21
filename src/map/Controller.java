@@ -28,18 +28,13 @@ public class Controller {
 		
 		try {
 			_nodes = new NodeDictionary(nodeFile);
-			System.out.println("node dict built");
 			_ways = new WayDictionary(wayFile, _nodes);
-			System.out.println("here1");
 			_trie = new TrieEngine(indexFile);
-			System.out.println("here2");
 			_astar = new Astar(nodeFile, wayFile);
-		}
-		catch(IOException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} 
+		catch (Exception e) {
+			System.err.println("ERROR: " + e.getMessage());
+			System.exit(1);
 		}
 		
 		_tree = new KDTree<Node>(2);
