@@ -127,6 +127,9 @@ JUnit tests are located in a tests directory. They perform
 unit tests on our subcomponents. 
 
 To run system tests use the command "ant my_test".
+The first two fail, but only because the tester doesn't
+wait long enough for the output.  They have been verified
+with unit tests, and by hand.
 
 Some Astar tests were run by hand with a smaller data set.
 We also tested Astar by comparing the results to an online 
