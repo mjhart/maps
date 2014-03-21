@@ -75,11 +75,11 @@ public class WayDictionary {
 		
 		
 		try {
-			System.out.println("about to build way parser");
+			//System.out.println("about to build way parser");
 			long start = System.currentTimeMillis();
 			_wayParser = new WayParser(filename);
 			long end = System.currentTimeMillis();
-			System.out.println(String.format("Building took %d seconds", (end-start)/1000));
+			//System.out.println(String.format("Building took %d seconds", (end-start)/1000));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

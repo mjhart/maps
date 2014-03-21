@@ -54,9 +54,7 @@ public class SugField extends JTextField {
 				String query = _field.getText();
 				if(query.length()>0){
 					List<String> list = _c.getSuggestions(query);
-					System.out.println("here");
 					if(list.size()>0){
-						System.out.println("SHould be here");
 						_box.display(list);
 					}
 					else{

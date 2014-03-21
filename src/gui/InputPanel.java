@@ -123,7 +123,6 @@ public class InputPanel extends JPanel {
 				String cs1 = _sfs[1].getText().trim();
 				String s2 = _sfs[2].getText().trim();
 				String cs2 = _sfs[3].getText().trim();
-				System.out.println(s1+", "+cs1+", "+s2+", "+cs2);
 				Node src = _c.getIntersection(s1, cs1);
 				Node dst = _c.getIntersection(s2, cs2);
 				try{
@@ -172,7 +171,6 @@ public class InputPanel extends JPanel {
 					}
 				}
 			}
-			System.out.println(_text.getText());
 			_text.setText(sb.toString());
 		}
 		else{

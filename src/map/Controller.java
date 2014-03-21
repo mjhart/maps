@@ -225,9 +225,9 @@ public class Controller {
 		//System.out.println("Null ways: " + _ways.nullWays);
 		//System.out.println(String.format("Ways loaded - Disk: %d Mem: %d", _ways.toDisk, _ways.inMem));
 		//System.out.println("Buffer read: " + _ways.bufferRead);
-		System.out.println("Time spent getting way ids " + time);
-		System.out.println("Time spend getting ways " + time2);
-		System.out.println("Total time spent getting tile: " + time3);
+		//System.out.println("Time spent getting way ids " + time);
+		//System.out.println("Time spend getting ways " + time2);
+		//System.out.println("Total time spent getting tile: " + time3);
 		_ways.bufferRead = 0;
 		_ways.toDisk = 0;
 		_ways.inMem = 0;
