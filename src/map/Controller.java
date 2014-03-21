@@ -1,4 +1,14 @@
 package map;
+
+
+/************
+ * The Controller is our top level class which delegates 
+ * between the backend code and either the REPL (also 
+ * contained in this class) or GUI. 
+ * 
+ * 
+ */
+
 import graph.Astar;
 import graph.Edge;
 import graph.Node;
@@ -100,7 +110,8 @@ public class Controller {
 								System.out.println(source.toString()+" -/- "+destination.toString());
 							}
 						} catch (IOException e) {
-							e.printStackTrace();
+							System.err.println("ERROR: "+e.getMessage());
+							//e.printStackTrace();
 						}
 						
 					}
@@ -150,7 +161,7 @@ public class Controller {
 							System.out.println(src.toString()+" -/- "+dst.toString());
 						}
 					} catch (IOException e) {
-						e.printStackTrace();
+						System.err.println("ERROR: "+e.getMessage());
 					}
 				}
 				else{

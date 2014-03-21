@@ -132,6 +132,11 @@ Some Astar tests were run by hand with a smaller data set.
 We also tested Astar by comparing the results to an online 
 mapping utility.
 
+Many of our tests use the smaller data set (smallways.tsv,
+etc...) that we have included.  This data set is effectively
+most of College Hill and was produced from the original
+data set.
+
 Building and Running from the Command Line
 ==========================================
 

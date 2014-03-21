@@ -8,6 +8,13 @@ import javax.swing.*;
 
 import map.Controller;
 
+/*****
+ * 
+ * this class is the highest level container in our JFrame
+ * @author sbreslow
+ *
+ */
+
 
 public class MainPanel extends JFrame{
 	
@@ -21,26 +28,16 @@ public class MainPanel extends JFrame{
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
 		DrawingPanel dp = new DrawingPanel(controller);
-		//InputPanel ip = new InputPanel(dp);
-		ZoomPanel zp = new ZoomPanel(dp, 10, 10);
-		//dp.setIPan(ip);
-		//dp.setZPan(zp);
 		InputPanel ip = new InputPanel(dp, controller);
 		
 		dp.setIp(ip);
 		this.add(dp, BorderLayout.CENTER);
-		//this.add(ip, BorderLayout.WEST);
-		this.add(zp, BorderLayout.SOUTH);
 		this.add(ip, BorderLayout.WEST);
 		this.setResizable(false);
 		this.pack();
 		this.setVisible(true);
 		
 		this.controller = controller;
-	}
-	
-	public static void main(String[] args) throws IOException{
-		//new MainPanel();
 	}
 	
 }
